@@ -1,0 +1,29 @@
+@startuml
+/'actor tom #green
+boundary Foo2
+control Foo3
+entity Foo4
+database Foo5
+' 注释行
+participant "I have a\n dream" as HW
+tom -> Bob: Authentication Request
+Bob --> Alice: Authentication Response
+tom -> HW
+Alice -> Bob: Another authentication Request
+Alice <-- tomm: another authentication Response
+tomm --> Alice :faega'/
+
+  Bliss -> Tia : I love you
+  Bliss -> Tia : I miss you
+  Tia --> Bliss:result
+  newpage
+
+  Bliss -> Tia : Let's go home
+  Bliss -> Tia : Quick
+
+  newpage A title for the\nlast page
+
+  Tia -> Bliss : Give me money
+  Tia -> Bliss : No money No love
+
+@enduml
