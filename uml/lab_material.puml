@@ -1,3 +1,4 @@
+'http://archive.3zso.com/archives/plantuml-quickstart.html
 @startuml
 actor Applicant
 actor "实验室仓管员"
