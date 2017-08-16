@@ -4,6 +4,10 @@ actor "实验室仓管员"
 participant "OA" as OA
 participant "WMS" as WMS
 participant "ERP" as ERP
+note left Applicant
+特定员工
+并非所有员工
+end note
 title 实验室退机时序图
 'autonumber
 Applicant -> OA:申请人提实验室退机
@@ -19,6 +23,7 @@ alt 推单成功
             实验室仓管员 -> WMS:操作WMS系统
             WMS->ERP:出库入账
             WMS->OA:归档流程
+            note right:使用WebService实现
         else 退回申请
             WMS->OA:退回到申请人
         end
