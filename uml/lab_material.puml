@@ -1,0 +1,46 @@
+@startuml
+actor Applicant
+actor "实验室仓管员"
+participant "OA" as OA
+participant "WMS" as WMS
+participant "ERP" as ERP
+title 实验室退机时序图
+'autonumber
+Applicant -> OA:申请人提实验室退机
+OA -> WMS:查询提单人实验室机器明细
+OA -> WMS : OA推单到WMS
+alt 推单成功
+    '判断是否销帐？  销帐 wms-> erp   不销帐 仓管员工操作
+    alt 销帐
+        WMS->ERP:销帐操作
+        WMS->OA : 归档流程
+    else 不销帐
+        alt 确认出库
+            实验室仓管员 -> WMS:操作WMS系统
+            WMS->ERP:出库入账
+            WMS->OA:归档流程
+        else 退回申请
+            WMS->OA:退回到申请人
+        end
+    end
+else 推单失败
+    loop 重试3次
+        OA -> WMS:重新尝试推单
+    end
+end
+
+newpage 实验室借机时序图
+Applicant->OA:申请人提单借机
+OA->OA:主管审批
+OA->WMS:推单到wms系统
+实验室仓管员->WMS:仓管员操作wms
+alt 确认出库
+    WMS->ERP:erp入账
+    WMS->OA: 流程到下一节点至申请人
+    OA->OA:申请人确认
+    OA->OA:归档
+else 退回申请
+    WMS->OA:退回到申请人
+end
+
+@enduml
