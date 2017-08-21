@@ -1,0 +1,39 @@
+@startuml
+actor Applicant
+usecase 部门领料
+usecase 部门退料
+usecase 物料转移
+usecase 查看个人资产
+usecase 查询个人资产
+
+
+usecase 物料
+usecase 低值易耗
+usecase 固定资产
+
+usecase 通用出库
+usecase 第三方仓库
+
+'rectangle "OA" {
+'
+'}
+    Applicant ---> 部门领料
+    Applicant ---> 部门退料
+    Applicant ---> 物料转移
+
+
+/'Applicant ---> 部门领料
+Applicant ---> 部门退料
+Applicant ---> 物料转移
+Applicant ---> 查看个人资产
+部门退料 --> 查询个人资产:<include>
+物料转移 --> 查询个人资产:<include>
+查看个人资产 --> 查询个人资产:<include>
+
+物料 ---|> 部门领料
+低值易耗 ---|> 部门领料
+固定资产 ---|> 部门领料
+
+部门领料 -->通用出库
+通用出库 --> 第三方仓库:<invokes>'/
+@enduml

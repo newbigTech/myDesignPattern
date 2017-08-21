@@ -5,11 +5,11 @@ participant Facade as facade
 participant "Module A" as A
 participant "Module B" as B
 participant "Module B" as C
-note over of client #grey : 面向客户的客户端
+'note over of client #grey : 面向客户的客户端
 note left of facade: 多个模块对外的高层接口
 autonumber
 client -> facade: 调用外观Facade的某个方法
-note left : 由Facade来调用各个子模块
+note right : 由Facade来调用各个子模块
 ' Bob --> Alice: Authentication Response
 facade -> A: 可能调用模块A
 facade -> B: 可能调用模块B
