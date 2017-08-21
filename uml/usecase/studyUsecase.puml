@@ -1,0 +1,61 @@
+@startuml
+/'skinparam handwritten true
+skinparam usecase {
+	BackgroundColor DarkSeaGreen
+	BorderColor DarkSlateGray
+
+	BackgroundColor<< Main >> YellowGreen
+	BorderColor<< Main >> YellowGreen
+
+	ArrowColor Olive
+	ActorBorderColor black
+	ActorFontName Courier
+
+	ActorBackgroundColor<< Human >> Gold
+}'/
+
+usecase UC1 as "You can use
+several lines to define your usecase.
+You can also use separators.
+--
+Several separators are possible.
+==
+And you can add titles:
+..Conclusion..
+This allows large description."
+usecase query <<查询角色>>
+usecase insert
+usecase edit
+usecase delete
+actor Applicant <<申请人角色>>
+actor Developer <<开发角色>>
+actor 仓管员
+
+note right of insert : asdfkkkkk
+note right of Developer:开发人员
+
+title XXX系统用例图
+
+note "This note is connected\nto several objects." as N
+delelte .. N
+N .. query
+
+/'note "This note is connected\nto several objects." as N
+delelte .. N2
+N2 .. Applicant'/
+
+Developer---|>Applicant
+rectangle query {
+    Applicant -up-> (query):申请人查询数据
+    (query) .> insert : include
+    (query) .> edit : extends
+    (query) -- 仓管员
+}
+
+newpage
+
+:actor1: -up-> (Usecase1)
+newpage
+:actor2: --> (Usecase2)
+
+@enduml

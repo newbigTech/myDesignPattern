@@ -7,7 +7,7 @@ public class FacadeFactory {
     private static FacadeImpl facade = null;
     private FacadeFactory(){}
 
-    public static FacadeApi getFacade(){
+    public static FacadeApi createFacade(){
         if(facade == null) {
             facade =new FacadeImpl();
         }
