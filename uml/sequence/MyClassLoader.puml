@@ -1,0 +1,25 @@
+@startuml
+actor 委托加载
+participant MyClassLoader
+participant AppClassLoader
+participant ExtClassLoader
+participant BootstrapClassLoader
+note over of MyClassLoader : 自定义类加载器
+
+
+委托加载 -> MyClassLoader
+alt 自身类加载器缓存已加载过
+    MyClassLoader->委托加载
+else 自身类加载器缓存未加载过
+    alt 有父加载器
+        alt 自身类加载器缓存已加载过
+
+        else 自身类加载器缓存未加载过
+
+        end
+    else 无父加载器
+
+    end
+end
+
+@enduml
