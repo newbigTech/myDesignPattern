@@ -5,6 +5,6 @@ package com.ytc.dp.simpleFactory;
  */
 public class AProduct implements Product {
     public void showProp(){
-        System.out.println("Õ¹Ê¾²úÆ·AµÄÊôĞÔ¡£¡£¡£");
+        System.out.println("å±•ç¤ºäº§å“Açš„å±æ€§ã€‚ã€‚ã€‚");
     }
 }
