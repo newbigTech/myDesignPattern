@@ -1,0 +1,21 @@
+@startuml
+start
+:审核自定义地址;
+if (审核通过) then (true)
+    if (地址名称在地址库中不存在) then (true)
+       if (该地址为州级别) then (true)
+           :自定将该地址的父节\n点设置成对应的国家;
+       else (false)
+            if (父id为空) then (true)
+                :从现有地址库中，\n选择对应的父节点;
+            else (false)
+            endif
+       endif
+    else (false)
+    endif
+    :修改该地址名称对应的所有\n自定义地址的状态为审核通过;
+else (false)
+:修改该地址名称对应的所有\n自定义地址的状态为审核不通过;
+endif
+stop
+@enduml

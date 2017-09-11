@@ -1,0 +1,30 @@
+@startuml
+left to right direction
+actor Applicant
+
+rectangle OA {
+Applicant --> (外购样机申请)
+Applicant --> (外购样机退回)
+Applicant --> (低值易耗退回)
+Applicant --> (固定资产退回)
+
+}
+
+rectangle ERP {
+    (ERP入库操作)
+    (ERP出库操作)
+}
+rectangle WMS {
+    (查询个人资产)
+    (通用出库)
+    (通用入库)
+}
+(外购样机退回)..>(查询个人资产):<include>
+(低值易耗退回)..>(查询个人资产):<include>
+(固定资产退回)..>(查询个人资产):<include>
+(外购样机申请) ..>(通用出库):<invoke>
+(外购样机退回) ..>(通用入库):<invoke>
+(低值易耗退回) ..>(通用入库):<invoke>
+(通用入库) ..>(ERP入库操作):<invoke>
+(通用出库) ..>(ERP出库操作):<invoke>
+@enduml

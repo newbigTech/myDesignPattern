@@ -1,0 +1,48 @@
+@startuml
+class address {
+String address_id
+String address_type
+String address_name
+String address_en_name
+String parent_id
+String parent_name
+String name_path
+String address_id_path
+int has_child
+String country_code
+String country_id
+int display_sort
+}
+
+class custom_address {
+String address_type
+String address_name
+String parent_id
+String country_code
+String country_id
+String source_from
+int status
+}
+
+class india_pincode {
+int id
+String pincode
+String stateName
+String cityName
+}
+
+
+class inv_shipping_region_special {
+int region_type
+String country_name
+String country_code
+String state_or_province_name
+String state_or_province_code
+String city_name
+String city_code
+String postcode
+}
+
+
+
+@enduml

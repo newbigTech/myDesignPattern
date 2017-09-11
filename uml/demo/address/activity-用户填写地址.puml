@@ -1,0 +1,14 @@
+@startuml
+start
+:用户在城市框中输入;
+:匹配输入和前端地址数据中的地址;
+if (匹配到数据) then (true)
+    :展示给用户选择;
+else (false)
+    :调用google地址接口;
+    if (返回了地址数据) then (true)
+        :展示给用户选择;
+    endif
+endif
+stop
+@enduml

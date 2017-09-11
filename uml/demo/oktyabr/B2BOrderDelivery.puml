@@ -1,0 +1,31 @@
+@startuml
+actor 客户
+
+客户 -> OPSS: 创建订单
+
+OPSS -> YJ_WMS: 推送订单
+...5 minutes latter...
+YJ_WMS -> YJ_WMS: 分配库存
+alt ws仓库发货
+    YJ_WMS -> WS_WMS: 推送发货单
+    WS_WMS -> WS_WMS: 发货
+    YJ_WMS <- WS_WMS: 通知发货信息
+else 松岗仓发货
+
+else 工厂发货
+    actor PMC
+    PMC -> ERP: 下PO
+    PMC -> YJ_WMS: 下载工厂发货单
+    entity 工厂
+    PMC -> 工厂: 发货信息
+    工厂 -> 工厂: 发货
+    YJ_WMS -> 工厂: 获取发货信息
+    activate YJ_WMS
+    YJ_WMS -> YJ_WMS: 记录发货信息
+    deactivate YJ_WMS
+end
+
+YJ_WMS -> ERP: 通知发货信息
+
+
+@enduml
