@@ -1,0 +1,59 @@
+'http://archive.3zso.com/archives/plantuml-quickstart.html
+@startuml
+actor Applicant
+participant "OA" as OA
+participant "WMS" as WMS
+participant "ERP" as ERP
+participant "仓管员" as 仓管员
+
+title 物料手机领用限额时序图
+'autonumber
+Applicant -> OA:申请人物料手机申请
+Applicant -> OA:输入sku
+OA -> ERP:查询该申请人部门指定SKU,已领数量&剩余可领数量
+OA -> OA : 提交申请
+OA -> ERP : 锁定申请人中sku的数量
+alt 主管审批通过
+    OA -> WMS : OA推单到WMS
+    alt 仓管员确认出库
+        仓管员 -> WMS:确认出库单
+        WMS->ERP:出库ERP入账
+        WMS->ERP:解除SKU数量锁定
+        WMS->OA: 归档流程
+        note right:使用WebService实现
+    else 仓管员退回申请
+        仓管员->WMS:退回申请
+        WMS->ERP:解除SKU数量锁定
+        WMS->OA:退回到申请人
+        note right:使用WebService实现
+    end
+else 主管审批退回
+    OA->ERP: 解除SKU数量锁定
+    OA->OA: 退回到申请人
+end
+
+newpage 物料手机退回限额时序图
+'autonumber
+Applicant -> OA:申请人提外物料手机退机
+OA -> WMS:查询提单人物料手机个人明细
+OA -> OA:提交申请
+OA -> WMS : OA推单到WMS
+    alt 销帐
+        WMS->WMS:更新个人物料明细
+        WMS->ERP:ERP销帐操作
+        WMS->OA : 归档流程
+    else 不销帐
+        alt 仓管员确认入库
+            仓管员->WMS:确认入库
+            WMS->ERP:写ERP
+            WMS->ERP:按配置比例增加SKU限额
+            WMS->OA:归档流程
+            note right:使用WebService实现
+        else 仓管员退回申请
+            仓管员->WMS:退回申请
+            WMS->OA:退回到申请人
+            note right:使用WebService实现
+        end
+    end
+
+@enduml

@@ -1,0 +1,48 @@
+'http://archive.3zso.com/archives/plantuml-quickstart.html
+@startuml
+actor Applicant
+actor "仓管员"
+participant "OA" as OA
+participant "WMS" as WMS
+participant "ERP" as ERP
+
+title 外购样机申请时序图
+
+Applicant->OA:申请人提外购样机
+OA->OA:主管确认
+OA->WMS:推单到wms系统
+alt 确认出库
+    仓管员->WMS:确认出库单
+    WMS->ERP:erp入账
+    WMS->OA: 回写物流信息
+    WMS->OA: 流程到下一节点至申请人
+    note right:使用WebService实现
+    OA->OA:申请人确认
+    OA->OA:归档
+else 退回申请
+    仓管员->WMS:退回出库单
+    WMS->OA:退回到申请人
+    note right:使用WebService实现
+end
+
+newpage 外购样机退机时序图
+'autonumber
+actor "仓管员"
+Applicant -> OA:申请人提外购样机退机
+OA -> WMS:查询提单人外购样机个人明细
+OA -> WMS : OA推单到WMS
+    alt 销帐
+        WMS->ERP:销帐操作
+        WMS->OA : 归档流程
+    else 不销帐
+        alt 确认出库
+            仓管员 -> WMS:操作WMS确认入库
+            WMS->ERP:写ERP
+            WMS->OA:归档流程
+            note right:使用WebService实现
+        else 退回申请
+            仓管员 -> WMS:退回入库单
+            WMS->OA:退回到申请人
+        end
+    end
+@enduml
