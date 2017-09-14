@@ -1,0 +1,27 @@
+'http://archive.3zso.com/archives/plantuml-quickstart.html
+@startuml
+actor Applicant
+actor "仓管员"
+participant "OA" as OA
+participant "WMS" as WMS
+participant "ERP" as ERP
+
+title 低值易耗申请时序图
+
+Applicant->OA:申请人低值易耗流程,填写SKU和数量
+'OA->OA:主管确认
+仓管员->OA:审批
+OA->WMS:推单到wms系统
+WMS -> ERP:写ERP入账
+
+
+newpage 低值易耗退回时序图
+'autonumber
+actor "仓管员"
+Applicant -> OA:申请人退回低值易耗流程
+OA -> WMS:查询申请人固定资产明细
+Applicant -> OA:选择明细及数量，提交流程
+仓管员 -> OA :仓管员确认
+OA -> WMS : OA推单到WMS
+WMS->ERP:ERP记账
+@enduml

@@ -1,0 +1,15 @@
+@startuml
+scale 350 width
+
+state ThreadStates {
+  [*] --> New
+  New --> Runnable: start
+    state Runnable {
+       Blocked -> Ready
+       Ready ----> Blocked
+       Ready-> Running
+       Running->Blocked
+    }
+}
+
+@enduml

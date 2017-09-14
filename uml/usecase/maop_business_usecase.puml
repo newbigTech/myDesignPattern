@@ -1,0 +1,29 @@
+@startuml
+left to right direction
+actor Applicant
+actor 申请人主管
+actor 泰然仓管员
+actor 采购
+actor 审计
+
+
+Applicant --> (外购样机领用)
+Applicant --> (外购样机退回)
+Applicant --> (外购样机转移)
+Applicant --> (个人外购样机查询)
+Applicant --> (低值易耗领用)
+Applicant --> (低值易耗退回)
+Applicant --> (固定资产领用)
+Applicant --> (固定资产退回)
+Applicant --> (固定资产转移)
+
+申请人主管 --> (审批外购样机申请单)
+
+泰然仓管员 --> (外购样机领用审批出库)
+泰然仓管员 --> (外购样机退回审批入库)
+
+审计 --> (调整部门SKU领用限额)
+
+采购 --> (外购样机购买)
+
+@enduml

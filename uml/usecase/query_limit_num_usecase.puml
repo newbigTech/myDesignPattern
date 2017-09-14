@@ -1,0 +1,28 @@
+@startuml
+left to right direction
+actor Applicant
+
+rectangle OA {
+    (物料手机申请)
+}
+
+rectangle ERP {
+    (查询部门SKU限额)
+    (锁定部门SKU限额)
+    (更新部门SKU限额)
+    (解除部门SKU限额锁定)
+}
+rectangle WMS {
+    (查询个人资产)
+    (通用出库)
+    (通用入库)
+}
+Applicant ..>(物料手机申请)
+(物料手机申请) ..>(查询个人资产):<include>
+(物料手机申请)..>(查询部门SKU限额):<invoke>
+(物料手机申请)..>(锁定部门SKU限额):<invoke>
+(物料手机申请)..>(解除部门SKU限额锁定):<invoke>
+(物料手机申请)..>(通用出库):<invoke>
+(通用出库)..>(解除部门SKU限额锁定):<invoke>
+(通用出库)..>(更新部门SKU限额):<invoke>
+@enduml

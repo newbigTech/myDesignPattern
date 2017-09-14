@@ -1,0 +1,28 @@
+'http://archive.3zso.com/archives/plantuml-quickstart.html
+@startuml
+actor Applicant
+actor "仓管员"
+participant "OA" as OA
+participant "WMS" as WMS
+participant "ERP" as ERP
+
+title 固定资产申请时序图
+
+Applicant->OA:申请人固定资产申请人流程,填写SKU和数量
+'OA->OA:主管确认
+仓管员->OA:填写固定资产明细,并审批
+OA->WMS:推单到wms系统
+WMS -> ERP:写ERP入账
+
+
+newpage 固定资产退回时序图
+'autonumber
+actor "仓管员"
+Applicant -> OA:申请人固定资产退机
+OA -> WMS:查询申请人固定资产明细
+WMS -> ERP :查询申请人固定资产明细
+Applicant -> OA:选择退机明细，提交流程
+仓管员 -> OA :仓管员确认
+OA -> WMS : OA推单到WMS
+WMS->ERP:ERP记账
+@enduml

@@ -1,0 +1,13 @@
+@startuml
+'scale 350 width
+state 外购样机申请状态机 {
+    [*] --> OA新建状态:申请人提单
+    OA新建状态 --> TLApproved:主管审批通过
+    TLApproved-->OA新建状态:主管审批不通过
+    TLApproved --> PMCApproved: PMC审批通过
+    PMCApproved --> OA新建状态 :PMC退回
+    PMCApproved --> WMS出库单新建状态: 自动推单WMS
+    WMS出库单新建状态 --> OA新建状态:退回出库单
+    WMS出库单新建状态 --> [*] : 仓管员出库操作
+}
+@enduml

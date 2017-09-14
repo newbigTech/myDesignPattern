@@ -1,30 +1,43 @@
 @startuml
 left to right direction
 actor Applicant
+actor 泰然仓管员
+actor 采购员
+actor 审计
 
 rectangle OA {
 Applicant --> (外购样机申请)
 Applicant --> (外购样机退回)
+Applicant --> (外购样机转移)
+Applicant --> (个人外购样机明细查询)
+Applicant --> (低值易耗领用)
 Applicant --> (低值易耗退回)
+Applicant --> (固定资产领用)
 Applicant --> (固定资产退回)
-
+Applicant --> (固定资产转移)
 }
 
 rectangle ERP {
     (ERP入库操作)
     (ERP出库操作)
+    审计->(部门SKU限额调整)
 }
 rectangle WMS {
     (查询个人资产)
-    (通用出库)
-    (通用入库)
+    泰然仓管员->(通用出库):外购样机申请
+    泰然仓管员->(通用入库):外购样机退回
+    采购员->(通用入库):采购入库
 }
+
 (外购样机退回)..>(查询个人资产):<include>
+(外购样机转移)..>(查询个人资产):<include>
 (低值易耗退回)..>(查询个人资产):<include>
 (固定资产退回)..>(查询个人资产):<include>
+(固定资产转移)..>(查询个人资产):<include>
 (外购样机申请) ..>(通用出库):<invoke>
 (外购样机退回) ..>(通用入库):<invoke>
 (低值易耗退回) ..>(通用入库):<invoke>
 (通用入库) ..>(ERP入库操作):<invoke>
 (通用出库) ..>(ERP出库操作):<invoke>
+(个人外购样机明细查询)..>(查询个人资产):<include>
 @enduml
