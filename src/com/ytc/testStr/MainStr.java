@@ -32,5 +32,12 @@ public class MainStr {
         System.out.println(stu.hashCode());
         System.out.println(stu2.hashCode());
         System.out.println(stu == stu2);
+        Haha haha = new Haha();
+//        haha.getAddress
+        System.out.println("............................................>>>");
+        Address address222 = Haha.getAddress();
+        System.out.println(address222.getAddressName());
+        address222.setAddressName("asdf");
+        System.out.println(address222.getAddressName());
     }
 }

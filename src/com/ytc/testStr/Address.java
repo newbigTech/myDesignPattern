@@ -1,10 +1,16 @@
 package com.ytc.testStr;
 
+import java.math.BigDecimal;
+
 /**
  * Created by Administrator on 2017/9/6.
  */
 public class Address implements Cloneable {
     private String addressName;
+
+//    public Address(char[] in, int offset, int len) {
+//        super(in, offset, len);
+//    }
 
     public String getAddressName() {
         return addressName;
