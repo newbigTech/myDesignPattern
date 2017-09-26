@@ -1,0 +1,27 @@
+@startuml
+
+namespace java.lang #DDDDDD {
+    class Error << unchecked >>
+    Throwable <|-- Error
+    Throwable <|-- Exception
+    Exception <|-- CloneNotSupportedException
+    Exception <|-- RuntimeException
+    RuntimeException <|-- ArithmeticException
+    RuntimeException <|-- ClassCastException
+    RuntimeException <|-- IllegalArgumentException
+    RuntimeException <|-- IllegalStateException
+    Exception <|-- ReflectiveOperationException
+    ReflectiveOperationException <|-- ClassNotFoundException
+}
+
+namespace java.io #DDDDDD {
+    java.lang.Exception <|-- IOException
+    IOException <|-- EOFException
+    IOException <|-- FileNotFoundException
+}
+
+namespace java.net #DDDDDD {
+    java.io.IOException <|-- MalformedURLException
+    java.io.IOException <|-- UnknownHostException
+}
+@enduml
