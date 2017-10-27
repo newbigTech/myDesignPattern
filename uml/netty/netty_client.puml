@@ -14,8 +14,8 @@ alt initAndRegister()
   AbstractBootstrap -> Bootstrap: 工厂方法创建channel
   AbstractBootstrap -> AbstractBootstrap: init(channel)
   AbstractBootstrap -> Bootstrap: 2.init(channel)
-  AbstractBootstrap -> AbstractBootstrap: 3.channel.unsafe()\n.register(channelPromise)
-  AbstractBootstrap -> AbstractChannel:register(channelPromise)
+  AbstractBootstrap -> AbstractChannel: 3.channel.unsafe()\n.register(channelPromise)
+'  AbstractBootstrap -> AbstractChannel:register(channelPromise)
   AbstractChannel -> AbstractNioChannel:doRegister()
   AbstractNioChannel -> AbstractNioChannel:javaChannel()\n.register(eventLoop().selector, 0, this);
   AbstractChannel -> AbstractChannel:pipeline.fireChannelRegistered()
