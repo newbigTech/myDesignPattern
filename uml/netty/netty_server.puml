@@ -1,0 +1,11 @@
+@startuml
+participant "server" as server
+participant "ServerBootstrap" as ServerBootstrap
+participant "AbstractBootstrap" as AbstractBootstrap
+participant "AbstractChannel" as AbstractChannel
+participant "DefaultChannelPipeline" as DefaultChannelPipeline
+participant "AbstractNioChannel" as AbstractNioChannel
+participant "NioServerSocketChannel" as NioServerSocketChannel
+
+
+@enduml
