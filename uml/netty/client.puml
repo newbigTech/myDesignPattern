@@ -1,0 +1,58 @@
+@startuml
+participant "client" as client
+participant "Bootstrap" as Bootstrap
+participant "AbstractBootstrap" as AbstractBootstrap
+participant "AbstractChannel" as AbstractChannel
+participant "DefaultChannelPipeline" as DefaultChannelPipeline
+participant "AbstractNioChannel" as AbstractNioChannel
+participant "NioSocketChannel" as NioSocketChannel
+client -> client: connect(port, host)
+client -> Bootstrap: doConnect(remoteAddress,localAddress)
+Bootstrap -> AbstractBootstrap: 1.initAndRegister()
+alt initAndRegister()
+  AbstractBootstrap -> AbstractBootstrap: 1.createChannel()
+  AbstractBootstrap -> Bootstrap: 工厂方法创建channel
+  AbstractBootstrap -> AbstractBootstrap: init(channel)
+  AbstractBootstrap -> Bootstrap: 2.init(channel)
+  AbstractBootstrap -> AbstractBootstrap: 3.channel.unsafe()\n.register(channelPromise)
+  AbstractBootstrap -> AbstractChannel:register(channelPromise)
+  AbstractChannel -> AbstractNioChannel:doRegister()
+  AbstractNioChannel -> AbstractNioChannel:javaChannel()\n.register(eventLoop().selector, 0, this);
+  AbstractChannel -> AbstractChannel:pipeline.fireChannelRegistered()
+  alt isActive()
+      AbstractChannel -> DefaultChannelPipeline:pipeline.fireChannelActive()
+  end
+end
+AbstractBootstrap -> AbstractBootstrap:doBind0()
+AbstractBootstrap -> AbstractChannel:bind()
+AbstractChannel-> DefaultChannelPipeline:bind()
+DefaultChannelPipeline-> DefaultChannelPipeline:tail.bind()
+DefaultChannelPipeline-> DefaultChannelPipeline:head.bind()
+DefaultChannelPipeline-> DefaultChannelPipeline:unsafe\n.bind(localAddress, channelPromise)
+AbstractChannel-> NioServerSocketChannel:doBind(localAddress)
+NioSocketChannel-> NioSocketChannel:javaChannel().socket().bind()
+
+Bootstrap -> Bootstrap:2.doConnect0()
+alt doConnect0()
+Bootstrap -> AbstractChannel:channel.connect()
+AbstractChannel -> DefaultChannelPipeline:pipeline.connect()
+AbstractChannel -> DefaultChannelPipeline:tail.connect()
+AbstractChannel -> DefaultChannelPipeline:head.connect()
+AbstractChannel -> DefaultChannelPipeline:unsafe\n.connect(localAddress, channelPromise)
+DefaultChannelPipeline -> AbstractNioChannel:connect()
+AbstractNioChannel -> NioSocketChannel:doConnect()
+NioSocketChannel -> NioSocketChannel:javaChannel()\n.connect(remoteAddress)
+AbstractNioChannel -> AbstractNioChannel:fulfillConnectPromise()
+AbstractNioChannel -> DefaultChannelPipeline:pipeline()\n.fireChannelActive()
+  alt channel.config().isAutoRead()
+      DefaultChannelPipeline -> AbstractChannel:channel.read()
+      AbstractChannel -> DefaultChannelPipeline:pipeline.read()
+      DefaultChannelPipeline -> DefaultChannelPipeline:tail.read()
+      DefaultChannelPipeline -> DefaultChannelPipeline:head.read()
+      DefaultChannelPipeline -> AbstractChannel:unsafe.beginRead()
+      AbstractChannel -> AbstractChannel:doBeginRead()
+      AbstractChannel -> AbstractNioChannel:selectionKey\n.interestOps(interestOps | readInterestOp);
+  end
+end
+
+@enduml
