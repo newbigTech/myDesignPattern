@@ -18,7 +18,7 @@ alt initAndRegister()
 '  AbstractBootstrap -> AbstractChannel:register(channelPromise)
   AbstractChannel -> AbstractNioChannel:doRegister()
   AbstractNioChannel -> AbstractNioChannel:javaChannel()\n.register(eventLoop().selector, 0, this);
-  AbstractChannel -> AbstractChannel:pipeline.fireChannelRegistered()
+  AbstractChannel -> DefaultChannelPipeline:pipeline.fireChannelRegistered()
   alt isActive()
       AbstractChannel -> DefaultChannelPipeline:pipeline.fireChannelActive()
   end
@@ -44,7 +44,9 @@ AbstractNioChannel -> NioSocketChannel:doConnect()
 NioSocketChannel -> NioSocketChannel:javaChannel()\n.connect(remoteAddress)
 AbstractNioChannel -> AbstractNioChannel:fulfillConnectPromise()
 AbstractNioChannel -> DefaultChannelPipeline:pipeline()\n.fireChannelActive()
-  alt channel.config().isAutoRead()
+  alt fireChannelActive()
+      DefaultChannelPipeline -> DefaultChannelPipeline:head.fireChannelActive()
+      alt channel.config().isAutoRead()
       DefaultChannelPipeline -> AbstractChannel:channel.read()
       AbstractChannel -> DefaultChannelPipeline:pipeline.read()
       DefaultChannelPipeline -> DefaultChannelPipeline:tail.read()
@@ -52,6 +54,7 @@ AbstractNioChannel -> DefaultChannelPipeline:pipeline()\n.fireChannelActive()
       DefaultChannelPipeline -> AbstractChannel:unsafe.beginRead()
       AbstractChannel -> AbstractChannel:doBeginRead()
       AbstractChannel -> AbstractNioChannel:selectionKey\n.interestOps(interestOps | readInterestOp);
+      end
   end
 end
 
