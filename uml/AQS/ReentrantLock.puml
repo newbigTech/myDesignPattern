@@ -1,0 +1,27 @@
+@startuml
+participant "ReentrantLock" as ReentrantLock
+participant "FairSync" as FairSync
+participant "AbstractQueuedSynchronizer" as AbstractQueuedSynchronizer
+participant "AbstractOwnableSynchronizer" as AbstractOwnableSynchronizer
+ReentrantLock -> ReentrantLock: lock()
+ReentrantLock -> FairSync: sync.lock()
+FairSync -> FairSync: lock()
+FairSync -> AbstractQueuedSynchronizer: acquire(1)
+AbstractQueuedSynchronizer -> FairSync: tryAcquire(1)
+note right:上来就首先尝试获取锁，如果成功获取返回true，结束方法，没有下面调用
+alt tryAcquire(1)调用链路
+    FairSync -> AbstractQueuedSynchronizer: getState()
+    alt getState()==0&&没有前驱节点&&成功获取到锁
+        FairSync-> AbstractOwnableSynchronizer:setExclusiveOwnerThread(current) return true
+    else getState()!=0 && \ngetExclusiveOwnerThread()==Thread.currentThread()
+    FairSync -> AbstractQueuedSynchronizer: setState(getState()+1) return true
+    end
+end
+
+alt tryAcquire(1)==false
+    AbstractQueuedSynchronizer->AbstractQueuedSynchronizer:Node=addWaiter(Node.EXCLUSIVE)
+    note right:首先快速入队，不成功，则调用enq轮询入队；此方法返回入队节点
+    AbstractQueuedSynchronizer->AbstractQueuedSynchronizer:acquireQueued(Node, 1)
+    note right:轮询，每次轮询首先判断如果当前节点的前驱节点为head，则试图获取锁。\n如果以上不成立，判断当前节点是否线程需要中断
+end
+@enduml
