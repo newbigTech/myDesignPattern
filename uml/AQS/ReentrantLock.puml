@@ -3,6 +3,7 @@ participant "ReentrantLock" as ReentrantLock
 participant "FairSync" as FairSync
 participant "AbstractQueuedSynchronizer" as AbstractQueuedSynchronizer
 participant "AbstractOwnableSynchronizer" as AbstractOwnableSynchronizer
+title ReentrantLock公平锁
 ReentrantLock -> ReentrantLock: lock()
 ReentrantLock -> FairSync: sync.lock()
 FairSync -> FairSync: lock()
