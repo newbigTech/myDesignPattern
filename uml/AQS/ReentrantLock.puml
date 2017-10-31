@@ -23,6 +23,7 @@ alt tryAcquire(1)==false
     AbstractQueuedSynchronizer->AbstractQueuedSynchronizer:Node=addWaiter(Node.EXCLUSIVE)
     note right:首先快速入队，不成功，则调用enq轮询入队；此方法返回入队节点
     AbstractQueuedSynchronizer->AbstractQueuedSynchronizer:acquireQueued(Node, 1)
-    note right:轮询，每次轮询首先判断如果当前节点的前驱节点为head，则试图获取锁。\n如果以上不成立，判断当前节点是否线程需要中断
+    note right:轮询，每次轮询首先判断如果当前节点的前驱节点为head，则试图获取锁。\n如果以上不成立，判断当前节点是否线程需要中断；\n这样做是因为，如果队列为空，则没有其他线程唤醒当前线程
+
 end
 @enduml
