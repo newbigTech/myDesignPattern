@@ -1,0 +1,22 @@
+@startuml
+participant "client"         as client
+participant "ExtensionLoader"         as ExtensionLoader
+
+client -> ExtensionLoader:getExtension(name)
+alt (Holder<Object> holder = cachedInstances.get(name))==null
+    ExtensionLoader -> ExtensionLoader:createExtension(name)
+    ExtensionLoader -> ExtensionLoader:clazz = getExtensionClasses().get(name)
+    alt getExtensionClasses()
+        alt (Map<String, Class<?>> classes = cachedClasses.get())==null
+            ExtensionLoader->ExtensionLoader:classes = loadExtensionClasses();\ncachedClasses.set(classes);
+        else return cachedClasses.get()
+        end
+    end
+    ExtensionLoader -> ExtensionLoader:T instance = (T)EXTENSION_INSTANCES.get(clazz)
+    ExtensionLoader -> ExtensionLoader:injectExtension(instance);
+    ExtensionLoader->client:instance
+else instance=holder.get()
+    ExtensionLoader->client:instance
+end
+
+@enduml
