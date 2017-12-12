@@ -18,5 +18,10 @@ alt (Holder<Object> holder = cachedInstances.get(name))==null
 else instance=holder.get()
     ExtensionLoader->client:instance
 end
-
+legend center
+    ConcurrentMap<String, Holder<Object>> cachedInstances
+    ->
+    Holder<Map<String, Class<?>>> cachedClasses
+    & private static final ConcurrentMap<Class<?>, Object> EXTENSION_INSTANCES
+endlegend
 @enduml
