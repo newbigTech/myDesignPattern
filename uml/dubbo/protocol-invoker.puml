@@ -1,0 +1,41 @@
+@startuml
+'http://blog.javachen.com/2016/02/29/plantuml-class-diagram.html
+'泛化，Generalization：<|--
+'关联，Association：<--
+'组合，Composition：*--
+'聚合，Aggregation：o--
+'实现，Realization：<|..
+'依赖，Dependency：<..
+
+class ReferenceConfig
+
+namespace dubbo.invoke #DDDDDD {
+    interface Invoker<<T>>{
+        Result invoke(Invocation inv)
+    }
+    abstract class AbstractInvoker<<T>>
+    class DubboInvoker<<T>>
+    Invoker <|..AbstractInvoker
+    AbstractInvoker <|-- DubboInvoker
+}
+dubbo.protocol.DubboProtocol .> dubbo.invoke.DubboInvoker
+namespace dubbo.protocol #DDDDDD {
+    interface Protocol<<T>>{
+        <T> Invoker<T> refer(Class<T> type, URL url)
+    }
+    abstract class AbstractProtocol
+    class DubboProtocol
+    Protocol <|..AbstractProtocol
+    AbstractProtocol<|.. DubboProtocol
+}
+ReferenceConfig ..> dubbo.protocol.DubboProtocol
+
+'Invoker <|..AbstractInvoker
+'AbstractInvoker <|-- DubboInvoker
+'DubboProtocol ..> DubboInvoker
+'Protocol <|..AbstractProtocol
+'AbstractProtocol<|.. DubboProtocol
+''DubboProtocol <.. ReferenceConfig
+'ReferenceConfig ..> DubboProtocol
+
+@enduml
