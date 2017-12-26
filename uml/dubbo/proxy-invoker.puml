@@ -1,14 +1,20 @@
 @startuml
-participant "ReferenceConfig"         as ReferenceConfig
+participant "ReferenceConfig"            as ReferenceConfig
+participant "DubboProtocol"              as DubboProtocol
+participant "DubboInvoker"               as DubboInvoker
 participant "AbstractProxyFactory"       as AbstractProxyFactory
-participant "JdkProxyFactory"       as JdkProxyFactory
-participant "InvokerInvocationHandler"       as InvokerInvocationHandler
+participant "JdkProxyFactory"            as JdkProxyFactory
+participant "InvokerInvocationHandler"   as InvokerInvocationHandler
 
+ReferenceConfig->DubboProtocol:refprotocol.refer(interfaceClass, url)
+DubboProtocol->DubboInvoker:new DubboInvoker()
+DubboProtocol->ReferenceConfig:return invoker
 ReferenceConfig->AbstractProxyFactory:getProxy(invoker)
 AbstractProxyFactory->AbstractProxyFactory:getProxy(invoker,interfaces)
 AbstractProxyFactory->JdkProxyFactory:getProxy(invoker,interfaces)
 JdkProxyFactory->ReferenceConfig:ref
 ReferenceConfig->JdkProxyFactory:ref.getBean("xxx")
 JdkProxyFactory->InvokerInvocationHandler:invoke(ref,method,args)
+InvokerInvocationHandler->DubboInvoker:doInvoke(Invocation)
 
 @enduml
