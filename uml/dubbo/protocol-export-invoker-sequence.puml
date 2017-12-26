@@ -1,0 +1,17 @@
+@startuml
+participant "ServiceConfig"                 as ServiceConfig
+participant "JdkProxyFactory"               as JdkProxyFactory
+participant "AbstractProxyInvoker"          as AbstractProxyInvoker
+participant "DubboProtocol"                 as DubboProtocol
+'participant "DubboInvoker"                 as DubboInvoker
+'participant "AbstractProxyFactory"         as AbstractProxyFactory
+'participant "InvokerInvocationHandler"     as InvokerInvocationHandler
+
+ServiceConfig -> ServiceConfig:doExport()
+ServiceConfig -> JdkProxyFactory:getInvoker(T proxy, Class<T> type,url)
+JdkProxyFactory -> AbstractProxyInvoker:new AbstractProxyInvoker<T>(proxy, type, url){\n     doInvoke(){}\n}
+JdkProxyFactory -> ServiceConfig:return invoker
+ServiceConfig -> DubboProtocol:export(invoker)
+DubboProtocol -> ServiceConfig:return exporter
+
+@enduml
