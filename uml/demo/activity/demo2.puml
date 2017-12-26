@@ -1,0 +1,36 @@
+@startuml
+title 活动图-扩展-3
+
+package "This is package" {
+    interface - [package 2]
+    [package 2] -> [package 3]
+}
+
+node "This is node" {
+    [package 3] -- [node 1]
+    [node 1] --> [node 2]
+}
+
+cloud {
+    [node 2] --> [cloud 1]
+    [node 2] --> [cloud 2]
+    [node 2] --> [cloud 3]
+}
+
+database "This is Mysql" {
+    folder "This is folder" {
+        [folder 1]
+        [folder 2]
+    }
+
+    frame "This is frame" {
+        [frame 1]
+    }
+}
+
+[cloud 1] --> [folder 1]
+[cloud 1] --> [folder 2]
+[cloud 2] --> [folder 1]
+[cloud 2] --> [folder 2]
+[cloud 3] --> [frame 1]
+@enduml

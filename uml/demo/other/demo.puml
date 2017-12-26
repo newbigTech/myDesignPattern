@@ -1,0 +1,22 @@
+@startuml
+title 其他图-折叠树-6
+@startsalt
+{
+    {T
+     + Folder
+     ++ Folder1
+     +++ Folder1.1
+     ++++ File1.1.1
+     ++ Folder1.2
+     +++ File1.2.1
+     +++ File1.2.2
+     +++ File1.2.3
+     ++ Folder2
+     +++ File2.1
+     +++ Folder2.2
+     ++++ File2.2.1
+     ++ Folder3
+    }
+}
+@endsalt
+@enduml

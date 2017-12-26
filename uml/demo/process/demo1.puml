@@ -1,0 +1,28 @@
+@startuml
+title 流程图-扩展-2
+
+start
+:Param;
+-> This is arrows message;
+floating note left: This is floating note left
+if (condition A) then (yes)
+    :Do something for yes A|
+    if (condition B) then (yes)
+        :Do something for yes B>
+    elseif (condition C) then (yes)
+        :Do something for yes C<
+        stop
+    else (nothing)
+        :Do something for nothing/
+    endif
+else (no)
+    :Do something for no A;
+    floating note right: This is floating note right
+endif
+
+while (condition D?)
+:Do something E}
+:Do something F]
+endwhile
+end
+@enduml

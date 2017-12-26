@@ -1,0 +1,45 @@
+@startuml
+title 流程图-扩展-3
+
+start
+:Param;
+-> This is arrows message;
+note left
+This is note left with <color #FF0000>HTML</color>
+This is Param note
+end note
+if (condition A) then (true)
+    -[#black,dashed]->
+    :Do something for yes A;
+    if (condition B) then (yes)
+        -[#000000]->
+        :Do something for yes B;
+    else
+        -[#green,bold]->
+        if (condition C) then (yes)
+            :Do something for yes C;
+        else (no)
+            :Do something for no C;
+        endif
+    endif
+else (false)
+    -[#blue,dotted]->
+    :Do something for no A;
+    note right
+        This is note right with <color #118888>HTML</color>
+        ====
+        * This is **bold**
+        * This is //italics//
+        * This is ""monospaced""
+        * This is --stroked --
+        * This is __underlined__
+        * This is ~~waved~~
+    end note
+endif
+
+#AAAAAA:Do something D;
+repeat
+#Green:Do something E;
+repeat while (condition F?)
+stop
+@enduml

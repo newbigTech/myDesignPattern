@@ -1,0 +1,55 @@
+@startuml
+
+title 类图-扩展-3
+
+abstract class AbstractList
+abstract AbstractCollection
+interface List
+interface Collection
+
+List <|-- AbstractList
+Collection <|-- AbstractCollection
+Collection <|- List
+AbstractCollection <|-- AbstractList
+
+package java.util {
+    AbstractList <|--  ArrayList
+    class ArrayList {
+        This is package java.util
+    }
+}
+
+namespace net.test {
+   com.test.ArrayList <|- ArrayList
+   class ArrayList {
+        This is namespace net.test
+    }
+}
+
+ArrayList <|-- net.test.ArrayList
+
+namespace com.test {
+    AbstractList <|--  ArrayList
+    class ArrayList {
+        This is namespace com.test
+    }
+}
+
+class ArrayList <? extends Element> {
+    Object[] elementData
+    int size()
+}
+
+package "enum and annotation" #DDDDDD {
+    enum HttpMethod {
+        POST
+        GET
+        PUT
+        DELETE
+        PATCH
+    }
+
+    annotation Annotation
+}
+
+@enduml

@@ -9,26 +9,43 @@
 
 class ReferenceConfig
 
+namespace dubbo.proxy #DDDDDD {
+    interface ProxyFactory{
+        <T> T getProxy(Invoker<T> invoker)
+        <T> Invoker<T> getInvoker(T proxy, Class<T> type, URL url)
+    }
+    abstract class AbstractProxyFactory
+    class JdkProxyFactory
+    ProxyFactory <|..AbstractProxyFactory
+    AbstractProxyFactory <|-- JdkProxyFactory
+}
+
 namespace dubbo.invoke #DDDDDD {
     interface Invoker<<T>>{
         Result invoke(Invocation inv)
     }
     abstract class AbstractInvoker<<T>>
-    class DubboInvoker<<T>>
+    class DubboInvoker<<T>> {
+        Result doInvoke(Invocation invocation)
+    }
     Invoker <|..AbstractInvoker
     AbstractInvoker <|-- DubboInvoker
 }
 dubbo.protocol.DubboProtocol .> dubbo.invoke.DubboInvoker
+
 namespace dubbo.protocol #DDDDDD {
-    interface Protocol<<T>>{
+    interface Protocol{
         <T> Invoker<T> refer(Class<T> type, URL url)
     }
     abstract class AbstractProtocol
     class DubboProtocol
     Protocol <|..AbstractProtocol
-    AbstractProtocol<|.. DubboProtocol
+    AbstractProtocol<|-- DubboProtocol
 }
-ReferenceConfig ..> dubbo.protocol.DubboProtocol
+dubbo.proxy.JdkProxyFactory ..>dubbo.invoke.DubboInvoker
+
+ReferenceConfig ..> dubbo.protocol.DubboProtocol:1.refprotocol.refer(interfaceClass, urls.get(0))
+ReferenceConfig ..> dubbo.proxy.JdkProxyFactory:2.proxyFactory.getProxy(invoker)
 
 'Invoker <|..AbstractInvoker
 'AbstractInvoker <|-- DubboInvoker

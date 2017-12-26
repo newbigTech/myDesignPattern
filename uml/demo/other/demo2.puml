@@ -1,0 +1,10 @@
+@startuml
+title 其他图-表格-3
+@startsalt
+{#
+    column1 | column2 | column3 | column4
+    row1 | value1_2 | value1_3 | value1_4
+    row2 | value2_2 | value2_3 | value2_4
+}
+@endsalt
+@enduml

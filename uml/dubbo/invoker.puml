@@ -3,7 +3,7 @@ participant "client"         as client
 participant "Invoker1"       as Invoker1
 participant "EchoFilter"     as EchoFilter
 participant "Invoker2"       as Invoker2
-participant "TraceFilter"  as TraceFilter
+participant "TraceFilter"    as TraceFilter
 participant "Invoker3"       as Invoker3
 participant "TimeOutFilter"  as TimeOutFilter
 participant "Invoker4"       as Invoker4

@@ -1,0 +1,31 @@
+@startuml
+title 用例图-扩展-2
+
+actor User
+actor :I am administrator: as Admin
+usecase Case1 as "This is usecase message
+But it is too lang
+--
+This is -- message
+==
+This is == message
+..introduction..
+This is .. message"
+
+User -> (Start)
+User --> Case1 : I am User
+Admin ---> Case1 : I am administrator
+note right of Admin
+This is note right with <color #FF0000>HTML</color>
+This is **bold**
+This is //italics//
+This is ""monospaced""
+This is --stroked --
+This is __underlined__
+This is ~~waved~~
+endnote
+note bottom of Case1: This is note bottom
+note "This is note message" as n
+(Start) .. n
+n .. Case1
+@enduml

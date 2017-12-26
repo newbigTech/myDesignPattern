@@ -1,0 +1,67 @@
+@startuml
+title 时序图-扩展-3
+
+actor 用户 #red
+participant 参与者1 #yellow
+participant 参与者2 #yellow
+participant "我的名字有点长\n参与者3" as p3 #99FF99
+
+autonumber
+用户 -> 参与者1: This is message1
+note left: This is left node message
+参与者1 --> 参与者2: This is message2
+
+... Please wait 5s ...
+参与者2 --> 参与者1: This is message3
+note right: This is right node message
+参与者1 -> 用户: This is message4
+
+用户 -[#0000FF]> 参与者2: This is message5
+用户 <-[#0000FF]- 参与者2: This is message6
+
+== This is  stage 1 ==
+autonumber 10
+用户 ->> p3: This is message10
+note left of 用户
+This is <color #118888>HTML</color> note
+This is **bold**
+This is //italics//
+This is ""monospaced""
+This is --stroked --
+This is __underlined__
+This is ~~waved~~
+endnote
+
+用户 <<-- p3: This is message11
+note right of p3 #aqua
+this is right note of p3
+endnote
+note over p3: This is note over p3
+
+用户 -> 用户: This is message 12 to myself\n but it is too long.
+
+== This is stage 2 ==
+autonumber 20 10
+用户 -> 参与者1: This is message20
+hnote over 用户: This is hnote message
+参与者1 -> 用户: This is message30
+rnote over 参与者1
+This is rnote message_1
+This is rnote message_2
+endrnote
+
+== This is stage 3 ==
+autonumber
+participant "参与者4" as p4
+ref over 用户: This is ref message
+用户 -> p3: This is message1
+activate p3
+p3 -> p4: This is activate message
+activate p4
+||50||
+ref over p4: This is ref message p4
+p4 --> p3: This is deactivate message
+deactivate p4
+p3 --> 用户: This is message4
+deactivate p3
+@enduml

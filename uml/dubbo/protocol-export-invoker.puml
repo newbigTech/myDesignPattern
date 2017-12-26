@@ -1,0 +1,20 @@
+@startuml
+'http://blog.javachen.com/2016/02/29/plantuml-class-diagram.html
+'泛化，Generalization：<|--
+'关联，Association：<--
+'组合，Composition：*--
+'聚合，Aggregation：o--
+'实现，Realization：<|..
+'依赖，Dependency：<..
+
+class ServiceConfig
+
+namespace dubbo.invoke #DDDDDD {
+
+}
+namespace dubbo.protocol #DDDDDD {
+
+}
+
+
+@enduml

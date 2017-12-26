@@ -1,0 +1,74 @@
+@startuml
+
+title 类图-扩展-2
+
+Class1 "extends" <|-- Class2: Class2 to Class1
+Class1 *-- "Composie" Class3
+Class3 <|-- Class4: extends
+User -o Class2: User to Class2
+Class1 : -Field1
+Class1 : #Field2
+Class1 : ~Method1()
+Class1 : +Method2()
+
+class Class2 {
+    int id
+    String data
+    int getSize()
+    void save()
+    void update()
+    void delete()
+    List<String> getList()
+}
+
+class Class3 {
+    This is Class3 message
+    But it is too lang
+    ..
+    This Class3 .. message
+    ==
+    This is Class == message
+    __
+    This is Class __ message
+    --
+    This is Class -- message
+    But it it too lang
+}
+
+class User {
+    This is class User
+    ..get method..
+    +getName()
+    +getAddress()
+    ..set method..
+    +setName()
+    +setAddress()
+    __private field__
+    -int age
+    -String sex
+    --protect field--
+    #String phone
+    --static field--
+    {static} String id
+    --abstract method--
+    {abstract} void methods()
+}
+
+note left of Class1: This is note left
+note top of User #red
+This is note top of User
+But it is too lang
+endnote
+note right of Class3
+This is note with <color #118888>HTML</color>
+This is **bold**
+This is //italics//
+This is ""monospaced""
+This is --stroked --
+This is __underlined__
+This is ~~waved~~
+endnote
+note "This is note message" as n
+Class3 .. n
+n ..Class4
+@enduml

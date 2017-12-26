@@ -1,0 +1,26 @@
+@startuml
+title 状态图-扩展-2
+
+scale 350 width
+[*] --> State1
+
+state State1 {
+    [*] -> State1.1
+    State1.1 --> State2: State 1.1 to 2
+    State2 --> State1.1: State 2 to 1.1
+}
+
+state State2 {
+    [*] --> State2.1
+    State2.1 --> State2.1.1: State 2.1 to 2.1.1
+    State2.1.1 --> State2.1: State 2.1.1 to 2.1
+
+    state State2.1.1 {
+        State2.1.1.1 -> State2.1.1.2
+    }
+    --
+    [*] -> State2.2
+    State2.2 --> State2.2.1: State 2.2 to 2.2.1
+    State2.2.1 --> State2.2: State 2.2.1 to 2.2
+}
+@enduml

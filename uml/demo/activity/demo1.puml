@@ -1,0 +1,32 @@
+@startuml
+title 活动图-扩展-2
+
+skinparam componentStyle uml2
+[Component one] as c1
+component [Component two] as c2
+component "This name is too lang\nComponent three" as c3 #green
+interface "Interface one" as i1
+() "interface two" as i2 #AAAAAA
+i1 - c1
+c1 -> c2
+c2 -right-> c3
+c2 ..> i2: Component to Interface
+c3 -up-> up: This is up
+c3 -right-> right
+
+note top of c2: This is note top message
+note bottom of c1: This is note bottom message
+note left of i1
+This is note left message with <color #FF0000>HTML</color>
+This is **bold**
+This is //italics//
+This is ""monospaced""
+This is --stroked --
+This is __underlined__
+This is ~~waved~~
+endnote
+note right of i2
+This is note right message
+But it is too lang
+endnote
+@enduml
