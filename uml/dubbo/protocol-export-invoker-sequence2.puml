@@ -7,6 +7,7 @@ participant "DubboProtocol"                 as DubboProtocol
 'participant "InvokerInvocationHandler"     as InvokerInvocationHandler
 'participant "DubboExporter"                as DubboExporter
 
+title Provider暴露服务时序图
 ServiceConfig -> ServiceConfig:doExport()
 ServiceConfig -> ServiceConfig:exportLocal(url):暴露本地服务
 ServiceConfig -> RegistryProtocol:export()
