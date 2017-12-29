@@ -1,0 +1,24 @@
+@startuml
+participant "ServiceConfig"                 as ServiceConfig
+participant "RegistryProtocol"              as RegistryProtocol
+participant "DubboProtocol"                 as DubboProtocol
+'participant "RegistryFactory"                 as RegistryFactory
+'participant "AbstractProxyFactory"         as AbstractProxyFactory
+'participant "InvokerInvocationHandler"     as InvokerInvocationHandler
+'participant "DubboExporter"                as DubboExporter
+
+ServiceConfig -> ServiceConfig:doExport()
+ServiceConfig -> ServiceConfig:exportLocal(url):暴露本地服务
+ServiceConfig -> RegistryProtocol:export()
+RegistryProtocol -> RegistryProtocol:doLocalExport()
+RegistryProtocol -> DubboProtocol:export(invoker):暴露远程服务
+    alt 暴露远程服务
+    RegistryProtocol -> DubboProtocol:openServer(url)
+    RegistryProtocol -> DubboProtocol:createServer(url):启动netty，监听端口
+    RegistryProtocol <- DubboProtocol:返回Export
+    end
+RegistryProtocol -> RegistryFactory:连接zookeeper
+RegistryProtocol <- RegistryFactory:ZookeeperRegistry
+RegistryProtocol -> ZookeeperRegistry:向zk注册服务
+RegistryProtocol -> ZookeeperRegistry:监听zookeeper
+@enduml
