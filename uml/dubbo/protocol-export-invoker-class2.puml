@@ -25,15 +25,51 @@ namespace dubbo.factory #DDDDDD {
 }
 
 namespace dubbo.registry #DDDDDD {
+    interface RegistryService{
+        void register(URL url)
+    }
     interface Registry
-    abstract class AbstractRegistry
-    abstract class FailbackRegistry
-    class ZookeeperRegistry
+    abstract class AbstractRegistry {
+        void register(URL url)
+    }
+    abstract class FailbackRegistry {
+        void register(URL url){super.register}
+        protected abstract void doRegister(URL url);
+    }
+    class ZookeeperRegistry {
+        doRegister(URL url)
+    }
+    RegistryService<|-- Registry
     Registry<|.. AbstractRegistry
     AbstractRegistry<|-- FailbackRegistry:super(url)
     FailbackRegistry<|-- ZookeeperRegistry:super(url)
 }
-RegistryProtocol...>dubbo.factory.AbstractRegistryFactory:registryFactory.getRegistry(url)
-RegistryProtocol....>dubbo.factory.ZookeeperRegistryFactory
-dubbo.factory.ZookeeperRegistryFactory..> dubbo.registry.ZookeeperRegistry:new ZookeeperRegistry(URL\n,ZookeeperTransporter)
+
+namespace dubbo.zookeeper #DDDDDD {
+    interface ZookeeperClient{
+    void create(String path, boolean ephemeral)
+    }
+    abstract class AbstractZookeeperClient{
+        public void create(){}
+        protected abstract void createPersistent(String path);
+        protected abstract void createEphemeral(String path);
+    }
+    class ZkclientZookeeperClient{
+        public void createEphemeral(String path) {}
+        public void createPersistent(String path) {}
+    }
+    ZookeeperClient<|.. AbstractZookeeperClient
+    AbstractZookeeperClient<|-- ZkclientZookeeperClient:super(url)
+}
+
+RegistryProtocol...>dubbo.factory.AbstractRegistryFactory:1.registryFactory.getRegistry(url)
+dubbo.factory.AbstractRegistryFactory..>dubbo.factory.ZookeeperRegistryFactory:2.createRegistry(url)
+dubbo.factory.ZookeeperRegistryFactory..> dubbo.registry.ZookeeperRegistry:3.new ZookeeperRegistry(URL\n,ZookeeperTransporter)
+RegistryProtocol..> dubbo.registry.FailbackRegistry:4.registry.register(url)
+dubbo.registry.FailbackRegistry..>dubbo.registry.ZookeeperRegistry:5.doRegister(url)
+
+dubbo.registry.ZookeeperRegistry..>dubbo.zookeeper.AbstractZookeeperClient:6.zkClient.create()
+dubbo.zookeeper.AbstractZookeeperClient...>dubbo.zookeeper.ZkclientZookeeperClient:7.createEphemeral()
+
+
 @enduml
