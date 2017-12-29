@@ -6,12 +6,15 @@ participant "DubboProtocol"                 as DubboProtocol
 'participant "DubboInvoker"                 as DubboInvoker
 'participant "AbstractProxyFactory"         as AbstractProxyFactory
 'participant "InvokerInvocationHandler"     as InvokerInvocationHandler
+'participant "DubboExporter"                as DubboExporter
 
 ServiceConfig -> ServiceConfig:doExport()
 ServiceConfig -> JdkProxyFactory:getInvoker(T proxy, Class<T> type,url)
 JdkProxyFactory -> AbstractProxyInvoker:new AbstractProxyInvoker<T>(proxy, type, url){\n     doInvoke(){}\n}
 JdkProxyFactory -> ServiceConfig:return invoker
 ServiceConfig -> DubboProtocol:export(invoker)
+note right : 主要是打开 socket 侦听服务,\n并接收客户端发来的各种请求，\n通讯细节由Dubbo 自己实现
+DubboProtocol -> DubboExporter:new DubboExporter(invoker,xx,xx)
 DubboProtocol -> ServiceConfig:return exporter
 
 @enduml
