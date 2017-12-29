@@ -1,0 +1,39 @@
+@startuml
+'http://blog.javachen.com/2016/02/29/plantuml-class-diagram.html
+'泛化，Generalization：<|--
+'关联，Association：<--
+'组合，Composition：*--
+'聚合，Aggregation：o--
+'实现，Realization：<|..
+'依赖，Dependency：<..
+
+class RegistryProtocol
+
+namespace dubbo.factory #DDDDDD {
+    interface RegistryFactory{
+        Registry getRegistry(URL url)
+    }
+    abstract class AbstractRegistryFactory {
+    Registry getRegistry(URL url)
+        protected abstract Registry createRegistry(URL url)
+    }
+    class ZookeeperRegistryFactory {
+        Registry createRegistry(URL url)
+    }
+    RegistryFactory<|.. AbstractRegistryFactory
+    AbstractRegistryFactory<|-- ZookeeperRegistryFactory
+}
+
+namespace dubbo.registry #DDDDDD {
+    interface Registry
+    abstract class AbstractRegistry
+    abstract class FailbackRegistry
+    class ZookeeperRegistry
+    Registry<|.. AbstractRegistry
+    AbstractRegistry<|-- FailbackRegistry:super(url)
+    FailbackRegistry<|-- ZookeeperRegistry:super(url)
+}
+RegistryProtocol...>dubbo.factory.AbstractRegistryFactory:registryFactory.getRegistry(url)
+RegistryProtocol....>dubbo.factory.ZookeeperRegistryFactory
+dubbo.factory.ZookeeperRegistryFactory..> dubbo.registry.ZookeeperRegistry:new ZookeeperRegistry(URL\n,ZookeeperTransporter)
+@enduml
