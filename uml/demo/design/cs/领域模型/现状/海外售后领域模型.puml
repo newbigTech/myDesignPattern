@@ -1,0 +1,275 @@
+@startuml
+
+hide member
+enum RMA单据类型{
+    10: Return
+    20: Replacement
+    30: Repair
+}
+enum 服务类型{
+     10:仓库
+     20:网点
+}
+enum 寄回方式{
+    10:自行寄回
+    20:上门取件
+    30:带至网点
+    40:送至网点
+}
+
+enum 寄回给用户方式{
+    10:自行寄回
+    20:上门取件
+}
+
+enum RMA来源{
+    10: Customer
+    20: Call Center
+    30: Reverse Logitic
+    40: Service Center
+}
+
+enum 维修类别 {
+    保内：InWarranty
+    保外：OutOfWarranty
+}
+
+enum 高低价值{
+   10:低价值
+   20:高价值
+}
+
+enum 退款单类型{
+    10:线上退款单
+    20:线下退款单
+}
+
+class 退款单来源类型{
+    0:默认退款单
+    10:RMA售后退款单
+    20:LMA售中退款单
+    30:无实物
+}
+
+class RMA主单据{
+    rma_sheet_id RMA单id
+    service_zone 服务区域
+    customer_id 用户id
+    ticket_no 海外工单票号
+    source_id 来源id
+    source_complete_time 来源单据完成时间
+    status 状态
+    type 单据类型 10: Return,20: Replacement,30: Repair
+    service_type 服务类型 10:仓库,20:网点
+    swap_create_type 换货单创建类型
+    swap_order_no 换货单号
+    house_sheet_id 仓库网点单据id
+    house_code 仓库网点编号
+    house_tel 仓库网点电话号码
+    return_method 寄回方式 10:自行寄回,20:上门取件,30:带至网点,40:送至网点
+    shipping_method 寄回给用户方式
+    appoint_time 预约申请时间
+    currency 币种
+    checkout_price 实收金额
+    depreciate_price 折旧金额
+    refund_amount 退款金额
+    pay_status 支付状态
+    pay_type 支付方式
+    reason_descr 原因描述
+    create_user 创建人员
+    create_time 创建时间
+    modify_user 修改人员
+    modify_time 修改时间
+    carrier 物流公司
+    tracking_no 寄回物流单号
+    carriage_price 运费
+    cancel_reason 取消原因
+    reject_reason 拒绝原因
+    return_tracking_no 寄回给用户物流单号
+    memo 备注
+    inspect_remark 检测备注
+    treatment_type 处理方式
+    repair_detail 维修详情
+    repairment_level 维修级别
+    software_version 软件版本
+    customer_received 客户是否收货
+    appoint_accepted_time 网点受理时间
+    customer_received_time 客户收货时间
+    customer_send_time 客户发货时间
+    house_received_time 网点收货时间
+    house_send_time 网点寄出时间
+    return_tracking_carrier 寄回给用户物流渠道
+    treatment_type2 维修类别 保内/保外
+    address_verified 地址是否已确认
+    purchase_channel 购买渠道
+    purchase_time 购买时间
+    pending_reason 等待原因
+    pending_type 等待类型
+    rma_reason RMA派单原因
+    new_orderno 新订单号
+    flags 是否特批
+    apply_reason 申请原因
+    apply_reason_desc 申请原因描述
+    rma_source RMA来源 10: Customer,20: Call Center,30: Reverse Logitic,40: Service Center
+    approve_time 审核时间
+    cancel_time 取消时间
+    cancel_reason_type 取消原因类型
+    customer_id_type 用户id类型 10：userid 20:openid
+    version
+    complete_time RMA单据完成时间
+    labour_fee 人工费
+    invoice_no 印度发票号
+    problem_category 故障分类,10：软件 20：硬件
+    problem_description 详细的故障描述
+    new_software_version 新软件版本
+    attach_user 上传用户
+    attachment 附件
+    rsp_order 服务商RMA主键
+}
+
+class RMA商品{
+    id 主键
+    rma_sheet_id RMA主键
+    parent_id 父id
+    imei_old1 原imei号1
+    imei_old2 原imei号2
+    imei_new1 新imei号1
+    imei_new2 新imei号2
+    goods_code 商品编码
+    goods_name 商品名称
+    en_goods_name 商品英文名称
+    type 商品类型中文名
+    en_type 商品类型英文名
+    order_qty 订单数量
+    submit_qty 提交数量
+    original_price 原价金额
+    discount_amount 折扣金额
+    apply_reason 申请原因
+    check_failed_num 检测失败数量
+    check_pass_num 检测通过数量
+    product_date 商品生产日期
+    is_material 是否是实物
+    warranty_start_time 保修开始时间
+}
+
+class RMA地址{
+    id 主键
+    rma_sheet_id RMA主键
+    type 类型
+    customer_id 用户id
+    customer_name 用户名称
+    receiver_name 收货人名称
+    phone_number 联系电话
+    email email
+    post_code 邮编
+    country 国家
+    country_name 国家名称
+    addr_prov 省
+    addr_prov_name 省名称
+    addr_city 市
+    addr_city_name 市名称
+    addr_distr 区
+    addr_distr_name 区名称
+    addr_street 街
+    addr_street_name 街名称
+    addr_detail 详细地址
+    receiver_first_name 收货人firstname
+    receiver_last_name 收货人lastname
+    gstin 用户税号
+}
+
+class RMA坏料备件 {
+    id
+    source_id 来源id主键
+    treatment_type 保内保外类型 10:保外 12:保内
+    sku_code sku编号
+    apply_price 领退料价格
+    status 状态,新建状态、好转坏、二级退一级、一级退总仓
+    apply_currency 申请币种
+    quotation_price  网点给用户报价
+    quotation_currency 服务商给用户报价币种
+    partner 服务商
+    service_node_code 网点编号
+    cn_name 中文名称
+    en_name 英文名称
+    machine_types SKU机型，所个用逗号分隔
+    type SKU类型 主板、耗材等
+    value SKU高低价值 10:低价值 20:高价值
+    warehouse_code 备件当前所在仓库编码
+    apply_sheet_id 退料申请单id
+    apply_sheet_id2 退料申请单id2
+    create_time 创建时间
+    create_user 创建人
+    modify_time 更新时间
+    modify_user 更新人
+    min_pck_qty 最小包装数量
+    rma_complete_time RMA完成时间
+    tax 该SKU税费
+    hsn 海关编码
+    tax_rate sku税率
+}
+
+class RMA好料备件{
+    id
+    source_id 来源id主键
+    sp_id RMA维修检测坏料表id
+    treatment_type 保内保外类型 10:保外 12:保内
+    sku_code sku编号
+    apply_price 领退料价格
+    status 状态
+    apply_currency 申请币种
+    quotation_price  网点给用户报价
+    quotation_currency
+    partner 服务商
+    service_node_code 网点编号
+    cn_name 中文名称
+    en_name 英文名称
+    machine_types SKU机型，所个用逗号分隔
+    type SKU类型 主板、耗材等
+    value SKU高低价值 10:低价值 20:高价值
+    warehouse_code 备件当前所在仓库编码
+    apply_sheet_id 退料申请单id
+    apply_sheet_id2 退料申请单id2
+    create_time 创建时间
+    create_user 创建人
+    modify_time 更新时间
+    modify_user 更新人
+    min_pck_qty 最小包装数量
+    rma_complete_time RMA完成时间
+    hsn 海关编码
+    tax_rate sku税率
+}
+
+class RMA退款单{
+    refund_sheet_id 退款单号
+    create_time 创建时间
+    create_user 创建人
+    currency 币种
+    country 国家
+    memo 备注
+    modify_time 更新时间
+    modify_user 更新人
+    order_amount 订单金额
+    order_no 订单号
+    payer 支付人
+    payment_time 支付时间
+    paypal_no paypal帐号
+    product_type_descr 产品类型描述
+    refund_amount 退款金额
+    status 10：待审核   20：审核通过  30：审核拒绝  40：已退款
+    type 退款类型
+    refund_time 退款时间
+    auto_flag 是否自动创建
+    flags 标识位，第一位：是否假退款
+    virtual_refund_flag 是否虚拟退款
+    source_id 来源主键
+    source_type 来源类型
+    refund_sheet_type 10:线上退款单, 20:线下退款单
+}
+
+RMA主单据-left..> RMA地址:dependent
+RMA主单据-right..> RMA商品:dependent
+RMA主单据-down..>RMA退款单:dependent
+RMA主单据-down..>RMA坏料备件:dependent
+RMA主单据-down..>RMA好料备件:dependent
+@enduml

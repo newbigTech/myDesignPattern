@@ -1,0 +1,68 @@
+@startuml
+
+|用户|
+start
+:取消订单;
+
+|WMS|
+|优惠|
+|库存|
+|订单|
+|库存|
+|订单|
+if(是否推送到WMS) then(true)
+    |WMS|
+    if(取消订单)then(失败)
+        stop
+    endif
+endif
+
+|订单|
+
+if(订单类型) then(普通订单)
+    if (支付状态) then (已支付)
+        |库存|
+        :释放占用;
+    else (未支付)
+        |库存|
+        :释放预扣;
+    endif
+endif
+
+|订单|
+:更新订单结束状态为已Cancelled;
+:广播订单状态与信息;
+fork
+
+if(支付状态) then (未支付)
+    |订单|
+    if(是否有券) then (true)
+        |优惠|
+        :返还券;
+    endif
+    |订单|
+     if (是否有邀请码) then (true)
+        |优惠|
+        :返还邀请码;
+     endif
+else (已支付)
+    |订单|
+    :作废发票;
+    :生成退款单;
+endif
+
+fork again
+|订单|
+:作废发货单;
+fork again
+if(订单类型) then(抢购订单)
+  :通知抢购系统回收库存;
+endif
+
+fork again
+:增加操作日志;
+fork end
+stop
+
+@enduml
+

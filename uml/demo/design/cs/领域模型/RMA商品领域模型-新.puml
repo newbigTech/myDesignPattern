@@ -1,0 +1,29 @@
+@startuml
+
+class RMA商品信息{
+    id 主键
+    rma_sheet_id RMA主键
+    --parent_id 父id--,
+    imei_old1 原imei号1
+    imei_old2 原imei号2
+    imei_new1 新imei号1
+    imei_new2 新imei号2
+    goods_code 商品编码
+    goods_name 商品名称
+    en_goods_name 商品英文名称
+    type 商品中文名称
+    en_type 商品类型英文名
+    order_qty 订单数量
+    submit_qty 提交数量
+    original_price 原价金额
+    discount_amount 折扣金额
+    apply_reason 申请原因
+    check_failed_num 检测失败数量
+    check_pass_num 检测通过数量
+    product_date 商品生产日期
+    is_material 是否是实物
+    warranty_start_time 保修开始时间
+    item_id 商品条目id(新增)
+}
+
+@enduml

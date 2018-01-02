@@ -1,0 +1,69 @@
+@startuml
+'此文档描述订单相关的业务用例
+left to right direction
+skinparam packageStyle rectangle
+
+:个人用户: as User
+:运营人员: as Operator
+:物流人员: as LogisticStaff
+
+rectangle ordercenter {
+    User -right-> (下订单)
+    User --> (支付)
+    User --> (查看订单)
+    User --> (取消订单)
+    User -> (下载发票)
+    User -> (查看路由)
+    User -> (申请售后)
+
+    Operator -right-> (查看订单)
+    Operator --> (修改订单)
+
+    (订单状态更新)
+    (订单退款)
+    (订单推送)
+
+    (下订单)..>(库存路由):include
+    (支付)..>(库存占用):include
+    (取消订单) --> (取消未支付订单)
+    (取消订单) --> (取消已支付订单)
+    (申请售后) --> (申请退货)
+    (申请售后) --> (申请换货)
+
+}
+rectangle inv {
+    (路由)..>(预扣):include
+    (占用)
+    (还原库存)
+}
+
+rectangle wms {
+    LogisticStaff -up-> (发货)
+    LogisticStaff -up-> (查看发货单)
+    LogisticStaff -up-> (打印发票)
+    LogisticStaff -up-> (逆向收货)
+    LogisticStaff -up-> (包裹拒收)
+    (取消发货单)
+    (订单接收)
+    (发货单状态更新)
+
+    (发货)-up->(分配库存)
+    (发货)-up->(推送第三方)
+    (发货)-up->(第三方发货)
+
+}
+
+'order和inv
+(库存路由) --> (路由)
+(库存占用) --> (占用)
+(取消已支付订单) ----> (还原库存)
+
+'order和wms
+(包裹拒收) -left-> (订单退款)
+(订单推送) -> (订单接收)
+(取消已支付订单) --> (取消发货单)
+(发货单状态更新) --> (订单状态更新)
+'wms和inv
+(取消发货单)-up->(还原库存)
+
+@enduml

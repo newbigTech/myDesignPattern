@@ -1,0 +1,50 @@
+@startuml
+
+
+退款单 ..审核
+退款单 ..退款
+ class 退款单 {
+
+	退款单号refundNo
+	退款状态refundStatus
+	关联订单号orderNo
+	业务单号bizNo
+	退款业务类型refundBizType
+	关联用户userId
+	备注remark
+}
+
+class 审核 {
+
+	 审核人auditor
+	 审核意见auditInfo
+	 审核时间auditTime
+
+}
+
+ class 退款 {
+
+	退款时间refundTime
+	退款金额refundAmount
+	应付金额payAmount
+	退款操人refundOperator
+	商家退款交易号merchantRefundTradeNo
+	商家付款交易号merchantPayTradeNo
+	退款平台用户账号refundPlatAccount
+	
+	
+	
+	货币currency
+	退款方式refundType
+	附加信息attachment
+	
+
+}
+
+enum 退款方式{
+    OP_ONLINE
+    OP_OFFLINE
+    THIRD_SELLER
+}
+
+@enduml

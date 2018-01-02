@@ -1,0 +1,19 @@
+@startuml
+
+ class 售后项 {
+
+	 售后单号rmaNo
+	 关联订单号orderNo
+	 关联的订单项orderItemId
+	 附加信息attachment
+	 商品编号skuCode
+	 申请原因applyReason
+	 旧ImeioldImei
+	 新imeinewImei
+	 售后申请数量rmaApplyCount
+	 售后通过数量rmaPassCount
+
+
+}
+
+@enduml

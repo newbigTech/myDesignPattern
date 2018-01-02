@@ -1,0 +1,14 @@
+@startuml
+
+[*] --> Created :用户创建订单
+Created -right-> Pushed :推送订单到WMS
+Pushed -up-> Allocated :WMS分配实存
+Allocated --> Deliveried :WMS通知订单出库
+Deliveried --> Arrived: WMS通知用户签收包裹
+Deliveried --> Refused :WMS通知包裹已入库
+Created --> Cancelled : 用户取消订单
+Arrived -->[*]
+Refused -->[*]
+Cancelled -->[*]
+
+@enduml

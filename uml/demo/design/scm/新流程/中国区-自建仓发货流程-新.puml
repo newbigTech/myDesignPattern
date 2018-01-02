@@ -1,0 +1,54 @@
+@startuml
+actor Time
+control tradecenter as trade
+control wms
+control inv
+control erp
+boundary 第三方物流系统 as Logistic
+actor 制单员 as invoicer
+actor 仓管员 as warehouser
+
+autonumber 10 10 "<font color=red><b>[000]"
+trade -> erp: 推送订单账目信息
+trade -> wms: 推送发货单
+autonumber resume "<b> [000]  "
+
+alt 抢购订单的发货单
+    Time --> wms: 定时路由和预占库存
+    wms --> inv: 路由和预占库存
+else 无
+end
+Time --> wms: 定时占用实存
+wms --> inv: 占用实存
+wms --> trade: 通知状态变更：已分配实存
+
+
+
+invoicer --> wms: 生成拣货批次
+alt 纸质发票
+    invoicer --> wms: 打印纸质发票
+else 电子发票
+end
+
+autonumber resume "<font color=red><b> [000]  "
+wms -[#0000FF]-> trade: 获取订单信息
+wms <-- trade: 返回订单信息
+autonumber resume "<b> [000]  "
+warehouser --> wms: 打印购物清单
+warehouser --> wms: 拣货
+wms --> wms: 更新状态
+warehouser --> wms: 配货
+wms --> wms: 更新状态
+warehouser --> wms: 打包
+wms --> Logistic: 获取运单号
+wms --> wms: 打印物流面单
+wms --> wms: 更新状态
+warehouser --> wms: 出库
+wms --> wms: 更新状态
+
+wms --> inv: 扣减库存
+autonumber resume "<font color=red><b> [000]  "
+wms --> erp: 通知发货信息
+wms --> trade: 通知发货单发货信息
+
+@enduml

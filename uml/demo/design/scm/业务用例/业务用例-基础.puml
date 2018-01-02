@@ -1,0 +1,100 @@
+@startuml
+
+
+actor PMC as pmc
+actor 逆向仓库作业人员 as 逆向仓库
+actor 通用仓库作业人员 as 仓库
+actor 自有仓仓库作业人员 as 自有仓库
+actor B2B仓库作业人员 as B2B仓库
+actor 物流人员 as 物流
+actor 客服人员 as 客服
+actor 海外物流人员 as 物流_us
+actor 海外客服人员 as 客服_us
+actor 财务人员 as 财务
+actor 审计人员 as 审计
+actor 系统管理员 as admin
+
+entity 订单系统 as trade
+entity 客服系统 as cs
+entity OA as oa
+entity OPPO as oppo
+entity 第三方仓库 as tpl_warehouse
+entity AfterShip as aftership
+entity 物流公司 as courier
+card 定时任务 as time
+
+
+time --> (同步采购订单)
+物流 --> (创建收货通知单)
+仓库 --> (收货)
+仓库 --> (入库)
+仓库 --> (通用入库)
+仓库 --> (通用出库)
+物流 --> (申请调拨)
+仓库 --> (调拨出库)
+仓库 --> (调拨入库)
+仓库 --> (物料转移)
+
+trade --> (新增发货单)
+trade --> (取消发货单)
+time --> (发货单实存占用)
+time --> (推送发货单到第三方仓库)
+tpl_warehouse <-- (推送发货单到第三方仓库)
+物流 --> (出库)
+物流 --> (通知路由信息)
+
+自有仓库 --> (制单)
+自有仓库 --> (拣货)
+自有仓库 --> (打印发票和购物清单)
+自有仓库 --> (配货)
+自有仓库 --> (打包)
+自有仓库 --> (出库)
+
+B2B仓库 --> (商品装箱)
+B2B仓库 --> (B2B制单)
+B2B仓库 --> (B2B配货)
+B2B仓库 --> (B2B出库)
+
+left to right direction
+
+逆向仓库 --> (逆向收货)
+cs --> (推送逆向入库)
+(推送逆向入库) --> (逆向入库)
+(逆向收货) --> (逆向入库)
+
+tpl_warehouse --> (出库)
+tpl_warehouse --> (B2B出库)
+
+aftership --> (通知路由信息)
+courier --> (通知路由信息)
+
+财务 --> (发票备案)
+财务 --> (打印发票)
+财务 --> (补打发票)
+财务 --> (冲红发票)
+财务 --> (作废发票)
+财务 --> (发票变更)
+
+time --> (开具电子发票)
+time --> (冲红电子发票)
+time --> (重开电子发票)
+
+pmc --> (通知工厂发货)
+(通知工厂发货) --> oppo
+oppo <-- (获取工厂发货信息)
+(获取工厂发货信息) <-- time
+oa --> (部门领料)
+oa --> (部门退料)
+oa --> (查询个人物料)
+
+admin --> (订单路由终结)
+admin --> (设置订单推送)
+admin --> (管理配置)
+admin --> (设置发票打印机)
+admin --> (维护sku)
+admin --> (管理仓库)
+
+(出库) --> trade
+
+
+@enduml

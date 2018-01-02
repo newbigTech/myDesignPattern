@@ -1,0 +1,44 @@
+@startuml
+actor Time
+control tradecenter as xman
+control wms
+control inv
+control erp
+boundary Delhivery仓储系统 as TPL
+actor 仓管员 as warehouser
+
+autonumber 10 10 "<font color=red><b>[000]"
+xman -> wms: 计算订单的税率税额
+xman -> erp: 推送订单账目信息
+xman <-- wms: 税率税额
+xman -> wms: 推送发货单
+autonumber resume "<b> [000]  "
+
+alt 抢购订单/售后类订单
+    Time --> wms: 定时路由和预占库存
+    wms --> inv: 路由和预占库存
+else 无
+end
+Time --> wms: 定时占用实存
+wms --> inv: 占用实存
+wms --> wms: 分配发票号码
+
+Time --> wms: 定时推送
+
+
+wms --> TPL: 推送订单至DEL系统
+autonumber resume "<font color=red><b> [000]  "
+wms --> xman: 通知订单已经推送仓库处理
+xman --> xman: 状态变更processing
+autonumber resume "<b> [000]  "
+warehouser --> TPL: 打印发票
+warehouser --> TPL: 仓库制单、发货等
+
+TPL --> wms: 通知发货信息imei运单号等
+
+wms --> inv: 扣减库存
+autonumber resume "<font color=red><b> [000]  "
+wms --> erp: 通知发货信息
+wms --> xman: 通知发货单发货信息
+
+@enduml

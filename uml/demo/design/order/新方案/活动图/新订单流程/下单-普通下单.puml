@@ -1,0 +1,41 @@
+
+@startuml
+
+|用户|
+start
+:提交订单;
+
+|优惠|
+:计算价格;
+|库存|
+|订单|
+:保存下单的上下文;
+
+|库存|
+:库存路由;
+:预扣库存;
+
+|#AntiqueWhite|订单|
+if (是否有券) then (true)
+    |优惠|
+    :使用券;
+endif
+
+|订单|
+if (是否有邀请码) then (true)
+    |优惠|
+    :使用邀请码;
+endif
+|订单|
+if (是否0元单) then (是)
+    :更新订单的初始阶段为Created;
+    else
+    :更新订单的初始阶段为Approved;
+endif
+
+|订单|
+:保存订单到Codis;
+
+:异步删成功的订单上下文;
+
+@enduml

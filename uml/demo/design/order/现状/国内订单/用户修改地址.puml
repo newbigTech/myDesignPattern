@@ -1,0 +1,23 @@
+@startuml
+
+|用户|
+
+start
+:申请修改订单的售后地址;
+|库存|
+|订单|
+if(地址可修改) then(false)
+    stop;
+endif;
+
+if(是否需要重新路由) then(true)
+        |库存|
+        :重新预扣库存;
+
+endif;
+:保存路由信息;
+:修改订单地址;
+
+
+stop
+@enduml

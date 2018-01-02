@@ -1,0 +1,35 @@
+@startuml
+
+class RMA好料备件信息{
+    id
+    source_id 来源id主键
+    sp_id RMA维修检测坏料表id
+    treatment_type 保内保外类型 10:保外 12:保内
+    sku_code sku编号
+    apply_price 领退料价格
+    status 状态
+    apply_currency 申请币种
+    quotation_price  网点给用户报价
+    quotation_currency
+    partner 服务商
+    service_node_code 网点编号
+    cn_name 中文名称
+    en_name 英文名称
+    machine_types SKU机型，所个用逗号分隔
+    type SKU类型 主板、耗材等
+    value SKU高低价值 10:低价值 20:高价值
+    warehouse_code 备件当前所在仓库编码
+    apply_sheet_id 退料申请单id
+    apply_sheet_id2 退料申请单id2
+    create_time 创建时间
+    create_user 创建人
+    modify_time 更新时间
+    modify_user 更新人
+    min_pck_qty 最小包装数量
+    rma_complete_time RMA完成时间
+    hsn 海关编码
+    tax_rate sku税率
+    --row_sn 相对每个来源id的子序号--,
+}
+
+@enduml

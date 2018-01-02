@@ -1,0 +1,71 @@
+@startuml
+
+actor 用户 as user
+control OA as oa
+control ERP_ADMIN as erp_admin
+control WMS_CN as wms_cn
+control WMS_AWS as wms_us
+actor 仓管员 as warehouser
+
+== 部门领料 ==
+autonumber 10 10 "<font color=red><b>[000]"
+
+user -> oa : 部门领料申请
+user -> oa : 选择国家
+
+oa -> erp_admin : 部门领料
+erp_admin -> erp_admin : 根据国家和仓库映射拆分部门领料单
+alt 国内仓库
+    erp_admin -> wms_cn : 推送通用出库单
+    wms_cn -> wms_cn : 出库
+    wms_cn -> erp_admin : 通知出库和记录ERP信息
+else 海外仓库
+    erp_admin -> wms_us : 推送通用出库单
+    wms_us -> wms_us : 出库
+    wms_us -> erp_admin : 通知出库和记录ERP信息
+end
+erp_admin -> oa : 通知出库信息
+
+== 部门领料打回 ==
+
+warehouser -> wms_cn : 打回部门领料单
+wms_cn -> erp_admin : 打回部门领料单
+
+warehouser -> wms_us : 打回部门领料单
+wms_us -> erp_admin : 打回部门领料单
+erp_admin -> oa : 更新OA单中此商品为打回状态
+
+== 部门退料 ==
+
+user -> oa : 部门退料申请
+user -> oa : 选择仓库
+oa -> erp_admin : 部门退料
+alt 国内仓库
+    erp_admin -> wms_cn : 推送通用入库单
+    wms_cn -> wms_cn : 入库
+    wms_cn -> erp_admin : 通知入库和记录ERP信息
+else 海外仓库
+    erp_admin -> wms_us : 推送通用入库单
+    wms_us -> wms_us : 入库
+    wms_us -> erp_admin : 通知入库和记录ERP信息
+end
+erp_admin -> oa : 通知入库信息
+autonumber resume "<b> [000]  "
+
+== 部门退料打回 ==
+
+warehouser -> wms_cn : 打回部门退料单
+wms_cn -> erp_admin : 打回部门退料单
+
+warehouser -> wms_us : 打回部门退料单
+wms_us -> erp_admin : 打回部门退料单
+erp_admin -> oa : 打回部门退料单
+
+== 查询个人物料明细 ==
+user -> oa : 查看个人物料明细
+oa -> erp_admin : 查询个人物料明细
+
+autonumber resume "<font color=red><b> [000]  "
+
+
+@enduml

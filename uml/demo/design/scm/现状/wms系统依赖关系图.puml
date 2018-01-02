@@ -1,0 +1,72 @@
+@startuml
+
+package 广州 {
+    artifact wms {
+        component 仓储管理 as warehouse
+        component 物流管理 as logistic
+        component 订单管理 as wms_order
+        component 基础数据管理 as wms_data
+    }
+    artifact inv_cn
+    artifact trade
+    artifact cs
+    artifact goods_cn
+    artifact open_cn
+    artifact erp
+    artifact opss
+    boundary api1.oneplus.cn as api1
+}
+
+package AWS {
+    artifact inv_us
+    artifact xman
+    artifact goods_us
+    artifact open_us
+}
+
+queue 消息队列 as msg_queue
+cloud HTTP as http
+package 第三方 {
+    package 仓储合作商 as tpl_warehouse{
+        entity WS as ws
+        entity 科捷 as kj
+        entity BlueDart as bd
+        entity Delhivery as del
+    }
+    package 物流合作商 as tpl_logistic{
+        entity aftership
+        entity 顺丰 as sf
+        entity 圆通 as yt
+        entity EMS as ems
+    }
+    }
+    entity OA as oa
+    entity OPPO as oppo
+
+' 内部依赖关系
+xman <--> msg_queue : 订单同步
+trade <--> msg_queue : 订单同步
+wms_order <---> msg_queue : 订单同步
+
+wms <--> erp : 账目记录
+wms_data <-- goods_cn : 同步sku
+warehouse --> inv_cn : 库存管理
+warehouse --> http : 库存管理
+http --> inv_us : 库存管理
+opss --> wms_order : 推送订单
+cs --> wms_order : 查询订单
+warehouse <-up--> cs : 逆向单据
+
+
+' 外部系统依赖关系
+wms_order --> tpl_warehouse : 推送/取消/查询订单
+tpl_warehouse --> open_cn : 通知单据出库/入库
+tpl_warehouse --> api1 : 通知单据出库/入库
+
+logistic --> tpl_logistic : 获取运单
+tpl_logistic --> api1 : 推送路由信息
+
+warehouse --> oppo : 获取出库信息
+oa --> warehouse : 部门领退料
+
+@enduml

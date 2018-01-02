@@ -1,0 +1,16 @@
+@startuml
+
+[*] --> Created :创建退款单
+Created -right-> Approved :审批通过
+Created --> Cancelled :审批不通过
+Approved --> Failed: 同步退款失败
+Approved --> Successful :同步退款成功
+Approved --> Refunding : 异步退款
+Refunding --> Failed: 异步退款失败
+Failed -->Created :退换失败,重新发起退款
+Refunding --> Successful :异步退款成功
+Cancelled -->[*]
+Failed -->[*]
+Successful -->[*]
+
+@enduml

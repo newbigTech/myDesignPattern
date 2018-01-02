@@ -1,0 +1,29 @@
+@startuml
+'hide members
+
+package 共用单据 {
+   Object 发票
+   Object 地址
+   Object 支付
+   Object 退款单
+   Object 物流单
+
+}
+
+package 正向订单 {
+   Object 订单主表
+    Object 订单项
+    Object 订单履约项
+    Object 订单履约日志
+     订单主表  -up- "1..*" 订单项
+     订单项  -down- "1..*" 订单履约项
+     订单项  -right- "1..*" 订单履约日志
+     订单主表  -up- "1..*" 地址
+     订单主表  -down- "1" 发票
+     订单主表  -- "0..*" 退款单
+     订单主表  -- "1..*" 支付
+     订单主表  -- "1..*" 物流单
+
+}
+
+@enduml

@@ -1,0 +1,37 @@
+@startuml
+
+物流单 <|-- 发货单
+
+ class 物流单 {
+	业务单号bizNo
+	物流单号logisticsNo
+	物流单类型logisticsType
+	物流商编号logisticsCode
+	物流商名称logisticName
+	物流商运单号logisticTrackNo
+	订单号orderNo
+	仓库编号warehouseCode
+	仓库名称warehouseName
+	物流运费shippingFee
+}
+ class 发货单{
+
+	 发货单状态deliveryStatus
+	 eta
+	 etd
+	 imei列表
+	 发送的订单项deliveryItems
+	 发货时间deliveriedTime
+	 送达时间arrivedTime
+	 拒收时间refusedTime
+	 分配时间allocatedTime
+
+
+}
+enum 物流单类型{
+订单发货单OrderDelivery
+售后发货单RmaDelivery
+用户寄件物流RmaUserSend
+用户取件物流RmaUserPickUp
+}
+@endnuml

@@ -1,0 +1,51 @@
+@startuml
+
+地址 ..基础地址
+地址 ..联系人
+ class 地址 {
+
+ 业务单号bizNo
+
+ 地址类型addressType
+
+}
+
+ class 地址 {
+
+ 业务单号bizNo
+
+ 地址类型addressType
+
+}
+
+ class 基础地址  {
+
+	 地址编号addressId
+	 地址详情addressDetail
+	 州省province
+	 城市city
+	 区县area
+	 街道street
+	 州省编号provinceId
+	 区县编号areaId
+	 城市编号cityId
+	 街道编号streetId
+	 邮编postCode
+	 国家countryCode
+
+
+
+}
+
+ class 联系人 {
+
+	全名fullName
+	姓lastName
+	名firstName
+	电话phone
+	传真fax
+	邮件email
+	增值税号gstin
+}
+
+@enduml

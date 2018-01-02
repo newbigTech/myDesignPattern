@@ -1,0 +1,46 @@
+@startuml
+
+
+
+|客服|
+:人工恢复付款;
+|WMS|
+|订单|
+:更新付款流水为SUCCESS;
+
+
+|WMS|
+:取消Hold发货单;
+|订单|
+:取消挂起订单;
+
+
+if(是否已经支付)then(是)
+    stop;
+endif
+
+:占用库存;
+:更新订单的付款阶段为paid;
+
+:广播订单状态与信息;
+
+fork
+
+|订单|
+:通知Sear;
+fork again
+:修改抢购订单的Redis状态;
+fork again
+:记录操作日志;
+fork again
+:发送邮件;
+fork again
+:调用优惠领取推荐返利积分;
+
+fork again
+:调用优惠领取合作码;
+end fork
+
+stop
+@enduml
+

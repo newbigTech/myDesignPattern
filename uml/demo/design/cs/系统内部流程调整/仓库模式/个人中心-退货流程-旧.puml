@@ -1,0 +1,48 @@
+@startuml
+actor 用户
+用户 -> 商城: 退货售后申请 \n 1、RMA核心信息 \n 2、RMA地址 \n 3、RMA商品明细
+商城 -> GSP:推送售后申请到GSP
+GSP->GSP:校验RMA申请参数 \n 1、订单号必填 \n 2、RMA地址必填 \n 3、RMA商品明细不为空
+actor 呼叫中心客服
+GSP->SCM:根据订单号查询订单详情
+SCM-->GSP:返回订单详情
+GSP->GSP:校验订单信息 \n 1、订单存在SCM \n 2、订单非大订单类型 \n 3、订单状态是已发货
+GSP->GSP:计算当前订单对应的SKU的可退数量
+alt SKU申请售后数量大于可退数量
+    GSP->GSP:提示可退数量不足异常
+else SKU申请售后数量小于或者等于可退数量
+    GSP->GSP:保存RMA申请单
+end
+呼叫中心客服->GSP:审核RMA信息操作
+alt 取消
+    GSP->GSP:更新RMA为已取消
+else 审核 \n 1、编辑完善RMA申请信息 \n 2、选择仓库,派单RMA到仓库
+    GSP->GSP:更新RMA待检测
+    loop
+        alt RMA状态为待检测或者待客服处理
+            GSP->SCM:通知逆向入库
+            SCM->SCM:逆向匹配
+            alt 正常逆向入库
+                SCM->GSP:通知RMA变更为正常入库
+            else 非正常入库
+                SCM->GSP:通知RMA匹配失败的结果
+                GSP->SCM:通知最新的逆向信息(SKU)
+            end
+        end
+    end
+    呼叫中心客服->GSP:申请退款操作
+    GSP->GSP:更新RMA为等待退款状态
+    GSP->GSP:生成RMA待审核状态的退款单
+
+    呼叫中心客服->GSP:审核退款单操作
+    alt 审核
+        GSP->支付:调用退款接口退款
+        GSP->GSP:更新退款单为已完成
+        GSP->GSP:更新RMA申请单为已完成
+        GSP->SCM:逆向通知RMA金额
+    else 拒绝
+        GSP->GSP:更新退款单为已拒绝
+        GSP->GSP:更新RMA申请单为检测完成
+    end
+end
+@enduml

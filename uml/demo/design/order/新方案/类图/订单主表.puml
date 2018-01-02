@@ -1,0 +1,133 @@
+@startuml
+
+
+主表.. 下单人
+主表 .. 订单金额
+
+主表 .. 订单时间
+主表 ..实名认证
+主表 ..第三方订单
+主表 ..取消
+主表 ..广告联盟
+主表 ..抢购
+主表 ..优惠
+主表 ..订单状态
+
+
+class 主表 {
+
+	订单编号orderNo
+	商店编号storeViewCode
+	订单类型orderType
+	订单渠道orderChannel
+	买家备注remark
+	订单来源orderFrom
+
+}
+
+ class 订单状态 {
+
+ 付款阶段payStage;
+ 是否挂起hold;
+ 物流阶段logisticsStage;
+ 初始阶段beginStage;
+ 结束阶段endStage;
+
+
+
+}
+
+ class 下单人 {
+
+	 用户标识userId
+	 用户名userName
+	 手机phone
+	 邮箱email
+
+}
+
+ class 实名认证 {
+
+	真实姓名fullName
+	身份证idCard
+}
+
+
+ class 订单金额 {
+
+商品原始金额skuOriginAmount
+商品优惠总机金额skuDiscountAmount
+原始运费originShippingFee
+当前运费nowShippingFee
+订单金额orderTotalAmount
+订单税费taxFee
+货币currency
+
+
+}
+
+ class 订单时间 {
+
+	 下单时间createTime;
+	 支付时间paidTime;
+	 推送时间pushTime;
+	 过期时间expireTime;
+	 取消时间cancelledTime;
+
+
+
+}
+ class 第三方订单 {
+	 第三方订单号thirdOrderNo;
+}
+
+ class 抢购 {
+
+	 抢购标识rushId;
+
+}
+
+ class 广告联盟 {
+
+	 身份标识cpsId
+	 反馈标识euid
+	 链接主站标识mid
+
+
+
+}
+
+ class 订单金额 {
+
+	 商品原始金额skuOriginAmount;
+	 商品优惠总机金额skuDiscountAmount;
+	 原始运费originShippingFee;
+	 当前运费nowShippingFee;
+	 订单金额orderTotalAmount;
+	 订单税费taxFee;
+	 货币currency;
+
+
+
+}
+
+ class 优惠 {
+
+	参与的优惠列表settlePromos;
+	使用的券couponCodes;
+	使用的邀请码inviteCodes;
+
+
+
+}
+
+
+
+ class 取消 {
+
+	 取消类型cancelType;
+	 取消理由cancelReason;
+
+
+}
+@enduml

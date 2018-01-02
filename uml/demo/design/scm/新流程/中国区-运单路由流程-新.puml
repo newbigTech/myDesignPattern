@@ -1,0 +1,28 @@
+@startuml
+actor Time
+control tradecenter as trade
+control wms
+boundary 科捷仓储系统 as TPL
+boundary 各物流公司系统 as Logistic
+
+autonumber 10 10 "<b>[000]"
+alt 科捷仓发货
+    TPL --> wms: 回传发货信息imei运单号等
+    Logistic --> TPL: 路由轨迹信息
+    TPL --> TPL: 轨迹处理和封装
+    TPL --> wms: 通知订单路由轨迹和状态
+    wms --> wms: 记录运单信息更新状态
+
+    Time --> wms: 定时获取路由
+    wms --> TPL: 定时抓取非终结状态的路由信息
+    TPL --> wms: 记录运单信息更新状态
+else 自建仓发货
+    Logistic --> wms: 物流公司通知wms信息
+    wms --> wms: 记录运单信息更新状态
+end
+alt 路由最终状态
+    autonumber resume "<font color=red><b> [000]  "
+    wms --> trade: 通知订单发货单的路由状态
+else 非最终状态
+end
+@enduml

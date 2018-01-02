@@ -1,0 +1,9 @@
+@startuml
+    [*]-->Successful :支付通知 成功付款
+    Successful-->Review: 等待人工审核
+    Successful-->Pending:等待系统审核
+    Review-->Successful:支付通知 完成付款
+    Pending-->Successful:人工完成付款
+    Successful -->[*]
+
+@enduml

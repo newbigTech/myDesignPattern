@@ -1,0 +1,23 @@
+@startuml
+
+[*] --> Created :用户创建退款单
+[*] --> Created :服务点创建售后单
+Created -right-> Approved :审批通过
+Created --> Cancelled :审批不通过
+Approved -right-> SentToService: 网点收到售后商品
+SentToService --> Cancelled: 检测失败，退回给用户
+SentToService --> Finished :无换货费用，中国网点直接通过物流发给用户
+SentToService --> Paying :检测通过，需要付费
+Paying --> Paid :付费通过
+
+Paid --> Finished :中国网点直接通过物流发给用户
+
+
+SentToService-->SendingToUser :无换货费用，欧美印度网点建发货单给用户换货
+SentToService-->Paying :检测通过，需要付款。
+Paying-->SendingToUser :支付后，欧美印度网点建发货单给用户换货
+SendingToUser -up->Finished:确认包裹已经出库
+
+Cancelled -->[*]
+Finished -->[*]
+@enduml

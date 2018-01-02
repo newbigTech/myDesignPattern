@@ -1,0 +1,18 @@
+@startuml
+
+class RMA物流信息{
+    return_method 寄回方式 10:自行寄回,20:上门取件,30:带至网点,40:送至网点
+    carrier 寄回物流渠道
+    tracking_no 寄回物流单号
+    carriage_price 寄回运费
+    shipping_method 寄回给用户方式
+    return_tracking_carrier 寄回给用户物流渠道
+    return_tracking_no 寄回给用户物流单号
+    customer_received 客户是否收货
+    customer_received_time 客户收货时间
+    customer_send_time 客户发货时间
+    house_received_time 网点收货时间
+    house_send_time 网点寄出时间
+}
+
+@enduml

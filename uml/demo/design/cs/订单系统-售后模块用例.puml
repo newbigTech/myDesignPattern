@@ -1,0 +1,25 @@
+@startuml
+left to right direction
+skinparam packageStyle rectangle
+actor 用户
+rectangle 订单中心售后模块 {
+  用户 -- (申请退货售后)
+  用户 -- (申请换货售后)
+  用户 -- (申请维修售后)
+  (申请退货售后)-down-.>(可售后计算校验):include
+  (申请换货售后)-down-.>(可售后计算校验):include
+  (申请维修售后)-down-.>(可售后计算校验):include
+  (申请换货售后)-down-.>(第三方申请换货售后):include
+  (申请维修售后)-down-.>(第三方申请维修售后):include
+  用户-down-.>(取消售后):include
+  用户 -- (查询售后列表)
+  用户 -- (查询售后详情)
+  (查询售后详情)-down-.>(查询售后进度):include
+  (申请换货售后)-down-.>(查询报价单)
+  (申请维修售后)-down-.> (查询报价单)
+  (查询报价单)-down-.>(用户售后报价支付):include
+  用户 -- (查询物流轨迹)
+  (申请退货售后)-right-.>(退款金额计算)
+  (申请退货售后)-down-.>(查询退款单)
+}
+@enduml

@@ -1,0 +1,118 @@
+@startuml
+note top of InventoryStatusQueryDTO : 库存状态请求对象
+class InventoryStatusQueryDTO {
+    String countryCode
+
+    List<SkuStatusQueryDTO> skuStatusQueryDTOs
+}
+InventoryStatusQueryDTO *-- SkuStatusQueryDTO
+class SkuStatusQueryDTO {
+    String itemId
+    String parentItemId
+    String skuCode
+    Integer logisticInventoryBusinessType
+    boolean needEtd
+}
+note top of SkuInventoryStatusDTO : 库存状态返回对象
+class SkuInventoryStatusDTO {
+    String itemId
+    String skuCode
+    Integer logisticInventoryBusinessType
+    boolean outStock
+    boolean lowStock
+    boolean hasAvailableRealStock
+    Long etd
+    Integer availableQuantity
+    Integer availableRealQuantity
+    Long cacheTime
+}
+note top of InventoryOperationDTO : 路由请求对象/预占请求对象
+class InventoryOperationDTO {
+    // 业务系统业务类型
+    private Integer businessType;
+    // 业务操作类型
+    private Integer businessOperation;
+    // 主业务单号
+    private String majorBusinessNo;
+    private String minorBusinessNo;
+    private String countryCode;
+    private String stateOrProvinceCode;
+    private String cityCode;
+    private String areaCode;
+    private String streetCode;
+    // 详细地址
+    private String address;
+    private String warehouseAreaCode;
+    // 服务类型 standard/priority
+    private Integer shippingType;
+    // 配送方式是否需要可跟踪包裹轨迹
+    private Boolean hasTracking;
+    // 邮编
+    private String postCode;
+    // 运费是否优惠
+    private Boolean shippingDiscount = false;
+    private String shippingMethodCode;
+    private Long timestamp;
+    //订单金额
+    private String orderAmount;
+    private List<SkuInventoryDTO> skuInventorys;
+}
+InventoryOperationDTO *-- SkuInventoryDTO
+class SkuInventoryDTO{
+    String itemId
+    String parentItemId
+    // 业务类型
+    Integer logisticInventoryBusinessType;
+    private String skuCode;
+    private String warehouseCode;
+    private String warehouseAreaCode;
+    private Integer quantity;
+    private boolean shippingForFree;
+}
+
+note top of InventoryAllocateDTO : 路由返回对象/预占返回对象 //TODO
+class InventoryAllocateDTO{
+    private String warehouseName;
+    private String warehouseCode;
+    private String warehouseAreaCode;
+    private String warehouseAreaName;
+    private String shippingMethod;
+    //物流渠道
+    private String shippingMethodCode;
+    //配送类型
+    private Integer shippingType;
+    private Integer hasTracking;
+    private String postFee;
+    private Boolean isFarFlungLocations;
+    private String currency;
+    private Map<String, SkuInventoryDTO> skuAllotDetails;
+    private EstimatedTimeDTO estimatedTime;
+}
+
+note top of InventoryBatchOperationDTO : 预扣和占用使用的参数对象,可以针对\n一个订单的多个发货单同时操作
+class InventoryBatchOperationDTO {
+    //订单
+    String parentMajorBusinessNo
+    List<InventoryOperationDTO> inventoryOperationDTOs
+}
+
+note top of BatchEstimatedTimeDTO : 预扣和占用的返回结果
+class BatchEstimatedTimeDTO{
+    String majorBusinessNo
+    EstimatedTimeDTO estimatedTimeDTO
+}
+BatchEstimatedTimeDTO *-- EstimatedTimeDTO
+InventoryAllocateDTO *-- EstimatedTimeDTO
+class EstimatedTimeDTO{
+    private Long eta;
+    private Long etd;
+    // 预售批次
+    private String preSellBusinessNo;
+    List<SkuInventoryDTO> list;
+    // 出库时间跨过的周末-返回结果
+    private List<Long> weekends;
+    //出库时间跨过的节日-返回结果
+    private List<Long> holidays;
+}
+@enduml
+

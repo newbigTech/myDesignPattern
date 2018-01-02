@@ -1,0 +1,11 @@
+@startuml
+
+[*] --> Created:用户创建补发单
+[*] --> Created:服务点创建补发单
+Created -right-> Approved:审批通过
+Created --> Cancelled:审批不通过
+Approved -right-> SendingToUser:物流确认补发创建发货单
+SendingToUser -->Finished:确认包裹已经出库
+Cancelled -->[*]
+Finished -->[*]
+@enduml

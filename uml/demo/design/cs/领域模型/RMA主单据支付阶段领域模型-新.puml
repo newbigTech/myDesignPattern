@@ -1,0 +1,12 @@
+@startuml
+
+class RMA支付信息{
+    checkout_price 实收金额
+    depreciate_price 折旧金额
+    refund_amount 退款金额
+    pay_status 支付状态
+    pay_type 支付方式
+    labour_fee 人工费
+}
+
+@enduml

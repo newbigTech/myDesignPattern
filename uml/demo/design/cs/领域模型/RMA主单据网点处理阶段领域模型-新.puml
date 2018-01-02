@@ -1,0 +1,18 @@
+@startuml
+
+class RMA网点处理信息{
+    inspect_remark 检测备注
+    treatment_type 处理方式
+    repair_detail 维修详情
+    repairment_level 维修级别
+    software_version 软件版本
+    appoint_accepted_time 网点受理时间
+    treatment_type2 维修类别 保内/保外
+    pending_reason 等待原因
+    pending_type 等待类型
+    rma_reason RMA派单原因
+    problem_category 故障分类,10：软件 20：硬件
+    problem_description 详细的故障描述
+    new_software_version 新软件版本
+}
+@enduml

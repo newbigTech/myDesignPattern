@@ -1,0 +1,38 @@
+@startuml
+
+package "aws机房" {
+    artifact ordercenter_global
+    artifact wms_global
+    artifact inventory_global
+    queue mq_global
+    database oneplus_wms_global
+
+    ordercenter_global -down-> mq_global
+    wms_global -down-> mq_global
+    wms_global -up-> oneplus_wms_global
+}
+
+package "广州机房" {
+    artifact ordercenter_cn
+    artifact wms_cn
+    artifact inventory_cn
+    artifact erpadmin
+    queue mq_cn
+    database oneplus_wms_cn
+
+    ordercenter_cn -down-> mq_cn
+    wms_cn -right-> mq_cn
+    wms_cn -down-> oneplus_wms_cn
+    erpadmin -down-> oneplus_wms_cn
+    mq_cn -down-> erpadmin
+    mq_global -left-> mq_cn
+}
+
+package "oppo机房" {
+    artifact oneplus_erp
+    database oneplus_erp_database
+    erpadmin --> oneplus_erp_database
+    oneplus_erp_database -right- oneplus_erp
+}
+
+@enduml

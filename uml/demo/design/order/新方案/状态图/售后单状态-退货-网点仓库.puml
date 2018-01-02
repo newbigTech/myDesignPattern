@@ -1,0 +1,14 @@
+@startuml
+
+
+[*] --> Created :用户创建退货单
+[*] --> Created :服务点创建退货单
+Created -right-> Approved :审批通过
+Created --> Cancelled :审批不通过
+Approved --> SentToService: 收到退货商品
+SentToService --> Cancelled: 商品无法退货，取消退货单，退回给用户
+SentToService --> Refunding :检测通过，创建退款单
+Refunding -up-> Finished :退款完成，状态结束
+Cancelled -->[*]
+Finished -->[*]
+@enduml

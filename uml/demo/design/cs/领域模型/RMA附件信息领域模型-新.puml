@@ -1,0 +1,16 @@
+@startuml
+
+class RMA附件信息{
+    id
+    source_id 来源主键
+    source_type 来源类型 10：合作方上传 20：用户自动上传
+    file_key 上传文件的唯一key
+    file_name 真实文件名
+    file_size 文件大小
+    create_user 创建人
+    create_time 创建时间
+    url_prefix url前缀
+    url_suffix url前缀
+}
+
+@enduml

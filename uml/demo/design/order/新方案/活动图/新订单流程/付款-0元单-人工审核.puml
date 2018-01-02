@@ -1,0 +1,43 @@
+@startuml
+
+|风控人员|
+start
+:审核;
+|库存|
+|订单|
+if(是否通过审核)then(否)
+    :更新订单的结束阶段状态为Cancelled;
+
+    if(订单类型)then(非抢购单)
+    |库存|
+    :取消预扣;
+    endif
+    stop;
+endif
+
+|订单|
+
+:占用库存;
+:更新订单的初始阶段为Approved;
+:更新订单的付款阶段为Paid;
+
+:广播订单状态与信息;
+fork
+
+|订单|
+:通知Sear;
+fork again
+:修改抢购订单的Redis状态;
+fork again
+:记录操作日志;
+fork again
+:发送邮件;
+fork again
+:调用优惠领取推荐返利积分;
+
+fork again
+:调用优惠领取合作码;
+end fork
+stop
+@enduml
+

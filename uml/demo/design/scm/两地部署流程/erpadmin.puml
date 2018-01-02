@@ -1,0 +1,40 @@
+@startuml
+
+
+
+control WMS_AWS as wms_us
+queue 海外MQ as mq_us
+control WMS_CN as wms_cn
+queue 国内MQ as mq_cn
+
+control ERP_ADMIN as erp_admin
+control ERP as erp
+actor 定时任务 as timer
+
+autonumber 10 10 "<font color=red><b>[000]"
+
+wms_us -> mq_us : 各项业务数据
+mq_us -> mq_cn : 转发
+wms_cn -> mq_cn : 各项业务数据
+mq_cn -> erp_admin : 同步业务数据
+
+
+timer -> erp_admin : 定时同步数据至ERP
+erp_admin -> erp : 同步数据至ERP
+
+timer -> erp_admin : 定时从ERP抓取数据
+erp_admin -> erp : 抓取ERP数据
+erp --> erp_admin : 采购b2b订单等数据
+
+alt 国内单据
+    erp_admin -> mq_cn : 同步国内单据
+    mq_cn -> wms_cn : 同步国内单据
+else 海外单据
+    erp_admin -> mq_cn : 同步海外单据
+    mq_cn -> mq_us : 同步海外单据
+    mq_us -> wms_us : 同步海外单据
+end
+
+
+
+@enduml

@@ -1,0 +1,43 @@
+@startuml
+actor Time
+actor 仓管员 as warehouser
+actor 客服 as servicer
+control wms
+control tradecenter as trade
+control cs
+control erp
+
+autonumber 10 10 "<b>[000]"
+cs -> wms: 通知逆向入库单
+wms -> wms: 记录逆向入库单
+
+warehouser -> warehouser: 收到包裹
+warehouser -> wms: 录入逆向收货单
+
+Time -> wms: 定时匹配
+wms -> wms: 自动匹配逆向收货单和入库单
+autonumber resume "<font color=red><b> [000]  "
+
+wms -> wms: 退、换货入库
+wms -> cs: 通知退换货已入库
+cs -> cs: 记录入库
+cs -> trade: 通知trade退换货已入库
+wms -> erp: 通知erp订单的退换货商品信息
+
+alt 退货
+    trade -> trade: 生成退款单
+    servicer -> trade: 操作退款
+    trade -> erp: 通知erp订单退款信息
+
+    alt 中国区&电子发票
+        wms -> wms: 生成原订单发票的红票
+        wms -> trade: 查询订单剩余商品信息
+        trade --> wms: 剩余商品信息
+        wms -> wms: 剩余商品开具发票
+    else
+    end
+else 换货
+
+end
+
+@enduml

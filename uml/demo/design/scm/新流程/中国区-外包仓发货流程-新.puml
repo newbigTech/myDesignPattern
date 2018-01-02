@@ -1,0 +1,41 @@
+@startuml
+actor Time
+control tradecenter as trade
+control wms
+control inv
+control erp
+
+autonumber 10 10 "<font color=red><b>[000]"
+trade -> erp: 推送订单账目信息
+trade -> wms: 推送发货单
+autonumber resume "<b> [000]  "
+
+alt 抢购订单的发货单
+    Time --> wms: 定时路由和预占库存
+    wms --> inv: 路由和预占库存
+else 无
+end
+Time --> wms: 定时占用实存
+wms --> inv: 占用实存
+wms --> trade: 通知状态变更：已分配实存
+
+Time --> wms: 定时推送
+
+boundary 科捷仓储系统 as TPL
+wms --> TPL: 推送发货单至科捷系统
+alt 纸质发票
+    actor 发票专责 as invoicer
+    invoicer --> TPL: 生成拣货批次
+    TPL --> wms: 通知拣货批次
+    invoicer --> wms: 操作打印纸质发票
+else 电子发票
+end
+invoicer --> TPL: 仓库制单、发货等
+TPL --> wms: 回传发货信息imei运单号等
+
+wms --> inv: 扣减库存
+autonumber resume "<font color=red><b> [000]  "
+wms --> erp: 通知发货信息
+wms --> trade: 通知发货单发货信息
+
+@enduml

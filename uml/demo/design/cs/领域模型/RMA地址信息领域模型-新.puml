@@ -1,0 +1,29 @@
+@startuml
+
+class RMA地址信息{
+    id 主键
+    rma_sheet_id RMA主键
+    type 类型 收货地址、发货地址、账单地址
+    --customer_id 用户id--,
+    customer_name 用户名称
+    receiver_name 收货人名称
+    phone_number 联系电话
+    email email地址
+    post_code 邮编
+    country 国家
+    country_name 国家名称
+    addr_prov 省
+    addr_prov_name 省名称
+    addr_city 市
+    addr_city_name 市名称
+    addr_distr 区
+    addr_distr_name 区名称
+    addr_street 街
+    addr_street_name 街名称
+    addr_detail 详细地址
+    receiver_first_name 收货人firstname
+    receiver_last_name 收货人lastname
+    gstin 用户税号
+}
+
+@enduml

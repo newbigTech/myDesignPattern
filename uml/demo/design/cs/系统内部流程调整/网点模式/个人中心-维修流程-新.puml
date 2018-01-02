@@ -1,0 +1,115 @@
+@startuml
+actor 用户
+actor 呼叫中心客服
+
+control 商城
+control 订单中心 as trade
+control SCM
+control GSP
+control 支付
+entity 物流服务商
+actor 网点
+
+autonumber 10 10 "<b>[000]"
+用户 -> 商城: 换货售后申请
+autonumber resume "<font color=red><b>[000]"
+商城 -> trade: 记录售后申请
+trade -> trade: 校验申请参数
+trade -> trade: 校验订单信息和可维修数量
+trade -> GSP:推送售后申请
+
+autonumber resume "<b>[000]"
+
+呼叫中心客服 -> GSP:审核RMA信息操作
+
+alt 呼叫中心客服取消
+    GSP -> GSP:更新RMA为已取消
+    autonumber resume "<font color=red><b>[000]"
+    GSP -> trade: 通知trade变更
+    autonumber resume "<b>[000]"
+else 用户取消
+    autonumber resume "<font color=red><b>[000]"
+    trade->GSP:通知RMA更新状态为已取消
+    autonumber resume "<b>[000]"
+else 审核 \n 1、编辑完善RMA申请信息 \n 2、选择网点,派单RMA到网点
+        GSP -> GSP: 更新RMA待网点接受
+        网点 -> GSP: RMA接受受理操作
+        GSP -> GSP: 更新RMA为网点待入库
+
+        alt 网点申请取消RMA
+            loop
+                网点 -> GSP: 申请取消RMA
+                GSP -> GSP:更新RMA为申请取消状态
+                alt 客服同意取消
+                    呼叫中心客服 -> GSP: 审核通过取消
+                    GSP -> GSP:更新RMA已取消状态
+                    autonumber resume "<font color=red><b>[000]"
+                    GSP -> trade: 通知trade变更
+                    autonumber resume "<b>[000]"
+                else 客服不同意取消
+                    呼叫中心客服 -> GSP: 拒绝取消
+                    GSP -> GSP:更新RMA为网点待入库
+                end
+            end
+        else 网点操作RMA入库
+             网点 -> GSP: 操作RMA入库
+             GSP -> GSP: 更新RMA为已入库
+             autonumber resume "<font color=red><b>[000]"
+             GSP -> trade: 通知trade状态变更
+             autonumber resume "<b>[000]"
+        end
+
+        网点 -> GSP:RMA检测操作
+        GSP -> GSP:更新RMA为检测中
+        网点 -> GSP:结束检测操作
+        GSP -> GSP:更新RMA状态为检测结束
+
+        autonumber resume "<font color=red><b>[000]"
+        GSP->trade:通知trade变更,报价信息
+        alt 需要支付
+            autonumber resume "<b>[000]"
+            用户->商城:支付操作
+            alt 支付完成
+                网点->GSP:维修操作
+                GSP->GSP:更新RMA状态为维修中
+                网点->GSP:结束维修操作
+                GSP->GSP:更新RMA状态为维修结束
+                autonumber resume "<font color=red><b>[000]"
+                GSP->trade:通知trade状态变更
+                autonumber resume "<b>[000]"
+                网点->GSP:寄回发货操作
+                GSP->GSP:保存寄回给用户物流信息
+                GSP-->物流服务商:RMA物流对接(线下)
+                GSP->GSP:更新RMA状态为已完成
+                autonumber resume "<font color=red><b>[000]"
+                GSP->trade:通知trade变更,物流信息
+                autonumber resume "<b>[000]"
+            else 拒绝支付
+                autonumber resume "<font color=red><b>[000]"
+                trade->GSP:RMA状态变成退货拒收状态
+                autonumber resume "<b>[000]"
+                网点->GSP:寄回发货操作
+                GSP->GSP:保存寄回给用户物流信息
+                GSP-->物流服务商:RMA物流对接(线下)
+                autonumber resume "<font color=red><b>[000]"
+                GSP->trade:通知trade物流信息变更
+                autonumber resume "<b>[000]"
+            end
+        else 不需要支付
+            网点->GSP:维修操作
+            GSP->GSP:更新RMA状态为维修中
+            网点->GSP:结束维修操作
+            GSP->GSP:更新RMA状态为维修结束
+            autonumber resume "<font color=red><b>[000]"
+            GSP->trade:通知trade变更
+            autonumber resume "<b>[000]"
+            网点->GSP:寄回发货操作
+            GSP->GSP:保存寄回给用户物流信息
+            GSP-->物流服务商:RMA物流对接(线下)
+            GSP->GSP:更新RMA状态为已完成
+            autonumber resume "<font color=red><b>[000]"
+            GSP->trade:通知trade变更,物流信息
+            autonumber resume "<b>[000]"
+        end
+end
+@enduml

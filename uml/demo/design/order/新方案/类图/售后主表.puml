@@ -1,0 +1,65 @@
+@startuml
+
+
+售后主单..售后时间
+售后主单..取消
+售后主单..申请
+售后主单..付款
+售后主单..服务点
+
+
+ class 售后主单 {
+
+	售后单号rmaNo
+	订单号orderNo
+	状态rmaStatus
+	售后单类型rmaType
+	备注remark
+	用户标识userId
+
+	商品寄给服务点的方式sendToServiceMethod
+	商品寄给用户的方式sendUserMethod
+
+	服务点类型serviceType
+	服务区serviceZone
+
+
+}
+
+ class 售后时间 {
+
+	 创建时间createTime
+	 审核时间auditedTime
+	 商品寄送到网点的时间sentToServiceTime
+	 售后处理完成时间processedTime
+	 付款时间paidTime
+	 商品寄给用户的时间SentToUserTime
+	 结束时间finishTime
+	 取消时间cancelledTime
+}
+ class 取消 {
+	取消类型cancelType
+	取消原因cancelReason
+}
+ class 申请 {
+	申请类型applyType
+	申请原因applyReason
+}
+ class 付款 {
+	  应付金额payAmount
+	  币种currency
+	  支付方式payMethod
+}
+
+ class 服务点 {
+	 服务点电话(servicePhone);
+	 服务点名称(serviceName);
+	 服务点编号(serviceCode);
+}
+
+enum 支付方式{
+    线上收款
+    网点收款
+}
+
+@enduml

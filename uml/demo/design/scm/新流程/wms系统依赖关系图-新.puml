@@ -1,0 +1,90 @@
+@startuml
+
+package 广州 {
+    artifact wms_cn {
+        component 仓储管理 as warehouse
+        component 物流管理 as logistic
+        component 发货单管理 as wms_order
+        component 基础数据管理 as wms_data
+    }
+    artifact inv_cn
+    artifact trade_cn
+    artifact cs_cn
+    artifact goods_cn
+    artifact open_cn
+    artifact erpadmin
+    artifact erp
+    artifact opss
+    boundary api1.oneplus.cn as api1
+}
+
+package AWS {
+    artifact wms_us {
+        component 仓储管理 as warehouse_us
+        component 物流管理 as logistic_us
+        component 发货单管理 as wms_order_us
+        component 基础数据管理 as wms_data_us
+    }
+    artifact cs_us
+    artifact inv_us
+    artifact trade_us
+    artifact goods_us
+    artifact open_us
+}
+
+queue 消息队列 as msg_queue
+cloud HTTP as http
+package 国内第三方 {
+    entity 科捷 as tpl_warehouse
+    entity 顺丰_圆通_EMS as tpl_logistic
+}
+package 海外第三方 {
+    entity WS_BD_DEL as tpl_warehouse_us
+    entity aftership as tpl_logistic_us
+}
+entity OA as oa
+entity OPPO as oppo
+
+
+' 内部依赖关系
+trade_cn <-down-> msg_queue : 订单同步
+trade_us <-down-> msg_queue : 订单同步
+wms_order <---> msg_queue : 订单同步
+wms_order_us <---> msg_queue : 订单同步
+wms_order --> trade_cn : 查询订单
+
+
+erpadmin <---> msg_queue : 单据同步
+erpadmin <--> erp : 账目记录
+wms_data <-- goods_cn : 同步sku
+wms_data_us <-- goods_us : 同步sku
+warehouse --> inv_cn : 库存管理
+warehouse_us --> inv_us : 库存管理
+opss --> wms_order : 推送订单
+opss --> http : 推送海外订单
+
+http --> wms_order_us : 推送海外订单
+warehouse <-up--> cs_cn : 逆向单据
+warehouse_us <-up--> cs_us : 逆向单据
+
+
+' 外部系统依赖关系
+wms_order --> tpl_warehouse : 推送/取消/查询发货单
+tpl_warehouse --> open_cn : 通知单据出库/入库
+tpl_warehouse --> api1 : 通知单据出库/入库
+
+wms_order_us -up-> tpl_warehouse_us : 推送/取消/查询发货单
+wms_order_us -up-> trade_us : 查询订单
+tpl_warehouse_us --> open_us : 通知单据出库/入库
+
+logistic --> tpl_logistic : 获取运单
+tpl_logistic --> api1 : 推送路由信息
+
+tpl_logistic_us -down-> logistic_us : 推送路由信息
+
+warehouse -down-> oppo : 获取出库信息
+warehouse_us -down-> oppo : 获取出库信息
+oa --> warehouse : 部门领退料
+oa --> warehouse_us : 部门领退料
+
+@enduml

@@ -1,0 +1,16 @@
+@startuml
+
+[*] --> Created :用户创建售后单
+[*] --> Created :服务点创建售后单
+Created -right-> Approved :审批通过
+Created --> Cancelled :审批不通过
+Approved --> SentToService: 网点收到售后商品
+SentToService --> Cancelled: 售后失败，退回给用户
+
+SentToService-->Finished:无维修费用，网点直接通过物流发给用户
+SentToService --> Paying :有费用，需要用户支付。
+Paying --> Paid :用户支付成功
+Paid -up->Finished: 网点直接通过物流发给用户
+Cancelled -->[*]
+Finished -->[*]
+@enduml

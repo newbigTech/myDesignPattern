@@ -1,0 +1,27 @@
+@startuml
+'hide members
+
+package 共用单据     {
+   Object 发票
+   Object 地址
+   Object 支付
+   Object 退款单
+   Object 物流单
+
+   退款单   --  支付系统
+   物流单 -- 物流
+   支付 -- 支付系统
+   发票 -- 物流
+}
+package 支付系统 {
+   Object 退款
+   Object 付款
+}
+
+package 物流 {
+   Object 发货单
+   Object 税票
+}
+
+
+@enduml

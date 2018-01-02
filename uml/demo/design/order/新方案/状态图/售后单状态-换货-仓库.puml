@@ -1,0 +1,16 @@
+@startuml
+
+[*] --> Created :用户创建换货单
+[*] --> Created :服务点创建换货单
+Created -right-> Approved :审批通过
+Created --> Cancelled :审批不通过
+Approved -right-> SentToService: 仓库收到换货商品
+SentToService --> Cancelled: 仓库检测换货商品有问题，取消换货单
+SentToService --> Paying  :换货商品通过检测,需要付费
+SentToService --> SendingToUser :无换货费用，建发货单给用户换货
+Paying --> SendingToUser :用户支付换货费用,建发货单给用户换货
+SendingToUser -up->Finished:确认包裹已经出库
+
+Cancelled -->[*]
+Finished -->[*]
+@enduml

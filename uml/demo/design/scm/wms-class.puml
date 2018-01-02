@@ -1,0 +1,173 @@
+@startuml
+class Order {
+  id      INT  'id',
+  institution_code        '组织机构编码',
+  tpl_warehouse_code      '第三方仓库编码外销使用',
+  warehouse_id          '仓库id',
+  area_code VARCHAR '库区编码',
+  orderNo VARCHAR '订单号' PRIMARY KEY,
+  --hasInvoice '是否开具发票标识 1:开发票 0：不开发票 缺省值为1'--,
+  --open_id VARCHAR 'magento推送过来带的用户openid'--,
+  --user_id VARCHAR '用户id'--,
+  --userNameVARCHAR'用户名'--,
+  --creator VARCHAR '下单人'--,
+  third_warehouse_type  '第三方仓储类型[1:SF,2:科捷,3:4PX,4:PCH]',
+  logisticType  '物流公司[1:EMS 2:顺丰3:圆通 4:优速,UPS,DHL]',
+  logisticMailno  '物流运单号',
+  section   '配送时段:1全部,2工作日,3假日,4晚上',
+  orderFrom DEFAULT '1' '订单来源[1:商城,2:移动商城,3:拍拍,4:天猫,6:苏宁支付,7:今日头条,8:淘宝支付,9:中国移动10085]',
+  --payType  DEFAULT '1' '支付方式[1:在线支付,2货到付款]'--,
+  --payTime    '支付时间' --,
+  *order_channel  '订单渠道[10:2C 20:2B线上 21:2B线下,31:售后]',
+  orderType  '订单类型（1:普通,2:抢购,3:预售,4:旧大客户[废弃],5:换货,6:加油码,7:虚拟,8:合约机,9:自提,41:大客户[普通],42:大客户[退回],43:大客户[换货],44:大客户[退货]）',
+  allocate_time  '分配时间',
+  orderTime  '订单时间',
+  --sendTime   '发货时间' --,
+  -- orderStatus '订单状态（外销B2B订单：0未分配库存，1已分配库存，2已出库，3已取消）' -- ,
+  wms_orderStatus        '订单在wms时的状态[-4预占失败 -3待预占 -2实占失败 -1待实占,0已分配库存,1已分配拣货单,2已打印,3已领单,4已拣货完成,5配货完成,6已打包,8已扫描,9待出库,7已出库]（外销B2B订单：-1未分配库存，0已分配库存，7已出库，10已取消）',
+  wms_orderValid           '订单是否有效[0:无效,1:有效]',
+  wmsOrderLock             '订单是否锁定[0:未锁定,1:已锁定]',
+  --wms_update_by             '最后修改人'--,
+  -- invoiceCode             '发票代码'-- ,
+  --invoiceNos               '发票号码[有多个时用逗号分割]'--,
+  --mendInvoiceNos           '补打发票号码[有多个时用逗号分割]'--,
+  --invoicePrintStatus        '发票打印状态（1未开发票,2已开全额，3已开部分,默认1）'--,
+  --invoiceResendStatus      '发票补寄状态（1未申请补寄,2补寄发票,3补开余额,4换开发票）'-- ,
+  --rejectStatus             '退货入库情况 （1：未退货 2:全部退货 3：部分退货）'--,
+  --payFlowNo  '支付流水号'--,
+  --oversea_push_status      '外销B2B推送状态[0未分配箱号，1已通知分配箱号，2已分配箱号，3已通知出库，4已出库，5已取消，]'-- ,
+  pushStatus                '推送状态推送状态[-1:未操作推送 0：未分配不须推送1：待推送2：推送失败3：已推送]',
+  push_error_msg        '推送错误消息',
+  orderRouteStatus     '订单路由状态[1未签收,2已签收,3已拒收,4已退货,5已换货,90超时未返回. 默认1]',
+  --printableOfInvoice       '是否可打印发票（0:否,1:是）' --,
+  synTime   '订单系统推送订单时间',
+  pushTime  '推送成功时间',
+  deliveryTime        '出库时间',
+  --paymentChannel       '支付渠道：财富通、支付宝、银联'--,
+  signInTime          '签收时间',
+  --check_code           '自提订单校验码'--,
+  --delivery_mode        '配送方式（41=物流配送,42=客户自提）'--,
+  --signed_explanation   '签收说明'--,
+  --insure_type       '保险类型代码[NI不买保险 LI 低值保险]'--,
+  --insure_money       '保险金额'--,
+  --taxation   '税费',
+  --tax_type   '税种',
+  -- printed_logistics_label '是否已打印物流标标签（0=未打印,1=已打印）'-- ,
+  --acount_type        '账号类型,1-对公 2-对私'--,
+  -- stockist '零售商'-- ,
+  --stockistId     '零售商ID'--,
+  --notify_ma_status '通知magento状态[1. 未通知Magento订单推送状态，2.通知推送失败，3.通知推送成，4.通知出库失败，5.通知出库成功]'--,
+  --stock_order_no     '外销备货主键编号'--,
+  --notify_ma_warehouse     '订单更改仓库/渠道，通知Magneto. [-1.未更改无需通知 1.待通知 2.通知失败 3.通知成功]' --,
+  --rma_no  'RMA编码'--,
+  original_etd   '原始etd',
+  original_eta   '原始eta',
+  eta   '订单预计到达时间',
+  etd   '订单预计出库时间',
+   --department_code     '部门编码' --,
+  shipping_type       '发运类型 1.standard, 2.priority',
+  --magento_no           'Magento订单号'--,
+}
+
+class order_money {
+    order_no,
+    currency '币种[CNY:人民币,HKD:港币,USD:美元,EUR:欧元,GBP:英镑,INR:卢比等]',
+    goodsTotalAmount  '商品总金额',
+    totalDiscountFee  '总折扣费用',
+    postFee '运费',
+    freight_rate  '运费税率',
+    orderTotalAmount  '实付金额'
+}
+
+class order_extend_info {
+    order_no,
+    wms_picking_code         '拣货批次ID',
+    wms_picking_number       '购物清单序号',
+    bigPen   '大头笔',
+    message  '买家留言',
+    account_code        '客户代码',
+    factWeight          '商品第三方回传实际重量（存的是数字，单位是kg）',
+    goodsWeight         '商品总重量（存的是数字，单位是kg）',
+    packageWeight       '包裹重量（存的是数字，单位是kg）',
+    po_number ? '采购单号',
+    destination   ? '目的地',
+    oa_order_no       ? 'OA出库申请单号',
+    pre_sell_batch_no   '预售批次号',
+    etd_weekends         'etd中周末时间',
+    etd_holidays         'etd中节假日时间',
+}
+
+class wms_sales_order_goodsdetail{
+   `id` 'id',
+  -- `institution_code`  '组织机构编码'--,
+   `orderNo`  '订单ID',
+   +'item_id' '订单中的itemId'
+   --`goodsDetailId`  '商品详情ID'--,
+  ? `goodsType`   '商品类型[1:普通商品,2:套装,3:加价购]',
+   `goodsCode`  '商品的SKU',
+   `goodsName`   ,
+   +`goods_en_name`   ,
+   `discountAmount`   '国内：单个商品优惠金额；海外：整行商品的优惠总额。',
+   `goodsPrice`   '商品单价',
+   ?`groupCode`  '在goodsType为2时候此处为套装编码',
+   `quantity`           '商品数量,整型，缺省0',
+   --`signed_qty` '签收数量'--,
+   `comments`        '备注，商品类型为套餐时填套餐名',
+   --`comments1`        '手机刻字1'--,
+   --`comments2`        '手机刻字2'--,
+   ?`catId`       '商品类型：01:手机,02:配件,03:生活周边,04:维修配件,05:虚拟商品,06:包材',
+   `packscan_quantity`  '打包扫描数量',
+   --`create_time`      '创建时间',
+   --`tax_amount`    '税额'--,
+   --`tax_percent`     '税率'--,
+   --`insurance_target_sku`        '保险目标对象手机sku列表。逗号隔开'--,
+   --`shipping_for_free`    '是否免运费        0.非,        1.是'--,
+   `logistic_inventory_business_type`  '逻辑库区代码',
+   `deleteFlag`   '删除标识[默认1        删除为2]'
+}
+
+class addr {
+      --institution_code   '组织机构编码',
+      orderNo
+      last_name         '姓',
+      first_name        '名',
+      name              '收货人姓名',
+      phone             '电话',
+      country           ,
+      country_code      '国家代码',
+      mobile            '手机',
+      origincode        '原寄方地址',
+      destcode          '目的城市编码',
+      province          '省',
+      province_code     '省代码',
+      city              '市',
+      city_code         '市代码',
+      area              '区',
+      area_code         '区代码',
+      street            '街道',
+      street_code       '街道代码',
+      detail            '详细地址',
+      postCode          '邮编',
+      addr_alias        '收货地址别名',
+      doorplate         '门牌号',
+      company           '公司名称',
+      remark            NULL,
+      email             '邮箱',
+      remote_area       '是否偏远地区[Y/N]',
+      income_company_code  '收入主体编码'
+}
+
+'class wms_invoice{
+'
+'}
+'
+'class wms_mail_head {
+'    source_no '订单'
+'    mail_no '运单号'
+'}
+'
+'class wms_mail_route{
+'orderNo '订单'
+'mailNo '运单'
+'}
+@enduml

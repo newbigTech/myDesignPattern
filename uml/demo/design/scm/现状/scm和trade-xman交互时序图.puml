@@ -1,0 +1,75 @@
+@startuml
+actor 用户 as user
+control time
+entity trade
+entity wms
+entity xman
+
+== 国内B2C订单流程 ==
+/'订单正向流程'/
+time -> trade :获取待推送订单
+trade -> wms :订单推送
+wms -> wms :分配实存
+wms -> trade :通知已分配库存
+wms -> wms :出库
+wms -> trade :通知已出库（运单、imei）
+activate trade
+trade -> trade :更新状态 记录imei
+deactivate trade
+wms -> wms :派送
+wms -> trade :通知已签收
+activate trade
+trade -> trade : <font color=red>更新状态、生成保险？
+deactivate trade
+wms -> trade :通知已拒收
+activate trade
+trade -> trade : <font color=red>更新状态、生成退款单？
+deactivate trade
+...
+/'查询路由信息'/
+user -> trade :查看路由轨迹
+trade -> wms :查看路由轨迹
+wms --> trade :路由轨迹信息
+...
+/'取消订单信息'/
+user -> trade :取消订单
+activate trade
+trade -> wms :取消订单
+wms -> wms :释放库存、取消第三方订单等
+wms --> trade :取消结果
+deactivate trade
+
+newpage
+==海外B2C订单流程==
+
+/'订单正向流程'/
+time -> xman :获取待推送订单
+xman -> wms :订单推送
+wms -> wms :分配实存
+wms -> xman :通知ETD ETA
+wms -> wms :推送第三方仓库
+wms -> xman :通知已推送第三方
+xman -> xman :变更状态processing
+wms -> wms :出库
+wms -> xman :通知已出库（运单、imei）
+activate xman
+xman -> xman :更新状态complete，记录运单号
+deactivate xman
+wms -> wms :派送
+wms -> xman :通知已签收/已拒收
+activate xman
+xman -> xman : 更新状态
+deactivate xman
+
+...
+
+/'取消订单信息'/
+user -> xman :取消订单
+activate xman
+xman -> wms :取消订单
+wms -> wms :释放库存、取消第三方订单等
+wms --> xman :取消结果
+deactivate xman
+
+
+@enduml

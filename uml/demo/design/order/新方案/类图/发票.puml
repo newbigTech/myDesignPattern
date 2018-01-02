@@ -1,0 +1,46 @@
+@startuml
+
+
+ 发票  <|-- 国内发票
+ 发票  <|-- 购物清单
+
+ class 发票 {
+
+	 业务单号bizNo
+	 关联订单号orderNo
+	 发票种类invoiceType
+}
+ class 国内发票 {
+
+	发票类别invoiceCategory
+	抬头head
+	金额amount
+	开票内容content
+	纳税人税号taxIdentifyNo
+	发票状态invoiceStatus
+	开票时间invoiceTime
+	发票介质invoiceMedium
+	'发票号码是税务部门给予发票的编码'
+	发票代码invoiceCode
+	发票号码invoiceFlow
+	发票链接invoiceUrl
+
+}
+enum 发票种类InvoiceType{
+        普通发票1
+        增值税发票2
+        购物清单3
+}
+
+
+enum 发票介质invoiceMedium{
+    纸质Pager
+    电子Electronic
+}
+
+
+ class 购物清单  {
+	 发票链接invoiceUrl
+
+}
+@enduml

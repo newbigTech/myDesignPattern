@@ -1,0 +1,30 @@
+@startuml
+
+订单履约项 *-right- 订单履约日志
+
+
+class 订单履约项 {
+	 订单号orderNo;
+	 订单项orderItemId;
+	 履约项类型perfType
+	 商品编号skuCode;
+	 imei;
+	 商品数量skuCount;
+}
+ class 订单履约日志 {
+	 订单号orderNo
+	 订单项orderItemId
+	 商品编号skuCode
+	 日志类型logType
+	 商品数量skuCount
+	 imei
+	 日志唯一标识
+	 业务发生时间bizTime
+	 业务单据bizNo
+
+}
+enum 履约项类型perfType{
+    商品数量
+    商品IMEI
+}
+@enduml

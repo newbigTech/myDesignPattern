@@ -1,0 +1,28 @@
+@startuml
+
+
+class 订单项 {
+	 订单号orderNo
+	 订单项itemId
+	 父订单项parentItemId
+	 订单项类型itemType
+	 购买方式buyType
+	 商品类型skuType
+	 商品编号skuCode
+	 商品数量skuCount
+	 附加信息attachment
+	 商品原价originPrice
+	 商品售价salePrice
+	 商品优惠金额discountAmount
+	 商品参加的活动settlePromos
+	 商品维修时间repairDay
+	 商品退货天数returnDay
+	 商品换货天数swapDay;
+	 商品税费skuTaxFee;
+	 商品税率skuTaxRate;
+	 抢购活动rushId;
+	 邀请码inviteCode;
+
+}
+
+@enduml

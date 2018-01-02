@@ -1,0 +1,38 @@
+@startuml
+actor Time
+control tradecenter as xman
+control wms
+control inv
+control erp
+boundary WS仓储系统 as TPL
+actor 仓管员 as warehouser
+
+autonumber 10 10 "<font color=red><b>[000]"
+xman -> erp: 推送订单账目信息
+xman -> wms: 推送发货单
+autonumber resume "<b> [000]  "
+
+alt 抢购订单的发货单/售后类发货单
+    Time --> wms: 定时路由和预占库存
+    wms --> inv: 路由和预占库存
+else 无
+end
+Time --> wms: 定时占用实存
+wms --> inv: 占用实存
+
+Time --> wms: 定时推送
+
+wms --> TPL: 推送发货单至WS系统
+autonumber resume "<font color=red><b> [000]  "
+wms --> xman: 通知订单已经推送仓库处理
+xman --> xman: 状态变更processing
+autonumber resume "<b> [000]  "
+warehouser --> TPL: 仓库制单、发货等
+TPL --> wms: 回传发货信息imei运单号等
+
+wms --> inv: 扣减库存
+autonumber resume "<font color=red><b> [000]  "
+wms --> erp: 通知发货信息
+wms --> xman: 通知发货单发货信息
+
+@enduml

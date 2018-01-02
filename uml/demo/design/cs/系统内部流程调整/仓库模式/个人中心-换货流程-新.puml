@@ -1,0 +1,77 @@
+@startuml
+actor 用户
+actor 呼叫中心客服
+
+control 商城
+control 订单中心 as trade
+control SCM
+control GSP
+control 支付
+entity 物流服务商
+actor 呼叫中心客服
+
+autonumber 10 10 "<b>[000]"
+用户 -> 商城: 换货售后申请
+autonumber resume "<font color=red><b>[000]"
+商城 -> trade: 记录售后申请
+trade -> trade: 校验申请参数
+trade -> trade: 校验订单信息和可换数量
+trade -> GSP:推送售后申请
+
+autonumber resume "<b>[000]"
+
+呼叫中心客服 -> GSP:审核RMA信息操作
+
+alt 呼叫中心客服取消
+    GSP -> GSP:更新RMA为已取消
+    autonumber resume "<font color=red><b>[000]"
+    GSP -> trade: 通知trade变更
+    autonumber resume "<b>[000]"
+else 用户取消
+    autonumber resume "<font color=red><b>[000]"
+    trade->GSP:通知RMA更新状态为已取消
+    autonumber resume "<b>[000]"
+else 审核 \n 1、编辑完善RMA申请信息 \n 2、选择仓库,派单RMA到仓库
+        GSP->GSP:更新RMA待检测
+        loop
+            alt RMA状态为待检测或者待客服处理
+                GSP->SCM:通知逆向入库
+                SCM->SCM:逆向匹配
+                alt 正常逆向入库
+                    SCM->GSP:通知RMA变更为正常入库
+                else 非正常入库
+                    SCM->GSP:通知RMA匹配失败的结果
+                    GSP->SCM:通知最新的逆向信息(SKU)
+                end
+            end
+        end
+
+        autonumber resume "<font color=red><b>[000]"
+        GSP->trade:通知trade变更,报价信息
+        alt 需要支付
+            autonumber resume "<b>[000]"
+            用户->商城:支付操作
+            alt 支付完成
+                autonumber resume "<font color=red><b>[000]"
+                trade->SCM:生成发货单
+                trade->GSP:通知RMA状态变成已完成、物流信息
+                autonumber resume "<b>[000]"
+            else 拒绝支付
+                autonumber resume "<font color=red><b>[000]"
+                trade->GSP:RMA状态变成退货拒收状态
+                autonumber resume "<b>[000]"
+                呼叫中心客服->GSP:RMA打回操作
+                GSP->GSP:保存寄回给用户物流信息
+                GSP-->物流服务商:RMA物流对接(线下)
+                autonumber resume "<font color=red><b>[000]"
+                GSP->trade:通知trade物流信息变更
+                autonumber resume "<b>[000]"
+            end
+        else 不需要支付
+            autonumber resume "<font color=red><b>[000]"
+            trade->SCM:生成发货单
+            trade->GSP:通知RMA状态变成已完成、物流信息
+            autonumber resume "<b>[000]"
+        end
+end
+@enduml

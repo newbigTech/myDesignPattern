@@ -1,0 +1,31 @@
+@startuml
+'海外流程
+start
+:订单属性校验;
+:订单重复性校验;
+:为订单填充其他属性;
+if (包含代销保险的sku) then (yes)
+    :去掉代销保险并记录在代销保险中;
+else (no)
+endif
+if (剩下其他sku) then (yes)
+    if (是否纯虚拟订单或仅收款订单) then (yes)
+        :直接通知订单已出库;
+        :直接通知ERP;
+    else (no)
+        :存储订单主数据;
+        :存储订单地址数据;
+        :存储订单商品数据;
+        :存储海外保险数据;
+    endif
+    if (订单有效且包含保险商品) then (yes)
+        :通知admin系统保险信息;
+    else (no)
+    endif
+else (no)
+    :通知订单已出库;
+    :通知km;
+
+endif
+end
+@enduml

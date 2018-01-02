@@ -1,0 +1,32 @@
+@startuml
+actor Time
+actor 仓管员 as warehouser
+control 物流公司 as logistic
+control wms
+control erp
+control trade
+control cs
+
+autonumber 10 10 "<b>[000]"
+logistic -> wms: 通知拒收路由
+wms -> wms: 生成拒收入库单
+
+warehouser -> warehouser: 收到包裹
+warehouser -> wms: 录入逆向收货单
+
+Time -> wms: 定时匹配
+wms -> wms: 自动匹配逆向收货单和入库单
+wms -> erp: 通知订单拒收信息（取当前单金额信息）
+
+alt 中国区
+    alt 电子发票
+        wms -> wms: 生成对冲的红票
+    else
+    end
+    wms -> trade: 通知拒收已入库
+    trade -> trade: 触发生成退款单
+else 欧美区、印度区
+    wms -> cs: 通知拒收已入库
+    cs -> cs: 触发生成退款单
+end
+@enduml

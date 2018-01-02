@@ -1,0 +1,124 @@
+@startuml
+'hide members
+
+
+package 支付系统 {
+    Object 交易{
+        商家交易号merchTradeNo
+        父级商家交易号merchTradeNo
+        业务单号bizNo
+        平台交易号platTradeNo
+   }
+
+}
+package cs {
+    Object RMA{
+    rmaNo
+    }
+}
+package 物流 {
+    Object 发货单{
+        发货单号
+   }
+   Object 税票{
+        订单号
+   }
+}
+
+
+package 共用单据     {
+
+    Object 地址{
+        业务单号bizNo
+        地址编号addressId
+    }
+    Object 支付{
+        商家交易号merchTradeNo
+        父级商家交易号merchTradeNo
+        业务单号bizNo
+        平台交易号platTradeNo
+    }
+    Object 退款单{
+        退款单号refundNo
+        业务单号bizNo
+        商家交易号merchTradeNo
+    }
+    Object 物流单{
+        物流单号logisticNo
+        业务单号bizNo
+        物流单跟踪号 logisticTradeNo
+   }
+   Object 发票{
+        业务单号bizNo
+   	    发票种类invoiceType
+   }
+
+
+}
+
+package 正向订单 {
+    Object 订单主表{
+        订单号orderNo
+        用户标识userId
+    }
+    Object 订单项{
+        订单号orderNo
+        订单项标识itemId
+        父级订单项标识parentItemId
+    }
+    Object 履约项{
+        订单号orderNo
+        订单项orderItem
+    }
+    Object 履约日志{
+      	 订单号orderNo
+      	 业务单号bizNo
+    }
+
+}
+
+
+
+package 逆向售后 {
+
+    Object 售后主表{
+        售后单号rmaNo
+        关联订单号orderNo
+
+    }
+    Object 售后项{
+       	 售后单号rmaNo
+       	 关联订单号orderNo
+       	 关联的订单项orderItemId
+    }
+
+
+}
+
+
+
+订单主表   *-up- "1..*" 订单项:记录
+订单项  *-down- "1..*" 履约项 :生成
+履约项  -right- "1..*" 履约日志:包含
+订单主表  -up- "1..*" 地址:携带
+订单主表   -down- "1" 发票:保留
+订单主表  -- "0..*" 退款单:创建
+订单主表  -- "1..*" 支付 :支付
+订单主表  -- "1..*" 物流单:分拆
+
+订单主表  -- "1..*" 售后主表:申请
+
+售后主表  -down- "1..*" 售后项:记录
+售后主表  -up- "1..*" 地址 :记录
+售后主表  -up- "1" 发票 : 开具
+售后主表  -up- "0..1" 退款单 :创建
+售后主表  -up- "0..1" 支付
+售后主表  -up- "0..1" 物流单: 生成
+售后主表 "1"-- "1" RMA :对应
+
+ 支付  --   交易
+ 物流单 -- 发货单
+ 发票 --  "0..N"税票
+
+
+@enduml

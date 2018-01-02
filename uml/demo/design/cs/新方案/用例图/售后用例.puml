@@ -1,0 +1,24 @@
+待补充~
+
+@startuml
+
+left to right direction
+actor 用户 as user
+note bottom of user: 未必已存在于用户中心
+
+rectangle 售后{
+    user --> (申请售后)
+    user --> (取消售后)
+    user --> (支付售后)
+}
+
+note right of (支付售后)
+线上支付
+线下支付
+end note
+
+note "官网或客服" as applyNt
+(user).. applyNt
+applyNt ..(申请售后)
+
+@enduml

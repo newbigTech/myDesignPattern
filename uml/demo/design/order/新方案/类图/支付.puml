@@ -1,0 +1,31 @@
+@startuml
+
+支付 <|-- 付款
+
+
+支付 <|-- 退款
+
+ class 支付{
+
+业务单号bizNo
+业务来源bizFrom
+商家交易号merchantTradeNo
+平台交易号platTradeNo
+交易类型tradeType
+交易状态tradeStatus
+交易金额tradeAmount
+订单号orderNo
+}
+
+class 退款{
+ 
+ 	 退款业务类型refundBizType
+ 	 关联的付款商家交易号parentMerchantTradeNo
+ }
+
+ class 付款{
+    是否为重复支付duplicated
+ }
+
+@enduml
+

@@ -1,0 +1,98 @@
+@startuml
+'hide members
+
+package tradecenter {
+   Object 订单
+}
+
+package cs {
+   Object RMA
+}
+
+package wms {
+    Object 发货单
+    Object 发货商品
+    Object 收货地址
+    Object 发货imei
+    Object 运单
+    Object 运单轨迹
+
+    Object 逆向收货单
+    Object 逆向入库单
+
+    Object 发票
+    Object 发票详情
+
+    发货单 "1" -up- "1" 收货地址 : have >
+    发货单 "1" -left- "1..*" 发货商品 : have >
+    发货单 "1" -down- "0..*" 发货imei
+    运单 "1" -right- "0..*" 运单轨迹
+    发货单 "1" -right- "0..*" 运单
+    发票 "1" -- "0..*" 发票详情
+   ' 逆向入库单 "0..1" -left- "0..1" 逆向收货单
+
+    Object 发货单{
+        institution_code        '组织机构编码',
+        orderNo VARCHAR '订单号',
+        tpl_warehouse_code      '第三方仓库编码',
+        warehouse_id          '仓库id',
+        area_code VARCHAR '库区编码',
+        third_warehouse_type,
+        logisticType  '物流公司',
+        logisticMailno  '物流运单号',
+        section   '配送时段',
+
+        orderFrom ,
+        order_channel,
+        orderType ,
+
+        wms_orderStatus ,
+        wms_orderValid ,
+        wmsOrderLock',
+        orderRouteStatus,
+        pushStatus,
+        push_error_msg,
+
+
+        orderTime  '订单时间',
+        synTime   '订单系统推送订单时间',
+        allocate_time  '分配时间',
+        pushTime  '推送成功时间',
+        deliveryTime        '出库时间',
+        signInTime          '签收时间',
+        original_etd   '原始etd',
+        original_eta   '原始eta',
+        eta   '订单预计到达时间',
+        etd   '订单预计出库时间',
+        shipping_type       '发运类型 1.standard, 2.priority',
+    }
+    Object 发货商品{
+        sku
+        qty
+        price
+        discount
+    }
+    Object 收货地址{
+        address
+    }
+    Object 发货imei{
+        sku
+        imei
+    }
+    Object 运单{
+        mailNo
+        mailType
+        sourceNo
+    }
+    Object 运单轨迹{
+        mailNo
+        address
+        time
+        info
+    }
+}
+
+    订单 "1" -- "0..*" 发货单
+    订单 "1" -- "0..*" 发票
+    RMA "1" -- "0..*1" 逆向入库单
+@enduml

@@ -1,0 +1,60 @@
+@startuml
+actor 用户
+用户 -> 商城: 维修售后申请 \n 1、RMA核心信息 \n 2、RMA地址 \n 3、RMA商品明细
+商城 -> GSP:推送售后申请到GSP
+GSP->GSP:校验RMA申请参数 \n 1、订单号必填 \n 2、RMA地址必填 \n 3、RMA商品明细不为空
+actor 呼叫中心客服
+actor 网点
+GSP->SCM:根据订单号查询订单详情
+SCM-->GSP:返回订单详情
+GSP->GSP:校验订单信息 \n 1、订单存在SCM \n 2、订单非大订单类型 \n 3、订单状态是已发货
+GSP->GSP:计算当前订单对应的SKU的可退数量
+alt SKU申请售后数量大于可换数量
+    GSP->GSP:提示可维修数量不足异常
+else SKU申请售后数量小于或者等于维修数量
+    GSP->GSP:保存RMA申请单
+end
+呼叫中心客服->GSP:审核RMA信息操作
+alt 取消
+    GSP->GSP:更新RMA为已取消
+else 审核 \n 1、编辑完善RMA申请信息 \n 2、选择网点,派单RMA到网点
+        GSP->GSP:更新RMA待网点接受
+        网点->GSP:RMA接受受理操作
+        GSP->GSP:更新RMA为网点待入库
+        网点->GSP:RMA入库操作
+        alt 网点RMA申请取消
+        loop
+            GSP->GSP:更新RMA为申请取消
+            呼叫中心客服->GSP:RMA取消、拒绝操作
+                alt RMA取消
+                    GSP->GSP:更新RMA已取消状态
+                else RMA拒绝
+                    GSP->GSP:更新RMA为网点待入库
+                end
+        end
+        else 网点RMA入库
+            GSP->GSP:更新RMA为已入库
+        end
+        网点->GSP:RMA检测操作
+        GSP->GSP:更新RMA为检测中
+        网点->GSP:结束检测操作
+        GSP->GSP:更新RMA状态为检测结束
+        alt 需要支付
+            网点->GSP:发送报价操作
+            GSP->GSP:更新RMA状态为等待付款
+            alt 确认维修
+                网点->GSP:维修操作
+                GSP->GSP:更新RMA状态为维修中
+                网点->GSP:结束维修操作
+                GSP->GSP:更新RMA状态为维修结束
+            end
+        else 不需要支付
+            网点->GSP:维修操作
+            GSP->GSP:更新RMA状态为维修结束
+        end
+        网点->GSP:RMA回寄操作
+        GSP->GSP:保存寄回给用户物流信息
+        GSP-->物流服务商:RMA物流对接(线下)
+        GSP->GSP:更新RMA为已完成状态
+end
+@enduml

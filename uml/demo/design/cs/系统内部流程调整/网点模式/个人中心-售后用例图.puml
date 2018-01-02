@@ -1,0 +1,17 @@
+@startuml
+
+left to right direction
+skinparam packageStyle rectangle
+actor 用户
+rectangle 订单中心售后 {
+  用户 -- (申请售后)
+  (申请售后).>(可申请数量校验):include
+  (可申请数量校验).>(可申请数量计算):include
+  用户 -- (取消售后)
+  (取消售后).>(订单履约日志):include
+  (取消售后).>(可申请数量计算):include
+  用户 -- (查询售后历史记录)
+  用户 -- (售后支付)
+}
+
+@enduml

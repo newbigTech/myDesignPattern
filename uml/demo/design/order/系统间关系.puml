@@ -1,0 +1,29 @@
+@startuml
+actor user
+
+artifact store
+artifact xman
+artifact ordercenter{
+
+}
+artifact inv
+artifact wms
+artifact gsp
+artifact cs
+
+
+user -down-> store
+user -down-> xman
+
+store -down-> ordercenter
+xman -down-> ordercenter
+ordercenter <--down-> inv
+ordercenter <--down-> wms
+ordercenter <--down-> gsp
+ordercenter <--down-> cs
+
+
+
+
+
+@enduml

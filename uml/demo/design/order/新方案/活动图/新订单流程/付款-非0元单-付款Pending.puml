@@ -1,0 +1,20 @@
+@startuml
+
+|支付|
+start
+:记录付款Pending;
+|订单|
+:更新付款流水为Pending;
+if(Hold发货单)then(成功)
+    |订单|
+    :挂起订单;
+
+else (失败)
+    :标记订单挂起失败;
+endif
+stop
+@enduml
+
+
+
+支付中心通知付款Review，如果应付金额

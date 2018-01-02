@@ -1,0 +1,42 @@
+@startuml
+
+[*] --> 初始 :创建订单
+
+初始 -right->结束 :用户取消订单;0元订单被拒绝
+
+初始 -up-> 付款 :非0订单通过系统审核
+
+付款 --> 物流: 付款成功;0订单通过人工审核
+
+付款-->结束:用户支付后取消订单;用户支付前取消
+
+物流 -->结束:包裹完成
+
+结束-->物流: 补偿支付
+结束-right->[*]
+
+state 初始 {
+  [*] --> Drafted : 创建0元单
+  [*] --> Approved : 创建非0元单，并通过系统审核
+  Drafted--> Approved  : 0元单通过人工审核
+}
+state 付款 {
+    [*]-right->Unpaid :创建订单成功
+    Unpaid-right->Paid:用户支付足够金额到非0元单;0元单通过人工审核
+}
+
+state 物流 {
+    [*]-->Ready :订单支付成功
+    [*]-->Ready :0元单审核通过
+
+    Ready-right->Pushed:全部发货单通过MQ推送到物流
+    Pushed-right->Delivering:至少一个包裹变为Allocated
+    Delivering-right->Done:全部包裹到达结束阶段.
+}
+
+state 结束 {
+    [*] --> Finished: 全部包裹到达结束阶段.
+    [*]  -->Cancelled: 订单被取消;0元单审核不通过
+
+}
+@enduml

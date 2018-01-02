@@ -1,0 +1,39 @@
+@startuml
+
+class RMA主单核心信息{
+    rma_sheet_id RMA单id
+    service_zone 服务区域
+    customer_id 用户id
+    ticket_no 海外工单号
+    source_id 订单id
+    purchase_channel 订单购买渠道
+    purchase_time 订单购买时间
+    source_complete_time 来源单据完成时间
+    status 状态
+    type 单据类型 10: Return,20: Replacement,30: Repair
+    service_type 服务类型 10:仓库,20:网点
+    house_sheet_id 仓库网点单据id
+    house_code 仓库网点编号
+    house_tel 仓库网点电话号码
+    appoint_time 预约申请时间
+    create_user 创建人员
+    create_time 创建时间
+    modify_user 修改人员
+    modify_time 修改时间
+    apply_reason 申请原因
+    apply_reason_desc 申请原因描述
+    cancel_reason 取消原因
+    cancel_reason_type 取消原因类型
+    reject_reason 拒绝原因
+    memo 备注
+    rma_source RMA来源 10: Customer,20: Call Center,30: Reverse Logitic,40: Service Center
+    approve_time 审核时间
+    cancel_time 取消时间
+    customer_id_type 用户id类型 10：userid 20:openid
+    complete_time RMA单据完成时间
+    invoice_no 发票号
+    address_verified 地址是否已确认
+    flags 是否特批
+}
+
+@enduml

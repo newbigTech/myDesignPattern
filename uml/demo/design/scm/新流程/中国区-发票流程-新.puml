@@ -1,0 +1,41 @@
+@startuml
+actor Time
+control tradecenter as trade
+control wms
+control FastDFS
+boundary 科捷仓储系统 as TPL
+boundary 阿里发票 as Invoice
+entity 打印机 as printer
+
+autonumber 10 10 "<b>[000]"
+alt 纸质发票
+    alt 自建仓
+        actor 发票专责 as invoicer
+        invoicer --> wms: 操作打印纸质发票
+    else 科捷仓
+        invoicer --> TPL: 生成拣货批次
+        TPL --> wms: 通知拣货批次
+        invoicer --> wms: 操作打印纸质发票
+    end
+    autonumber resume "<font color=red><b> [000]  "
+    wms -[#0000FF]-> trade: 获取订单信息
+    wms <-- trade: 返回订单信息
+    autonumber resume "<b> [000]  "
+    wms --> wms: 记录发票信息
+    wms --> printer: 打印发票
+
+else 电子发票
+    TPL --> wms: 回传发货信息imei运单号等
+    autonumber resume "<font color=red><b> [000]  "
+    wms --> trade: 获取订单信息
+    wms <-- trade: 返回订单信息
+    autonumber resume "<b> [000]  "
+    wms --> wms: 生成电子发票头
+    Time --> wms: 定时创建电子发票
+    wms --> Invoice: 创建电子发票
+    Invoice --> wms: 返回发票信息及PDF文件
+    wms --> FastDFS: 存储电子发票
+end
+
+
+@enduml
