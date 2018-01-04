@@ -6,6 +6,7 @@ participant "MockInvokersSelector \nimplements Router" as MockInvokersSelector
 'participant FailoverClusterInvoker
 
 title 集群容错模式
+autonumber 10 10 "<font color=red><b>[000]"
 InvokerInvocationHandler ->   MockClusterInvoker:invoker.invoke(invocation)
 MockClusterInvoker       ->   AbstractClusterInvoker:invoker.invoke(invocation)
 activate AbstractClusterInvoker
