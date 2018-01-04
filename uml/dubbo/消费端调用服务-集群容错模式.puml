@@ -28,4 +28,11 @@ FailoverClusterInvoker   -> AbstractClusterInvoker:返回Result
 deactivate FailoverClusterInvoker
 deactivate AbstractClusterInvoker
 
+legend center
+    1.在Directory中找出本次集群中的全部invokers
+    2.在Router中,将上一步的全部invokers挑选出能正常执行的invokers
+    3.在LoadBalance中,将上一步的能正常的执行invokers中,根据配置的负载均衡策略,挑选出需要执行的invoker
+    PS:dubbo默认集群容错模式为failover；负载均衡策略默认为随机策略，当集群节点数为2时，退化成轮循
+endlegend
+
 @enduml
