@@ -1,0 +1,30 @@
+@startuml
+participant InvokerInvocationHandler
+participant MockClusterInvoker
+participant AbstractClusterInvoker
+participant "MockInvokersSelector \nimplements Router" as MockInvokersSelector
+'participant FailoverClusterInvoker
+
+title 集群容错模式
+InvokerInvocationHandler ->   MockClusterInvoker:invoker.invoke(invocation)
+MockClusterInvoker       ->   AbstractClusterInvoker:invoker.invoke(invocation)
+activate AbstractClusterInvoker
+AbstractClusterInvoker   ->   AbstractClusterInvoker:list(invocation)
+AbstractClusterInvoker   ->   AbstractDirectory:list(invocation)
+activate AbstractDirectory
+AbstractDirectory   ->   RegistryDirectory:List<Invoker<T>> doList(invocation)
+AbstractDirectory        ->   MockInvokersSelector:route(invokers,url,invocation)
+AbstractDirectory        ->   AbstractClusterInvoker:return Invokers
+deactivate AbstractDirectory
+AbstractClusterInvoker   -> FailoverClusterInvoker:doInvoke(invocation, invokers, loadbalance)
+activate FailoverClusterInvoker
+FailoverClusterInvoker   -> AbstractClusterInvoker:Invoker select(loadbalance, Invocation invocation,invokers,selected)
+FailoverClusterInvoker   -> FailoverClusterInvoker:invoker.invoke(invocation)
+note left
+获取需要执行的invoker，进行实际调用
+endnote
+FailoverClusterInvoker   -> AbstractClusterInvoker:返回Result
+deactivate FailoverClusterInvoker
+deactivate AbstractClusterInvoker
+
+@enduml
