@@ -1,44 +1,44 @@
 @startuml
+title 二阶段事务提交时序图
+== 阶段一 ==
 Oridinate -> Actor1:询问是否可以提交事务
 Oridinate -> Actor2:询问是否可以提交事务
 Oridinate -> Actor3:询问是否可以提交事务
 
-Oridinate <- Actor1:OK
-Oridinate <- Actor2:OK
-Oridinate <- Actor3:OK
+Actor1  -> DB1:执行事务,记录事务日志
+Actor2  -> DB2:执行事务,记录事务日志
+Actor3  -> DB3:执行事务,记录事务日志
 
+Oridinate <- Actor1:YES
+Oridinate <- Actor2:YES
+Oridinate <- Actor3:YES
+== 阶段二 ==
 Oridinate -> Actor1:发出commit请求
 Oridinate -> Actor2:发出commit请求
 Oridinate -> Actor3:发出commit请求
 
-Actor1  -> DB1:提交事务,记录事务日志
-Actor2  -> DB2:提交事务,记录事务日志
-Actor3  -> DB3:提交事务,记录事务日志
+Actor1  -> DB1:commit事务
+Actor2  -> DB2:commit事务
+Actor3  -> DB3:commit事务
 
 Oridinate <- Actor1:ACK
 Oridinate <- Actor2:ACK
 Oridinate <- Actor3:ACK
 
-newpage
+newpage 二阶段事务中断时序图
+== 阶段一 ==
 Oridinate -> Actor1:询问是否可以提交事务
 Oridinate -> Actor2:询问是否可以提交事务
 Oridinate -> Actor3:询问是否可以提交事务
-
-Oridinate <- Actor1:OK
-Oridinate <- Actor2:OK
-Oridinate <- Actor3:OK
-
-Oridinate -> Actor1:发出commit请求
-Oridinate -> Actor2:发出commit请求
-Oridinate -> Actor3:发出commit请求
 
 Actor1  -> DB1:提交事务,记录事务日志
 Actor2  -> DB2:提交事务,记录事务日志
 Actor3  -> DB3:提交事务,记录事务日志
 
-Oridinate <- Actor1:ACK
-Oridinate <- Actor2:提交失败
-Oridinate <- Actor3:ACK
+Oridinate <- Actor1:YES
+Oridinate <- Actor2:NO
+Oridinate <- Actor3:YES
+== 阶段二 ==
 
 Oridinate -> Actor1:回滚请求
 Oridinate -> Actor2:回滚请求

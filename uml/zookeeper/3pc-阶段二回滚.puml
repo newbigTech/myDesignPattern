@@ -1,0 +1,24 @@
+@startuml
+title 三阶段事务提交时序图
+== 阶段一 ==
+Oridinate -> Actor1:canCommit请求，是否可以执行事务操作
+Oridinate -> Actor2:canCommit请求，是否可以执行事务操作
+
+Oridinate <- Actor1:YES
+Oridinate <- Actor2:YES
+
+== 阶段二 ==
+Oridinate -> Actor1:发出preCommit请求
+Oridinate -> Actor2:发出preCommit请求
+
+Actor1  -> DB1:执行事务,记录事务日志
+Actor2  -> DB2:执行事务,记录事务日志
+
+Oridinate <- Actor1:ACK
+Actor1 -> Actor1:阻塞等待最终指令\n(commit or abort)
+Oridinate <- Actor2:NO
+alt <font color=red><b>反馈结果中有No or Actor反馈响应超时
+Oridinate -> Actor1:abort请求
+Oridinate -> Actor2:abort请求
+end
+@enduml
