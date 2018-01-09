@@ -16,6 +16,7 @@ Actor2  -> DB2:执行事务,记录事务日志
 
 Oridinate <- Actor1:ACK
 Actor1 -> Actor1:阻塞等待最终指令\n(commit or abort)
+note right :若在此时Actor1与协调者网络不通，\n导致协调者无法接收到Actor1的ACK，\n而协调者因无法接收到所有ACK，\n会发出abort命令，而Actor1无法接收到，\n最终等待协调者指令超时而提交事务\n导致数据不一致
 Oridinate <- Actor2:ACK
 Actor2 -> Actor2:阻塞等待最终指令\n(commit or abort)
 
@@ -26,8 +27,8 @@ Oridinate -> Actor2:发送doCommit请求 or <font color=red><b>接收协调者�
 Actor1  -> DB1:commit事务
 Actor2  -> DB2:commit事务
 
-Oridinate <- Actor1:ACK
-Oridinate <- Actor2:ACK
+Oridinate <- Actor1:ACK or No
+Oridinate <- Actor2:ACK or No
 
 alt <font color=red><b>反馈结果中有No or Actor反馈响应超时
     Oridinate -> Actor1:abort请求
