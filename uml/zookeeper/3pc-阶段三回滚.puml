@@ -38,8 +38,6 @@ alt <font color=red><b>反馈结果中有No or Actor反馈响应超时
 
     Oridinate <- Actor1:ACK
     Oridinate <- Actor2:ACK
-else
-
 end
 
 @enduml
