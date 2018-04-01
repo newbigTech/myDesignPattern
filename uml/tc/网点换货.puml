@@ -1,0 +1,8 @@
+@startuml
+actor 客服
+participant "CS" as CS
+participant "TradeCenter" as TradeCenter
+participant "WMS" as WMS
+title 网点换货时序图
+客服->CS:换货RMA
+@enduml

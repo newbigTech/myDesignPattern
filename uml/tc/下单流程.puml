@@ -1,0 +1,30 @@
+@startuml
+
+actor User
+participant Store
+participant WMS
+participant Inventory
+User -> Store: 商品结算页面
+activate Store
+Store -> Inventory: 计算路由规则
+Store <- Inventory: 原始ETD,ETA
+deactivate Store
+User -> Store: 提交订单
+activate Store
+Store -> Inventory: 预扣库存
+Store <- Inventory: 原始ETD,ETA
+Store -> Store: 保存原始ETD,ETA
+deactivate Store
+User -> Store: 支付订单
+activate Store
+Store -> Inventory: 占用库存
+deactivate Store
+Store -> WMS: MQ携带订单信息
+WMS -> WMS: 保存订单信息
+WMS -> Inventory: 实占
+activate Inventory
+WMS <- Inventory: 真实ETD、ETA
+deactivate Inventory
+WMS <- WMS: 保存真实ETD、ETA
+
+@enduml

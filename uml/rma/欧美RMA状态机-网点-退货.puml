@@ -1,0 +1,55 @@
+@startuml
+
+state "10 Awaiting Approval 待审核" as 待审核
+
+state "25 Canceled 已取消" as 已取消
+
+state "60 Completed 已完成" as 已完成{
+    已完成 : 通知wms网点退货完成
+}
+
+state "220 Pending ServiceCenter Accept 待网点接受" as 待网点接受
+state "240 Pending Return to Facility 网点待入库" as 网点待入库
+state 取件{
+    state "250 Picked up 已取件" as 已取件
+    state "260 Dropped off 已投递" as 已投递
+}
+state "270 Pending cancel 申请取消" as 申请取消
+state "280 Returned to facility 已到达网点" as 已到达网点
+state "290 Inspecting 检测中" as 检测中
+state "300 Inspected 检测结束" as 检测结束 {
+    state "Inspection Pass" as InspectionPass
+    state "Inspection Fails" as InspectionFails
+}
+state "340 Pending refund 等待退款" as 等待退款
+state "370 Pending CS Review 待客服复核" as 待客服复核
+
+[*] --> 待审核 : 创建退货RMA
+待审核 --> 待网点接受 : 客服审核通过/【网点模式】
+待审核 --> 已取消 : 客服审核不通过
+
+待网点接受 --> 网点待入库 : 网点接受
+待网点接受 --> 已取消 : 取消
+网点待入库 --> 已到达网点 : 网点收货
+网点待入库 --> 已取件 : 上门取件/【pick up】
+网点待入库 --> 已投递 : 用户投递/【dropped of】
+
+网点待入库 --> 申请取消 : 申请取消
+取件 -left-> 申请取消 : 申请取消
+
+申请取消 --> 已取消 : 客服同意取消
+
+取件 -down-> 待客服复核 : 网点修改商品信息
+待客服复核 -up-> 取件 : 客服reject
+取件 -down-> 已到达网点 : 网点confirm
+待客服复核 --> 已到达网点 : 客服confirm
+
+已到达网点 --> 检测中 : 检测
+检测中 --> InspectionPass : 检测通过
+InspectionPass --> 等待退款
+等待退款 --> 已完成
+检测中 --> InspectionFails : 检测不通过 finish
+InspectionFails --> 已完成 : send back
+已完成 --> [*]
+已取消 --> [*]
+@enduml

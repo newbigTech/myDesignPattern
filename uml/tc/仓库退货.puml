@@ -1,0 +1,18 @@
+@startuml
+actor 网点
+participant "TradeCenter" as TradeCenter
+participant "CS" as CS
+participant "WMS" as WMS
+title 网点退货时序图
+网点->TradeCenter:创建退货RMA
+TradeCenter->TradeCenter:创建换货RMA
+TradeCenter->CS:保存RMA单据信息
+网点->CS:审核换货RMA单据
+CS->TradeCenter:通知TC更新状态
+网点->网点:收货
+CS->TradeCenter:生成退款单
+TradeCenter->TradeCenter:生成退款单
+TradeCenter->CS:保存退款单信息
+
+
+@enduml

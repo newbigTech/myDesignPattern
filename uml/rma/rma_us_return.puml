@@ -1,0 +1,19 @@
+@startuml
+start
+:申请售后(Service Accepted);
+:提交工程师(Submit);
+:检测(Submit);
+if (保外收费) then (Yes)
+    :发送报价(Pending Payment);
+    if (支付完成) then (Yes)
+        :工程师维修(Under Repair);
+    else (No)
+        :放弃维修;
+    endif
+else (No)
+    :工程师维修(Under Repair);
+endif
+:维修结束取机(Waiting for Pickup);
+:售后完结(Closed);
+stop
+@enduml

@@ -1,0 +1,31 @@
+@startuml
+
+abstract class AbstractConfigDictZookeeperLoader
+interface ConfigDictVersionListener {
+    void parentListener();
+    void childListener();
+}
+interface ConfigDictVersionRegister{
+    register();
+    void refresh(); //更新节点版本
+    refresh(long id);
+}
+class ConfigLoaderContext {
+    public static ConfigLoaderContext getContext()
+    public void reload();
+}
+class ConfigDictVersionListenerImpl
+class ConfigDictVersionRegisterImpl
+class ConfigLoader
+
+AbstractConfigDictZookeeperLoader <|-- ConfigDictVersionRegisterImpl
+ConfigDictVersionRegister <|-- ConfigDictVersionRegisterImpl
+
+AbstractConfigDictZookeeperLoader <|-- ConfigDictVersionListenerImpl
+ConfigDictVersionListener <|-- ConfigDictVersionListenerImpl
+
+ConfigLoader->ConfigLoaderContext:1.getContext()
+ConfigLoader-->ConfigDictVersionRegister:2.register()
+ConfigLoader-->ConfigDictVersionListener:3.childListener()
+
+@enduml

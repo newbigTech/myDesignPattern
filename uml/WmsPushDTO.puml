@@ -1,0 +1,60 @@
+@startuml
+
+class WmsPushDTO{
+pushType 订单类型
+}
+class WmsPushBaseDTO{
+    userId,
+    userName,
+    orderNo 订单号
+}
+class WmsPushOrderDTO{
+orderType 普通、抢购、第三方,
+orderChannel 订单渠道,
+orderFrom 订单来源,
+skuOriginAmount 订单Sku原始总金额,
+skuDiscountAmount 订单Sku折扣总金额,
+shippingOriginFee,
+shippingNowFee,
+taxFee,
+orderTotalAmount,
+shippingType 发货类型
+}
+class WmsPushRmaDTO
+class AddressBillingDTO
+class AddressShippingDTO
+class DeliveryOrderDTO{
+    bizNo 发货单号,
+    logisticsNo 物流单号,
+    orderNo 关联订单号,
+    warehouseCode 仓库,
+    warehouseAreaCode 库区,
+    shippingMethodCode 物流渠道,
+    shippingType 发货单的实际发运方式,
+    originEta,
+    originEtd,
+    deliveryAmount 发货单的总金额,
+    deliveryOriginAmount 发货单的原始总金额
+    deliveryDiscountAmount 发货单的折扣总金额
+}
+class DeliveryItemDTO{
+itemId 订单项,
+skuCode 商品编号
+skuCount 商品数量
+originPrice 商品原价
+salePrice 商品算价的起价
+nowPrice 商品现价
+discountAmount 商品折扣总金额
+}
+WmsPushBaseDTO <|--WmsPushOrderDTO
+WmsPushBaseDTO <|--WmsPushRmaDTO
+
+WmsPushOrderDTO<-- WmsPushDTO
+AddressBillingDTO<-- WmsPushOrderDTO
+AddressShippingDTO<-- WmsPushBaseDTO
+WmsPushBaseDTO*--> DeliveryOrderDTO
+DeliveryOrderDTO*--> DeliveryItemDTO
+
+
+'WmsPushDTO..> WmsPushOrderDTO
+@enduml
