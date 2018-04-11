@@ -1,0 +1,59 @@
+@startuml
+actor User
+participant StorePage as pageInfo
+participant XMAN as xman
+participant TradeCenter as tc
+participant WMS as wms
+participant Inventory as inv
+participant ThirdWarehouse as warehouse
+== 订单列表展示etd/eta ==
+User-> pageInfo:查看
+
+== 订单详情页展示etd/eta ==
+
+== checkout页面展示etd ==
+User        ->      pageInfo    :checkOut订单
+User        ->      pageInfo    :选择地址
+pageInfo    ->      xman        :地址信息&商品信息
+xman        ->      inv         :
+== 下单成功页面展示etd ==
+
+== 商品详情页展示etd	 ==
+
+
+newpage 下单流程
+User        ->  pageInfo:<font color=red><b>[1] </font>购物车列表页面
+activate pageInfo
+pageInfo    ->  xman    :用户信息&商品信息
+xman        ->  inv     :地址信息&商品信息
+xman        <-  inv     :路由信息&<font color=red>原始ETD/原始ETD
+pageInfo    <-  xman    :路由信息&<font color=red>原始ETD/原始ETD
+deactivate pageInfo
+
+User        ->  pageInfo:<font color=red><b>[2] </font>提交订单
+activate pageInfo
+pageInfo    ->  xman    :订单信息
+xman        ->  inv     :地址信息&商品信息
+xman        <-  inv     :<font color=red>原始ETD/原始ETA
+pageInfo    <-  xman    :<font color=red>原始ETD/原始ETA
+deactivate pageInfo
+
+User        ->  pageInfo:<font color=red><b>[3] </font>支付订单
+activate pageInfo
+pageInfo    ->  xman    :订单信息
+xman        ->  tc      :订单信息
+tc          ->  tc      :保存订单
+deactivate pageInfo
+tc        -->  wms      :订单信息&地址信息(MQ)
+wms         ->  inv     :实占库存
+wms         <-  inv     :<font color=red>ETD/ETD
+note right
+对用户透明，意义在于
+为其他订单计算ETD/ETA作依据
+end note
+wms         ->  warehouse     :推送到第三方仓库
+warehouse   ->  warehouse     :出库
+warehouse   ->  wms     :物流信息
+wms         -->  tc      :物流信息(MQ)
+
+@enduml
