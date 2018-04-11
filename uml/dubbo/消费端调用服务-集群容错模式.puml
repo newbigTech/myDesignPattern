@@ -23,7 +23,7 @@ FailoverClusterInvoker   -> AbstractClusterInvoker:Invoker select(loadbalance, I
 FailoverClusterInvoker   -> FailoverClusterInvoker:invoker.invoke(invocation)
 note left
 获取需要执行的invoker，进行实际调用
-endnote
+end note
 FailoverClusterInvoker   -> AbstractClusterInvoker:返回Result
 deactivate FailoverClusterInvoker
 deactivate AbstractClusterInvoker
