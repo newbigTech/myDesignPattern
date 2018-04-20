@@ -1,0 +1,29 @@
+@startuml
+left to right direction
+actor User
+actor "物流/客服" as 物流客服
+
+rectangle XMAN {
+    (商品详情页)
+    (CheckOut页面)
+    (支付成功页)
+    (订单列表页)
+    (订单详情页面)
+    (订单邮件信息)
+    (订单中心后台)
+}
+
+rectangle WMS {
+    (wms订单后台)
+}
+
+User --> (商品详情页)
+User --> (CheckOut页面)
+User --> (支付成功页)
+User --> (订单列表页)
+User --> (订单详情页面)
+User --> (订单邮件信息)
+物流客服 --> (订单中心后台)
+
+仓库 --> (wms订单后台)
+@enduml

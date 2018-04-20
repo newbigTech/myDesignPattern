@@ -3,54 +3,84 @@ actor User
 participant StorePage as pageInfo
 participant XMAN as xman
 participant TradeCenter as tc
+participant Redis as redis
 participant WMS as wms
 participant Inventory as inv
 participant ThirdWarehouse as warehouse
-== 订单列表展示etd/eta ==
-User-> pageInfo:查看
-
-== 订单详情页展示etd/eta ==
-
-== checkout页面展示etd ==
-User        ->      pageInfo    :checkOut订单
-User        ->      pageInfo    :选择地址
-pageInfo    ->      xman        :地址信息&商品信息
-xman        ->      inv         :
-== 下单成功页面展示etd ==
-
-== 商品详情页展示etd	 ==
-
-
-newpage 下单流程
-User        ->  pageInfo:<font color=red><b>[1] </font>购物车列表页面
+'== 订单列表展示etd/eta ==
+'User-> pageInfo:查看
+'
+'== 订单详情页展示etd/eta ==
+'
+'== checkout页面展示etd ==
+'User        ->      pageInfo    :checkOut订单
+'User        ->      pageInfo    :选择地址
+'pageInfo    ->      xman        :地址信息&商品信息
+'xman        ->      inv         :
+'== 下单成功页面展示etd ==
+'
+'== 商品详情页展示etd	 ==
+'
+'
+'newpage 海外下单流程
+title 海外下单流程
+User        ->  pageInfo:<font color=red><b>[1] </font>点击进入商品列表页面
+User        ->  pageInfo:<font color=red><b>[2] </font>Select商品
+User        ->  pageInfo:<font color=red><b>[3] </font>点击CheckOut
+User        ->  pageInfo:<font color=red><b>[4] </font>CheckOut页面：选择ShippingAddress
 activate pageInfo
-pageInfo    ->  xman    :用户信息&商品信息
+pageInfo    ->  xman    :ShippingAddress&Store
+note right
+通过ShippingAddress和UserSession调用用户中心
+end note
 xman        ->  inv     :地址信息&商品信息
 xman        <-  inv     :路由信息&<font color=red>原始ETD/原始ETD
+xman        <-  xman    :保存路由信息&<font color=red>原始ETD/原始ETD</font>到session
+note right
+注：用户登录Session过期时间为3d；
+    ETD/ETA保存在session过期时间为1d
+end note
 pageInfo    <-  xman    :路由信息&<font color=red>原始ETD/原始ETD
+pageInfo    <-  pageInfo:展示不同ShippingMethod的<font color=red>原始ETD/原始ETD
 deactivate pageInfo
 
-User        ->  pageInfo:<font color=red><b>[2] </font>提交订单
+User        ->  pageInfo:<font color=red><b>[5] </font>CheckOut页面：选择ShippingMethod
+User        ->  pageInfo:<font color=red><b>[6] </font>CheckOut页面：Place Order
+
 activate pageInfo
-pageInfo    ->  xman    :订单信息
-xman        ->  inv     :地址信息&商品信息
-xman        <-  inv     :<font color=red>原始ETD/原始ETA
-pageInfo    <-  xman    :<font color=red>原始ETD/原始ETA
+pageInfo    ->  xman    :用户信息&商品信息
+
+xman        ->  xman    :从session取出<font color=red>ETD/ETA</font>(路由信息),组装商品信息
+xman        ->  tc      :商品信息，路由信息调用tc的dubbo接口
+tc          ->  inv     :预扣库存
+inv         ->  tc      :原始<font color=red>ETD/ETA
+tc          ->  tc      :组装商品信息/路由信息<font color=red>ETD/ETA
+tc          ->  redis   :保存商品信息，路由信息<font color=red>ETD/ETA</font>到redis
+note right
+此处保存到redis中的ETD/ETA为预占返回的原始ETD/ETA
+而不是选择ShippingAddress返回的ETD/ETA
+end note
+pageInfo    <-  xman    :Place Order Successful
+
 deactivate pageInfo
 
-User        ->  pageInfo:<font color=red><b>[3] </font>支付订单
+tc          ->  redis   :拉取订单信息(Schedule)
+tc          ->  tc      :保存订单信息
+User        ->  pageInfo:<font color=red><b>[7] </font>支付订单
 activate pageInfo
-pageInfo    ->  xman    :订单信息
-xman        ->  tc      :订单信息
-tc          ->  tc      :保存订单
+pageInfo    ->  xman
+xman        ->  tc      :更新订单信息
 deactivate pageInfo
-tc        -->  wms      :订单信息&地址信息(MQ)
-wms         ->  inv     :实占库存
-wms         <-  inv     :<font color=red>ETD/ETD
+tc          ->  wms     :推送订单信息(MQ)
+
+wms        ->  wms      :保存订单信息
+wms        ->  inv      :实占库存(Schedule)
+wms        <-  inv     :<font color=red>ETD/ETD
 note right
 对用户透明，意义在于
 为其他订单计算ETD/ETA作依据
 end note
+
 wms         ->  warehouse     :推送到第三方仓库
 warehouse   ->  warehouse     :出库
 warehouse   ->  wms     :物流信息

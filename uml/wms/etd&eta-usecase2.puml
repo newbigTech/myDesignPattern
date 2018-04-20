@@ -1,0 +1,47 @@
+@startuml
+left to right direction
+actor User
+rectangle XMAN {
+    (CheckOut订单)
+    (PlaceOrder订单)
+    (PayOrder订单)
+    (查看订单)
+}
+
+rectangle WMS {
+    (保存订单到WMS)
+    (wms定时任务实占)
+    (推送第三方仓库)
+    (通知TradeCenter订单状态变更)
+}
+
+rectangle Inventory {
+    (保存仓库处理信息)
+    (计算路由信息)
+    (预扣库存)
+    (实占库存)
+}
+
+
+rectangle TradeCenter {
+    (保存订单到TC)
+    (包装已提交订单)
+    (推送支付订单WMS)
+    (发送订单邮件信息)
+    (推送仓库订单信息至Inventory)
+    (订单查询接口)
+}
+User-->(CheckOut订单)
+User-->(PlaceOrder订单)
+User-->(PayOrder订单)
+User-->(查看订单)
+(CheckOut订单)..> (计算路由信息):<include>
+(查看订单)..>(订单查询接口):<include>
+(PlaceOrder订单) ..> (保存订单到TC):<include>
+(包装已提交订单) ..> (预扣库存):<include>
+(保存订单到TC)..> (包装已提交订单)
+(推送支付订单WMS)-->(保存订单到WMS)
+(wms定时任务实占)-->(实占库存)
+推送仓库订单信息至Inventory-->(保存仓库处理信息)
+
+@enduml
