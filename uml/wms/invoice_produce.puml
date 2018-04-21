@@ -3,11 +3,39 @@
 participant WMS as wms
 participant DB as db
 participant Ali as ali
+participant FastDFS as dfs
+participant Store as store
 
-wms->db:从InvoiceTemp获取待开票&待开票
-wms->wms:新建线程
-alt SerialNo==null
-wms->ali:获取SerialNo
+wms->wms:Schedule定时扫描
+wms->wms:开启两线程
+==线程一==
+wms->db:从InvoiceTemp获取待开票&待开票(schedule)
+wms->ali:获取SerialNo(如果为空)
+
+wms->wms:根据sourceType组装发票数据
+activate wms
+wms->wms:更新发票临时主表，写临时明细表
+wms->ali:上推生成发票需要的数据
+deactivate wms
+
+==线程二==
+wms->db:从InvoiceTemp获取开票中的记录
+wms->ali:获取开票结果
+wms<-ali:返回开票结果
+wms->dfs:保存发票PDF文件
+wms->wms:生成发票表wms_invoice信息
+wms->wms:生成发票明细表wms_invoice_detail信息
+
+alt 此发票为蓝票&&由发票变更触发
+    wms->wms:更新InvoiceChange发票变更的状态为<font color=red>完成
+else 此发票为红票&&由发票变更触发
+    alt 由发票变更触发
+        wms->wms:更新InvoiceChange发票变更的状态为<font color=red>等开新开票
+    end
+    wms->wms:更新此红票关联的蓝票Invoice状态为<font color=red>被冲红3
 end
-wms->wms:根据sourceType组装数据
+
+wms-->store:通知发票信息(MQ)
+
+wms->wms:更新发票临时信息<font color=red>(状态:完成)
 @enduml

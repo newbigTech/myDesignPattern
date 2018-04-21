@@ -1,0 +1,9 @@
+@startuml
+left to right direction
+actor wms
+title 生成蓝票涉及到税率的点
+
+wms---> (商品明细行)
+wms---> (商品折扣)
+wms---> (运费)
+@enduml

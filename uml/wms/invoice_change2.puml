@@ -1,0 +1,33 @@
+@startuml
+
+participant WMS as wms
+participant DB as db
+participant Ali as ali
+participant FastDFS as dfs
+participant Store as store
+
+wms->wms:Schedule定时扫描
+wms->wms:开启两线程
+==线程一==
+wms->db:从InvoiceChange获取状态为<font color=red>新建or冲红旧发票</font>的记录
+alt 原发票为纸质发票
+    alt 纸质转电子
+      wms->wms:更新invoiceChange状态为<font color=red>待开新发票(蓝票)
+    else 纸质转纸质 or 纸质终结
+    wms->wms:更新invoiceChange状态为<font color=red>完成
+    end
+else 原发票为电子发票
+    wms->wms:生成invoiceTemp临时信息(color=red),冲红蓝票
+    wms->wms:更新invoiceChange为<font color=red>冲旧发票中
+end
+==线程二==
+wms->db:从InvoiceChange获取状态为\n<font color=red>等开新开票or新开发票失败</font>的记录
+wms->wms:更新salesOrderInvoice的invoiceType(如果有需要)
+alt 电子->纸质 or 电子终结
+    wms->wms:更新invoiceChange为<font color=red>完成
+end
+wms->wms:根据invoiceChange生成invoiceTemp记录
+wms->wms:根据invoiceChangeDetail生成invoiceTempDetail记录
+
+wms->wms:更新invoiceChange为<font color=red>新开发票中
+@enduml

@@ -20,8 +20,7 @@ end note
 WMS <- ThirdWarehouse: 回传出库信息
 activate ThirdWarehouse
 alt 是电子发票 &不存在该订单的蓝票
-    WMS->WMS:生成发票信息
-
+    WMS->WMS:生成发票临时表InvoiceTemp信息
 end
 WMS-> inv : 扣减库存
 WMS-> erp : 抛ERP

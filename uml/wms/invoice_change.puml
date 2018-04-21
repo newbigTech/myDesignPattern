@@ -1,0 +1,19 @@
+@startuml
+
+participant GSP as gsp
+participant Store as store
+participant WMS as wms
+==电子发票变更==
+gsp->wms:(电子->电子 or 电子->纸质)
+wms->wms:生成invoiceChange主表信息
+alt 新旧发票一致
+    wms->wms:使用已有的InvoiceDetail\n生成InvoiceChangeDetail
+else 新旧发票不一致
+    wms->wms:使用传过来的参数\n生成InvoiceChangeDetail
+end
+
+wms->store:通知(MQ)
+
+==纸质发票变更==
+
+@enduml

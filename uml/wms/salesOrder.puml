@@ -1,0 +1,24 @@
+@startuml
+
+class SalesOrder{
+    postFee                      运费
+    freight_rate                运费税率,
+    <font color=red>orderTotalAmount      实付金额,
+    <font color=red>goodsTotalAmount     商品总金额,
+    <font color=red>totalDiscountFee        总折扣费用,
+    taxation                       税费
+    tax_type                      税种
+}
+class SalesOrderGoodsDetail {
+    tax_amount          税额
+    tax_percent         税率
+    goodsPrice          商品单价(原价)
+    discountAmount  商品优惠金额
+    quantity               商品数量
+    ....
+    <font color=blue><b>注:国内为单个商品优惠金额，
+    <font color=blue><b>     国外为该行商品优惠总金额
+}
+
+
+@enduml
