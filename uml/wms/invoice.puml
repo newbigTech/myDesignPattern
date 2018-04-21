@@ -1,0 +1,30 @@
+@startuml
+
+participant Store
+participant WMS
+participant ThirdWarehouse
+participant "Inventory" as inv
+participant "ERP" as erp
+Store -> WMS: 推送订单(MQ)
+activate WMS
+WMS -> WMS: 保存订单主表信息 wms_sales_order
+WMS -> WMS: 保存订单地址 wms_sales_order_address
+WMS -> WMS: 保存订单发票信息表 wms_sales_order_invoice
+WMS -> WMS: 保存订单商品明细表 wms_sales_order_goodsdetail
+deactivate WMS
+WMS -> inv : 实占库存(Schedule)
+WMS -> ThirdWarehouse: 推送订单到科捷(Schedule)
+note right
+携带是否开具纸质发票标记
+end note
+WMS <- ThirdWarehouse: 回传出库信息
+activate ThirdWarehouse
+alt 是电子发票 &不存在该订单的蓝票
+    WMS->WMS:生成发票信息
+
+end
+WMS-> inv : 扣减库存
+WMS-> erp : 抛ERP
+deactivate ThirdWarehouse
+
+@enduml

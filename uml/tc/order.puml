@@ -1,0 +1,65 @@
+@startuml
+
+class DeliveryPushMsg{
+pushType 订单类型
+}
+class DeliveryPushDTO{
+    userId,
+    userName,
+    orderNo 订单号
+    orderType 普通、抢购、第三方,
+    orderChannel 订单渠道,
+    orderFrom 订单来源,
+    <font color=red>orderTotalAmount 实付金额,
+    <font color=red>skuOriginAmount 订单Sku原始总金额,
+    <font color=red>skuDiscountAmount 订单Sku折扣总金额,
+    <font color=red>shippingOriginFee,
+    <font color=red>shippingNowFee,
+    <font color=red>taxFee,
+    shippingType 发货类型
+}
+class AddressBillingDTO {
+    bizNo 订单号
+}
+class AddressShippingDTO
+class DeliveryOrderDTO{
+    bizNo 发货单号,
+    logisticsNo 物流单号,
+    orderNo 关联订单号,
+    warehouseCode 仓库,
+    warehouseAreaCode 库区,
+    shippingMethodCode 物流渠道,
+    shippingType 发货单的实际发运方式,
+    originEta,
+    originEtd,
+   <font color=red>deliveryAmount 发货单的总金额,
+   <font color=red>deliveryOriginAmount 发货单的原始总金额
+   <font color=red>deliveryDiscountAmount 发货单的折扣总金额
+}
+class DeliveryItemDTO{
+    itemId 订单项,
+    skuCode 商品编号
+    skuCount 商品数量
+    <font color=red>originPrice 商品原价
+    <font color=red>salePrice 商品算价的起价
+    <font color=red>nowPrice 商品现价
+    <font color=red>discountAmount 商品折扣总金额
+}
+
+DeliveryPushDTO<-- DeliveryPushMsg
+AddressBillingDTO<-- DeliveryPushDTO
+AddressShippingDTO<-- DeliveryPushDTO
+DeliveryPushDTO*-> DeliveryOrderDTO
+DeliveryOrderDTO*-> DeliveryItemDTO
+
+legend center
+    1.发货项中discountAmount为同一sku的折扣总和
+    2.所有发货项的discountAmount总和为发货单中deliveryDiscountAmount
+    3.订单中ordrTotalAmount=skuOriginAmount+shippingOriginFee-skuDiscountAmount+taxFee
+    4.deliveryAmount =  deliveryOriginAmount - deliveryDiscountAmount
+    5.deliveryOriginAmount = (originPrice * skuCount) + ...+ n
+    6.deliveryDiscountAmount = discountAmount + ...+ n
+
+end legend
+
+@enduml

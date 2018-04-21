@@ -1,0 +1,13 @@
+@startuml
+
+participant WMS as wms
+participant DB as db
+participant Ali as ali
+
+wms->db:从InvoiceTemp获取待开票&待开票
+wms->wms:新建线程
+alt SerialNo==null
+wms->ali:获取SerialNo
+end
+wms->wms:根据sourceType组装数据
+@enduml

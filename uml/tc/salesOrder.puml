@@ -1,0 +1,19 @@
+@startuml
+
+class SalesOrder{
+    postFee '运费',
+    freight_rate 运费税率,
+    <font color=red>orderTotalAmount 实付金额,
+    <font color=red>goodsTotalAmount 商品总金额,
+    <font color=red>totalDiscountFee 总折扣费用,
+    taxation 税费,
+    tax_type 税种,
+}
+class SalesOrderGoodsDetail {
+    discountAmount '单个商品优惠金额',
+    goodsPrice '商品单价',
+    tax_amount '税额',
+    tax_percent '税率'
+}
+
+@enduml
