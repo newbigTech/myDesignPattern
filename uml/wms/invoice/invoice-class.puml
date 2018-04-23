@@ -1,0 +1,141 @@
+@startuml
+
+class wms_invoice_change{
+    source_no 来源单号,
+    order_no 物流单号,
+    source_invoice_no 原发票号码,
+    source_invoice_code 原发票代码,
+    source_invoice_type 原发票类型[1纸质发票,2电子发票],
+    has_same_detail 新发票与旧发票明细一致[1:一致,2:不一致],
+    new_invoice_head 新发票抬头,
+    change_reason 变更原因,
+    invoice_category 发票类别[1个人,2单位],
+    action_type 操作类型\n                  <font color=red>[paper2paper:纸质转纸质，paper2einvoice:纸质转电子,\n                  <font color=red>einvoice2paper:电子转纸制动,evinoice2einvoice:电子转电子，\n                   <font color=red>paper2end:纸质终结,einvoice2end:电子终结],
+    status <font color=red>1:新建,2:冲红旧发票中,3:冲红旧发票失败,4:等开新发票,\n            <font color=red>5:新开发票中,6:新开发票失败,7:完成,8:无效请求,
+    new_payer_register_no 新付款方税务登记证号,
+}
+class wms_invoice_change_detail{
+    parent_id 发货单号,
+    item_name 发票项目名称（或商品名称）,
+    item_no 发票项目编号（或商品编号）,
+    quantity 数量,
+    discount_price 优惠金额[单件商品优惠金额],
+    detail_type 明细类型[1：SKU明细 2：优惠 3：运费],
+    origin_price 订单上标注的价格,
+}
+
+class wms_einvoice_temp{
+    order_no,
+    einvoice_no 电子发票号,
+    einvoice_code 发票代码
+    serial_no 电子发票流水号
+    color 发票颜色,
+    origin_blue_serial_no <font color=blue>充红发票对应的原蓝发票的流水号,
+    ali_url 电子发票阿里URL,
+    einvoice_status <font color=red>开票状态（-1:新建,1:未开票,2:开票中,3:开票失败,\n                                             <font color=red>4:获取结果失败,5:完成开票,6:作废）,
+    business_type 默认：0。商家对个人:0，商家对企业:1,
+    erp_tid ERP系统中的单据号,
+    platform_code 电商平台代码,OTHER=其他,
+    platform_tid 电商平台对应的主订单号,
+    payee_address 开票方地址,
+    payee_name 开票方名称,
+    payee_operator 开票人,
+    invoice_amount 开票金额,当开红票时，该字段为负数
+    invoice_time 开票日期,
+    invoice_type <font color=red>蓝票blue,红票red,默认blue
+    normal_invoice_code <font color=blue>原发票代码,开红票时传入
+    normal_invoice_no <font color=blue>原发票号码,开红票时传入
+    payee_register_no <font color=red>收款方税务登记证号
+    payer_name <font color=red>付款方名称, 对应发票台头
+    sum_price <font color=red>合计金额,当开红票时，该字段为负数
+    sum_tax <font color=red>合计税额 当开红票时，该字段为负数
+    source_type <font color=red>订单:order,手动客制:custom
+    invoice_change_id <font color=blue>变更表的Id
+    payer_register_no <font color=red>付款方税务登记证号
+}
+
+class wms_einvoice_temp_detail{
+    parent_id 父Id,
+    order_no 订单号,
+    einvoice_no ,
+    einvoice_code,
+    item_name 发票项目名称（或商品名称）,
+    item_no 发票项目编号（或商品编号）,
+    price <font color=red>单价,折扣行此参数不能传，非折扣行必传；红票、蓝票都为正数
+    quantity,
+    row_type <font color=red>发票行性质。0表示正常行，1表示折扣行，2表示被折扣行,
+    sum_price总价,开红票时,该字段为负数
+    tax 税额,当开红票时，该字段为负数,
+    tax_rate <font color=blue>税率,
+    amount 价税合计=sumPrice和tax之和 当开红票时，该字段为负数
+    discount_price 优惠金额[单件商品优惠金额],
+    detail_type 明细类型1：SKU明细 2：优惠/折扣 3：运费,
+    unit 单位,
+    origin_price 订单上标注的价格,
+    cn_tax_category_code 中国-商品税类编码
+}
+class wms_invoice{
+    recordId 发票备案Id
+    invoiceNo 发票号码
+    invoiceCode 发票代码
+    warehouseCode 仓库编码
+    hasUsed 发票是否已使用[1未使用,2已使用,默认1],
+    orderNo 订单号码,
+    orderTime 订单时间,
+    currency 币种,
+    orderTotalAmount 订单实付金额
+    invoiceType 1纸质发票,2电子发票,默认1
+    invoiceCategory 发票类别[1个人,2单位,默认1]
+    invoiceHead 发票抬头
+    invoiceDate 发票开票日期
+    invoiceTotalAmount 发票总金额
+    discountTotalAmount 发票运费金额
+    transitAmount 实付金额
+    goodsCount 发票商品总数
+    invoiceStatus 发票状态[1正常,2冲红,3被冲红,4作废,默认1]
+    exceptionReason 发票异常原因[如冲红原因]
+    drawer 开票人,
+    drawerCorp 开票公司,
+    einvoice_url 电子发票PDF存储链接地址,
+    einvoice_serial_no 电子发票流水号,
+    origin_blue_serial_no <font color=blue>充红发票对应的原蓝发票的流水号,
+    changeReason 变更原因,
+    payer_register_no 付款方税务登记证号
+}
+class wms_invoice_detail{
+    invoiceCode,
+    invoiceNo,
+    detailType [1：SKU明细 2：优惠/折扣 3：运费]
+    skuCode
+    skuName
+    unit 单位,
+    quantity 数量,
+    goodsPrice 单价,
+    totalPrice 小计金额[单价*数量],
+    discountType 优惠类型,
+    discountId 优惠项ID,
+    discountName 优惠项名称,
+    discountPrice 优惠金额[单件商品优惠金额],
+    validState 有效状态[1有效,2无效,默认1],
+    einvoice_price 电子发票显示的价格,
+    einvoice_tax 电子发票显示的税额,
+    cn_tax_category_code 中国-商品税类编码
+}
+
+
+wms_einvoice_temp .. wms_einvoice_temp_detail:1*n
+wms_invoice .. wms_invoice_detail:1*n
+wms_invoice_change .. wms_invoice_change_detail:1*n
+
+
+'legend left
+'    1.发货项中discountAmount为同一sku的折扣总和
+'    2.所有发货项的discountAmount总和为发货单中deliveryDiscountAmount
+'    3.订单中ordrTotalAmount=skuOriginAmount+shippingOriginFee-skuDiscountAmount+taxFee
+'    4.deliveryAmount =  deliveryOriginAmount - deliveryDiscountAmount
+'    5.deliveryOriginAmount = (originPrice * skuCount) + ...+ n
+'    6.deliveryDiscountAmount = discountAmount + ...+ n
+'
+'end legend
+
+@enduml
