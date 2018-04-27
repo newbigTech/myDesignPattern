@@ -36,6 +36,13 @@ alt appProcessCode为空 or 上述注册失败
     AppProcessCodeZkCreator->FS:将appProcessCode写入"${user.home}/wms_8580"
 end
 
+group 获取最新的最大应用标识newCurMaxCode
+    AppProcessCodeZkCreator -> Zookeeper:将newCurMaxCode写入到节点"/identity/appProcessCode/wms"
+end
+note left
+CurMaxCode写入zk不成功，
+不影响使用
+end note
 deactivate AppProcessCodeZkCreator
 
 @enduml
