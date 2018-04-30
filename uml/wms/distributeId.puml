@@ -11,7 +11,7 @@ deactivate AppProcessCodeZkCreator
 
 AppProcessCodeZkCreator -> AppProcessCodeZkCreator: <font color=red>【2】</font>postProcessBeanFactory()
 activate AppProcessCodeZkCreator
-AppProcessCodeZkCreator -> Zookeeper: 创建持久化节点"/identity/appProcessCode/wms"
+AppProcessCodeZkCreator -> Zookeeper: 创建持久化节点(如果不存在)"/identity/appProcessCode/wms"
 
 AppProcessCodeZkCreator -> AppProcessCodeZkCreator:获取本机IP
 AppProcessCodeZkCreator -> AppProcessCodeZkCreator:组装数据data="host+codeFileName"
@@ -28,7 +28,7 @@ end
 ==内存中不存在or上述注册失败==
 alt appProcessCode为空 or 上述注册失败
     AppProcessCodeZkCreator -> Zookeeper:从"/identity/appProcessCode/wms"读取value值到<font color=blue>appProcessCode</font>和<font color=red>curMaxCode
-    loop endless times
+    loop endless times , util registered
         AppProcessCodeZkCreator -> AppProcessCodeZkCreator:<font color=blue>appProcessCode</font> = createNext(appProcessCode, maxCodeLength)
         AppProcessCodeZkCreator -> Zookeeper:创建临时节点"/identity/appProcessCode/wms/<font color=blue>appProcessCode</font>",value值为data
     end
