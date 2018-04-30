@@ -1,0 +1,15 @@
+@startuml
+actor Client as client
+participant Context as context
+participant Strategy as strategy
+
+client->strategy:选择策略
+client->context:组装数据，设置策略
+client->context:调用上下文执行功能
+activate client
+    context->strategy:转调具体策略方法，传入上下文对象
+    strategy->context:回调用context获取需要的数据
+deactivate client
+
+
+@enduml
