@@ -34,14 +34,14 @@ note right
 通过ShippingAddress和UserSession调用用户中心
 end note
 xman        ->  inv     :地址信息&商品信息
-xman        <-  inv     :路由信息&<font color=red>原始ETD/原始ETD
-xman        <-  xman    :保存路由信息&<font color=red>原始ETD/原始ETD</font>到session
+xman        <-  inv     :路由信息&<font color=red>路由ETD/路由ETD
+xman        <-  xman    :保存路由信息&<font color=red>路由ETD/路由ETD</font>到session
 note right
 注：用户登录Session过期时间为3d；
     ETD/ETA保存在session过期时间为1d
 end note
-pageInfo    <-  xman    :路由信息&<font color=red>原始ETD/原始ETD
-pageInfo    <-  pageInfo:展示不同ShippingMethod的<font color=red>原始ETD/原始ETD
+pageInfo    <-  xman    :路由信息&<font color=red>路由ETD/路由ETD
+pageInfo    <-  pageInfo:展示不同ShippingMethod的<font color=red>路由ETD/路由ETD
 deactivate pageInfo
 
 User        ->  pageInfo:<font color=red><b>[5] </font>CheckOut页面：选择ShippingMethod
