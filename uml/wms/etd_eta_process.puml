@@ -1,0 +1,29 @@
+@startuml
+title 流程图-ETD/ETA计算逻辑
+
+start
+:获取仓库信息;
+#HotPink:if (预售) then (yes)
+    :处理时效=24h
+    基准时间=preSellBatchETA-1d;
+else (no)
+    :处理时效=仓库配置时效
+    基准时间=当前时间;
+
+endif
+#HotPink:if(是否为Priority优先配送) then(no)
+    :处理时效=处理时效+1;
+else(yes)
+endif
+:根据处理时效计算天数N;
+#HotPink:while (i<=N) is(yes)
+    :基准时间+1d;
+    if(是否为周末) then (yes)
+    else if(是否为节假日) then (yes)
+    else if(仓库在这一天是否满载) then (yes)
+    else
+        :i++]
+    endif
+endwhile
+end
+@enduml
