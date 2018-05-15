@@ -1,0 +1,70 @@
+@startuml
+
+interface FixShardedResourceOperation<R> {
+    <T> T execute(String shardedKey, ResourceCallback<R, T> action)
+}
+
+interface ResourcesOperation<R, I> {
+    <T> AnyResourceCallbackStatus<T> executeAny(AnyResourceCallback<R, T> action);
+    <T> Map<I, T> executeAll(ResourcesCallback<R, T> action);
+    <T> T execute(ResourceCallback<R, T> action, String host, int port);
+
+}
+
+abstract FixedShardedPoolTemplate{
+    private FixedShardedPool<R, P, I> fixedShardedPool;
+}
+
+
+abstract FixedShardedJedisPoolTemplate{
+
+}
+
+class FixedShardedJedisIntelliPoolTemplate {
+
+}
+
+
+interface DynamicPool {
+    void changePool(List<T> poolsInfos, GenericObjectPoolConfig poolConfig);
+    List<T> toPoolInfos(String hosts, GenericObjectPoolConfig poolConfig);
+}
+
+interface Pools <R extends AutoCloseable, P extends Pool<R>, I>{
+    List<P> getAllPool();
+    I getPoolInfo(R resource);
+    P getPool(String host, int port);
+    void close();
+    boolean isClosed();
+}
+
+abstract class FixedShardedPool{
+
+}
+Pools <|..FixedShardedPool
+abstract class FixedShardedJedisPool{
+
+}
+
+class FixedShardedIntelliJedisPool {
+}
+FixedShardedPool<|--FixedShardedJedisPool
+
+
+class FixedShardedIntelliJedisDynamicPool {
+    public FixedShardedIntelliJedisDynamicPool(String hosts, GenericObjectPoolConfig poolConfig)
+}
+
+FixShardedResourceOperation <|..FixedShardedPoolTemplate
+ResourcesOperation <|..FixedShardedPoolTemplate
+
+FixedShardedPoolTemplate<|--FixedShardedJedisPoolTemplate
+
+FixedShardedJedisPoolTemplate<|--FixedShardedJedisIntelliPoolTemplate
+
+FixedShardedPoolTemplate --> FixedShardedIntelliJedisDynamicPool
+FixedShardedJedisPool<|--FixedShardedIntelliJedisPool
+FixedShardedIntelliJedisPool<|--FixedShardedIntelliJedisDynamicPool
+DynamicPool<|..FixedShardedIntelliJedisDynamicPool
+
+@enduml

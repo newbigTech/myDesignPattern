@@ -1,0 +1,26 @@
+@startuml
+
+interface LockTemplate {
+    execute(String lockKey, int lockTimeoutSecond, Executor<T> executor)
+}
+
+abstract class AbstractLockTemplate{
+    execute(String lockKey, int lockTimeoutSecond, Executor<T> executor)
+    abstract boolean getLock(final String lockKey, final String randomValue,final int lockTimeoutSecond);
+    abstract void releaseLock(final String lockKey, final String randomValue);
+}
+
+class RushRedisLockTemplate {
+    getLock()
+    releaseLock()
+}
+
+
+
+LockTemplate <|.. AbstractLockTemplate
+AbstractLockTemplate <|-- RushRedisLockTemplate
+
+
+
+
+@enduml

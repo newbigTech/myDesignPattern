@@ -3,9 +3,9 @@ actor User
 participant StorePage as pageInfo
 participant XMAN as xman
 participant TradeCenter as tc
-participant Redis as redis
 participant WMS as wms
 participant Inventory as inv
+participant Redis as redis
 participant ThirdWarehouse as warehouse
 '== 订单列表展示etd/eta ==
 'User-> pageInfo:查看
@@ -23,7 +23,8 @@ participant ThirdWarehouse as warehouse
 '
 '
 'newpage 海外下单流程
-title 海外下单流程
+title ETD/ETA相关
+==海外下单流程==
 User        ->  pageInfo:<font color=red><b>[1] </font>点击进入商品列表页面
 User        ->  pageInfo:<font color=red><b>[2] </font>Select商品
 User        ->  pageInfo:<font color=red><b>[3] </font>点击CheckOut
@@ -64,7 +65,11 @@ pageInfo    <-  xman    :Place Order Successful
 
 deactivate pageInfo
 
-tc          ->  redis   :拉取订单信息(Schedule)
+tc          --[#0000FF]>  redis   :拉取订单信息(Schedule)
+note right
+线上5台分片redis,11台TradeCenter应用
+redis配有监控
+end note
 tc          ->  tc      :保存订单信息
 User        ->  pageInfo:<font color=red><b>[7] </font>支付订单
 activate pageInfo
@@ -76,14 +81,17 @@ tc          ->  wms     :推送订单信息(MQ)
 wms        ->  wms      :保存订单信息
 wms        ->  inv      :实占库存(Schedule)
 wms        <-  inv     :<font color=red>ETD/ETD
-note right
-对用户透明，意义在于
-为其他订单计算ETD/ETA作依据
-end note
+wms        --> tc       :MQ通知<font color=red>ETD/ETA</font>等信息
 
 wms         ->  warehouse     :推送到第三方仓库
 warehouse   ->  warehouse     :出库
 warehouse   ->  wms     :物流信息
-wms         -->  tc      :物流信息(MQ)
-
+wms         -->  tc      :MQ通知出库时间、物流信息等
+==Inventory计算ETD/ETA逻辑==
+tc--[#0000FF]>inv:推送(Schedule,频率3s)
+activate tc
+inv->redis:缓存到redis
+deactivate tc
+inv->redis:获取仓库已分配库存
+inv--[#0000FF]>inv:加载仓库日处理能力(Schedule,频率2s)
 @enduml
