@@ -25,5 +25,6 @@ endif
         :i++]
     endif
 endwhile
+:返回基准时间偏移后的时间既为ETD;
 end
 @enduml
