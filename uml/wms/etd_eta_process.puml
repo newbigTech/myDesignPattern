@@ -1,5 +1,5 @@
 @startuml
-title 流程图-ETD/ETA计算逻辑
+title 流程图-ETD/ETA核心计算逻辑
 
 start
 :获取仓库信息;
@@ -15,7 +15,7 @@ endif
     :处理时效=处理时效+1;
 else(yes)
 endif
-:根据处理时效计算天数N;
+:根据处理时效计算天数N=处理时效/24;
 #HotPink:while (i<=N) is(yes)
     :基准时间+1d;
     if(是否为周末) then (yes)
