@@ -7,22 +7,12 @@ participant WMS as wms
 participant Inventory as inv
 participant Redis as redis
 participant ThirdWarehouse as warehouse
-'== 订单列表展示etd/eta ==
-'User-> pageInfo:查看
-'
-'== 订单详情页展示etd/eta ==
-'
-'== checkout页面展示etd ==
-'User        ->      pageInfo    :checkOut订单
-'User        ->      pageInfo    :选择地址
-'pageInfo    ->      xman        :地址信息&商品信息
-'xman        ->      inv         :
-'== 下单成功页面展示etd ==
-'
-'== 商品详情页展示etd	 ==
-'
-'
-'newpage 海外下单流程
+
+'->	同步消息
+'<–	同步应答
+'->>	异步消息
+'<<-	异步应答
+
 title ETD/ETA相关
 ==海外下单流程==
 User        ->  pageInfo:<font color=red><b>[1] </font>点击进入商品列表页面
@@ -76,12 +66,12 @@ activate pageInfo
 pageInfo    ->  xman
 xman        ->  tc      :更新订单信息
 deactivate pageInfo
-tc          ->  wms     :推送订单信息(MQ)
+tc          ->>  wms     :推送订单信息(MQ)
 
 wms        ->  wms      :保存订单信息
 wms        ->  inv      :实占库存(Schedule)
 wms        <-  inv     :<font color=red>ETD/ETD
-wms        --> tc       :MQ通知<font color=red>ETD/ETA</font>等信息
+wms        -->> tc       :MQ通知<font color=red>ETD/ETA</font>等信息
 
 wms         ->  warehouse     :推送到第三方仓库
 warehouse   ->  warehouse     :出库

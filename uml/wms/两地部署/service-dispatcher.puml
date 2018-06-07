@@ -1,0 +1,93 @@
+@startuml
+package 国内 {
+    package OPPO机房 {
+        frame "ERP" {
+            ["交易记录"]
+            ["基础数据"]
+        }
+        database "ERP-Oracle" {
+            [op_trans_headers_iface_s]
+            [op_trans_lines_iface_s]
+        }
+    }
+    package 广州机房 {
+        frame "OA" {
+            ["OA部门领料"]
+
+        }
+
+        frame "Service-Dispatcher" {
+        ["同步ERP中间表数据到ERP"]
+        ["同步ERP表数据到WMS(<font color=red>Schedule</font>)"]
+        ["包装OA部门领料数据"]
+        }
+
+        frame "WMS_CN" {
+            ["通用出库"]
+        }
+
+        database "WMS-MySql-CN" {
+            [wms_erp_header]
+            [wms_erp_lines]
+        }
+    }
+}
+
+package 海外{
+    cloud AWS机房 {
+        frame "WMS_Global" {
+            ["海外通用出库"]
+        }
+
+        database "WMS-MySql-Global" {
+            [wms_erp_headers]
+            [wms_erp_line]
+        }
+    }
+}
+
+
+
+["OA部门领料"]-->["包装OA部门领料数据"]:CN
+
+["包装OA部门领料数据"]--> ["通用出库"]:CN
+
+["通用出库"] --> [wms_erp_header]
+["通用出库"] --> [wms_erp_lines]
+
+["OA部门领料"]-->["包装OA部门领料数据"]:Global
+
+["包装OA部门领料数据"]--> ["海外通用出库"]:Global
+
+["海外通用出库"] -->[wms_erp_headers]
+["海外通用出库"] -->[wms_erp_line]
+
+
+'
+'node "组件2" {
+'    ["组件2.1"] - ["组件2.2"]
+'    ["组件2.2"] --> [负载均衡服务器]
+'}
+'
+'cloud {
+'    [负载均衡服务器] -> [逻辑服务器1]
+'    [负载均衡服务器] -> [逻辑服务器2]
+'    [负载均衡服务器] -> [逻辑服务器3]
+'}
+'
+'database "MySql" {
+'    folder "This is my folder" {
+'        [Folder 3]
+'    }
+'
+'    frame "Foo" {
+'        [Frame 4]
+'    }
+'}
+'
+'[逻辑服务器1] --> [Folder 3]
+'[逻辑服务器2] --> [Frame 4]
+'[逻辑服务器3] --> [Frame 4]
+
+
+@enduml
