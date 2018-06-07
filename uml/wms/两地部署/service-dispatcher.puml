@@ -8,6 +8,7 @@ package 国内 {
         database "ERP-Oracle" {
             [op_trans_headers_iface_s]
             [op_trans_lines_iface_s]
+            [op_purchase_order_header]
         }
     }
     package 广州机房 {
@@ -17,13 +18,15 @@ package 国内 {
         }
 
         frame "Service-Dispatcher" {
-        ["同步ERP中间表数据到ERP"]
         ["同步ERP表数据到WMS(<font color=red>Schedule</font>)"]
+        ["消费MQ同步ERP中间表数据到ERP"]
         ["包装OA部门领料数据"]
         }
 
         frame "WMS_CN" {
             ["通用出库"]
+            ["扫描WMS-ERP中间表发送MQ"]
+            ["同步国内ERP基础数据"]
         }
 
         database "WMS-MySql-CN" {
@@ -37,6 +40,8 @@ package 海外{
     cloud AWS机房 {
         frame "WMS_Global" {
             ["海外通用出库"]
+            ["扫描海外WMS-ERP中间表发送MQ"]
+            ["同步海外ERP基础数据"]
         }
 
         database "WMS-MySql-Global" {
@@ -62,32 +67,15 @@ package 海外{
 ["海外通用出库"] -->[wms_erp_headers]
 ["海外通用出库"] -->[wms_erp_line]
 
+["扫描WMS-ERP中间表发送MQ"] -> ["消费MQ同步ERP中间表数据到ERP"]:MQ
+["消费MQ同步ERP中间表数据到ERP"] ->[op_trans_headers_iface_s]
+["消费MQ同步ERP中间表数据到ERP"] ->[op_trans_lines_iface_s]
 
-'
-'node "组件2" {
-'    ["组件2.1"] - ["组件2.2"]
-'    ["组件2.2"] --> [负载均衡服务器]
-'}
-'
-'cloud {
-'    [负载均衡服务器] -> [逻辑服务器1]
-'    [负载均衡服务器] -> [逻辑服务器2]
-'    [负载均衡服务器] -> [逻辑服务器3]
-'}
-'
-'database "MySql" {
-'    folder "This is my folder" {
-'        [Folder 3]
-'    }
-'
-'    frame "Foo" {
-'        [Frame 4]
-'    }
-'}
-'
-'[逻辑服务器1] --> [Folder 3]
-'[逻辑服务器2] --> [Frame 4]
-'[逻辑服务器3] --> [Frame 4]
+["扫描海外WMS-ERP中间表发送MQ"]-> ["消费MQ同步ERP中间表数据到ERP"]:MQ
+
+
+["同步ERP表数据到WMS(<font color=red>Schedule</font>)"] --> ["同步国内ERP基础数据"]:MQ
+["同步ERP表数据到WMS(<font color=red>Schedule</font>)"] --> ["同步海外ERP基础数据"]:MQ
 
 
 @enduml
