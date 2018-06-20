@@ -6,13 +6,16 @@ interface FixShardedResourceOperation<R> {
 
 interface ResourcesOperation<R, I> {
     <T> AnyResourceCallbackStatus<T> executeAny(AnyResourceCallback<R, T> action);
-    <T> Map<I, T> executeAll(ResourcesCallback<R, T> action);
+    <T> Map<I, T> <font color=red>executeAll</font>(ResourcesCallback<R, T> action);
     <T> T execute(ResourceCallback<R, T> action, String host, int port);
 
 }
 
 abstract FixedShardedPoolTemplate{
     private FixedShardedPool<R, P, I> fixedShardedPool;
+    private ResourcesTemplate<R, P, I> resourcesTemplate;
+    public <T> AnyResourceCallbackStatus<T> executeAny(AnyResourceCallback<R, T> action);
+    public <T> T execute(String shardedKey, ResourceCallback<R, T> action);
 }
 
 
@@ -55,6 +58,18 @@ class FixedShardedIntelliJedisDynamicPool {
     public FixedShardedIntelliJedisDynamicPool(String hosts, GenericObjectPoolConfig poolConfig)
 }
 
+interface ResourcesOperation<R, I> {
+    public <T> AnyResourceCallbackStatus<T> executeAny(AnyResourceCallback<R, T> action);
+    public <T> Map<I, T> executeAll(ResourcesCallback<R, T> action);
+    public <T> T execute(ResourceCallback<R, T> action, String host, int port);
+}
+
+class ResourcesTemplate{
+
+}
+
+ResourcesOperation <|.. ResourcesTemplate
+
 FixShardedResourceOperation <|..FixedShardedPoolTemplate
 ResourcesOperation <|..FixedShardedPoolTemplate
 
@@ -66,5 +81,7 @@ FixedShardedPoolTemplate --> FixedShardedIntelliJedisDynamicPool
 FixedShardedJedisPool<|--FixedShardedIntelliJedisPool
 FixedShardedIntelliJedisPool<|--FixedShardedIntelliJedisDynamicPool
 DynamicPool<|..FixedShardedIntelliJedisDynamicPool
+
+FixedShardedPoolTemplate --->ResourcesTemplate
 
 @enduml
