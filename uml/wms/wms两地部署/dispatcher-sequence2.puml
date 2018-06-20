@@ -1,0 +1,20 @@
+@startuml
+'OA -> ServiceDispatcher: 国内领料
+'ServiceDispatcher -> WMS_CN: 包装并转发
+'WMS_CN -> WMS_CN: 通用出库写ERP中间表
+'OA -> ServiceDispatcher: 海外领料
+'ServiceDispatcher -> WMS_AWS: 包装并转发
+'WMS_CN -> WMS_CN: 通用出库写ERP中间表
+participant WMS_CN
+participant WMS_AWS
+participant ServiceDispatcher
+participant ServiceDispatcher
+participant ERP
+
+WMS_CN -> WMS_CN: 定时任务扫描中间表
+WMS_CN -> ServiceDispatcher: MQ发送中间表数据
+ServiceDispatcher->ERP:写ERP数据
+WMS_AWS -> WMS_AWS: 定时任务扫描中间表
+WMS_AWS -> ServiceDispatcher: MQ发送中间表数据
+ServiceDispatcher->ERP:写ERP数据
+@enduml

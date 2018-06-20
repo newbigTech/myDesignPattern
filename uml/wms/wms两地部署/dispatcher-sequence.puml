@@ -1,0 +1,8 @@
+@startuml
+OA -> ServiceDispatcher: 国内领料
+ServiceDispatcher -> WMS_CN: 包装并转发
+WMS_CN -> WMS_CN: 通用出库写ERP中间表
+OA -> ServiceDispatcher: 海外领料
+ServiceDispatcher -> WMS_AWS: 包装并转发
+WMS_CN -> WMS_CN: 通用出库写ERP中间表
+@enduml
