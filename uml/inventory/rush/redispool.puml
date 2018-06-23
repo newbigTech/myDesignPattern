@@ -42,7 +42,7 @@ interface Pools <R extends AutoCloseable, P extends Pool<R>, I>{
 }
 
 abstract class FixedShardedPool{
-
+    R getResource(String shardedKey);
 }
 Pools <|..FixedShardedPool
 abstract class FixedShardedJedisPool{
@@ -68,6 +68,18 @@ class ResourcesTemplate{
 
 }
 
+class FixedShardedIntelliJedisPoolInfo{
+List<FixedShardedIntelliJedisPoolInfo> toFixedShardedIntelliJedisPoolInfos(hosts,\n GenericObjectPoolConfig poolConfig)
+}
+
+class Sharded<R, S extends ShardInfo<R>> {
+    private final Hashing algo;
+    private TreeMap<Long, S> nodes;
+    R getShard(String key);
+    S getShardInfo(String key);
+    S getShardInfo(byte[] key);
+}
+
 ResourcesOperation <|.. ResourcesTemplate
 
 FixShardedResourceOperation <|..FixedShardedPoolTemplate
@@ -83,5 +95,9 @@ FixedShardedIntelliJedisPool<|--FixedShardedIntelliJedisDynamicPool
 DynamicPool<|..FixedShardedIntelliJedisDynamicPool
 
 FixedShardedPoolTemplate --->ResourcesTemplate
+FixedShardedIntelliJedisDynamicPool->FixedShardedIntelliJedisPoolInfo
 
+ResourcesTemplate -->FixedShardedIntelliJedisDynamicPool
+
+FixedShardedPool->Sharded
 @enduml
