@@ -43,6 +43,7 @@ interface Pools <R extends AutoCloseable, P extends Pool<R>, I>{
 
 abstract class FixedShardedPool{
     R getResource(String shardedKey);
+    protected void initSharded(List<I> shards);
 }
 Pools <|..FixedShardedPool
 abstract class FixedShardedJedisPool{
@@ -50,6 +51,7 @@ abstract class FixedShardedJedisPool{
 }
 
 class FixedShardedIntelliJedisPool {
+public FixedShardedIntelliJedisPool(List<FixedShardedIntelliJedisPoolInfo> shards,\n Hashing algo, Pattern tagPattern);
 }
 FixedShardedPool<|--FixedShardedJedisPool
 
@@ -70,6 +72,7 @@ class ResourcesTemplate{
 
 class FixedShardedIntelliJedisPoolInfo{
 List<FixedShardedIntelliJedisPoolInfo> toFixedShardedIntelliJedisPoolInfos(hosts,\n GenericObjectPoolConfig poolConfig)
+protected JedisIntelligentPool createResource();
 }
 
 class Sharded<R, S extends ShardInfo<R>> {
@@ -78,6 +81,16 @@ class Sharded<R, S extends ShardInfo<R>> {
     R getShard(String key);
     S getShardInfo(String key);
     S getShardInfo(byte[] key);
+}
+
+class FixedShardedJedisPoolInfo{
+
+}
+class FixedShardedPoolInfo{
+
+}
+class ShardInfo{
+    protected abstract T createResource()
 }
 
 ResourcesOperation <|.. ResourcesTemplate
@@ -100,4 +113,10 @@ FixedShardedIntelliJedisDynamicPool->FixedShardedIntelliJedisPoolInfo
 ResourcesTemplate -->FixedShardedIntelliJedisDynamicPool
 
 FixedShardedPool->Sharded
+
+FixedShardedIntelliJedisPoolInfo --|> FixedShardedJedisPoolInfo
+FixedShardedJedisPoolInfo -|> FixedShardedPoolInfo
+FixedShardedPoolInfo -|> ShardInfo
+
+Sharded-->FixedShardedIntelliJedisPoolInfo:createResource()
 @enduml
