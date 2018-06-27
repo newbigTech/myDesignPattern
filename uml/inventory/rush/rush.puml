@@ -1,25 +1,26 @@
 @startuml
 
 interface LockTemplate {
-    execute(String lockKey, int lockTimeoutSecond, Executor<T> executor)
+    <F, T> LockResult<T> lock(String key, int expire, Function<F, T> executor, F param)
 }
-
+interface Function<F, T> {
+    T apply(F input);
+}
 abstract class AbstractLockTemplate{
-    execute(String lockKey, int lockTimeoutSecond, Executor<T> executor)
-    abstract boolean getLock(final String lockKey, final String randomValue,final int lockTimeoutSecond);
-    abstract void releaseLock(final String lockKey, final String randomValue);
+    public <F, T> LockResult<T> lock(String lockKey, int expire, Function<F, T> executor,F params)
+    protected abstract boolean doAcquireLock(String lockKey,String lockValue,Integer expireSec);
+    protected abstract void doReleaseLock(String lockKey,String lockValue);
+    protected String getLockValue();
 }
 
 class RushRedisLockTemplate {
-    getLock()
-    releaseLock()
+    protected boolean doAcquireLock(String lockKey,String lockValue,Integer expireSec)
+    protected void doReleaseLock(String lockKey,String lockValue)
 }
-
-
 
 LockTemplate <|.. AbstractLockTemplate
 AbstractLockTemplate <|-- RushRedisLockTemplate
-
+AbstractLockTemplate ->Function
 
 
 
