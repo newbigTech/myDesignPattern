@@ -1,0 +1,84 @@
+@startuml
+
+interface DynamicPool {
+    void changePool(List<T> poolsInfos, GenericObjectPoolConfig poolConfig);
+    List<T> toPoolInfos(String hosts, GenericObjectPoolConfig poolConfig);
+}
+
+class LoadBalanceJedisDynamicPool {
+    protected boolean doAcquireLock(String lockKey,String lockValue,Integer expireSec)
+    protected void doReleaseLock(String lockKey,String lockValue)
+}
+class LoadBalanceJedisPool {
+    private Map<JedisInfo, JedisIntelligentPool> jedisPools = new HashMap<>();
+    public LoadBalanceJedisPool(GenericObjectPoolConfig poolConfig, \n                                    List<JedisInfo> jedisInfos, LoadBalance loadBalance)
+    protected void initPools(GenericObjectPoolConfig poolConfig, List<JedisInfo> jedisInfos)
+    protected boolean doAcquireLock(String lockKey,String lockValue,Integer expireSec)
+    protected void doReleaseLock(String lockKey,String lockValue)
+}
+abstract class LoadBalancePool<Jedis, JedisIntelligentPool, JedisInfo> {
+    private LoadBalance loadBalance;
+    private List<P> pools;
+}
+abstract class Pool{
+
+}
+
+interface Pools<R extends AutoCloseable, P extends Pool<R>, I>{
+List<P> getAllPool();
+I getPoolInfo(R resource);
+P getPool(String host, int port);
+}
+
+class JedisInfo{
+public static final List<JedisInfo> toJedisInfos(String hosts)
+}
+
+class LoadBalanceJedisTemplate{
+
+}
+class ResourceTemplate{
+
+}
+interface JedisCommands{
+
+}
+class JedisCommandsTemplate<Jedis>{
+
+}
+class JedisTemplate{
+
+}
+
+interface ResourcesOperation<Jedis, JedisInfo>{
+    <T> AnyResourceCallbackStatus<T> executeAny(AnyResourceCallback<R, T> action);
+    <T> Map<I, T> executeAll(ResourcesCallback<R, T> action);
+    <T> T execute(ResourceCallback<R, T> action, String host, int port);
+}
+
+
+
+interface ResourceOperation<R>{
+    <T> T execute(ResourceCallback<R, T> action);
+}
+
+ResourceTemplate <|-- JedisCommandsTemplate
+JedisCommands <|.. JedisCommandsTemplate
+JedisCommandsTemplate <|-- JedisTemplate
+JedisTemplate <|-- LoadBalanceJedisTemplate
+ResourcesOperation <|.. LoadBalanceJedisTemplate
+
+ResourceOperation <|.. ResourceTemplate
+
+LoadBalanceJedisPool <|-- LoadBalanceJedisDynamicPool
+DynamicPool <|.. LoadBalanceJedisDynamicPool
+LoadBalancePool <|-- LoadBalanceJedisPool
+Pools <|.. LoadBalancePool
+Pool <|-- LoadBalancePool
+ResourcesOperation <|-- ResourcesTemplate
+
+LoadBalanceJedisDynamicPool->JedisInfo
+LoadBalanceJedisTemplate --> ResourcesTemplate
+LoadBalanceJedisTemplate --> LoadBalanceJedisDynamicPool
+
+@enduml
