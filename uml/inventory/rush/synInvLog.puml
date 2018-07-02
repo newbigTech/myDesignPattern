@@ -12,7 +12,7 @@ Schedule -> Pools:从所有分片redis中通过加权轮询策略获取一个分
 activate Schedule
 Pools -> Redis:获取指定分片的jedis连接
 Redis -> Redis:从未同步流水list取出一条Logkey放入已同步list中
-Schedule -> ThreadPoolExecutor:将取出的流水Logkey提交到线程池中
+Schedule ->> ThreadPoolExecutor:将取出的流水Logkey提交到线程池中
 deactivate Schedule
 
 ThreadPoolExecutor -> Redis: 通过Logkey中订单号路由到分片Redis
