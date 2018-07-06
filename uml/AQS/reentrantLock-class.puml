@@ -1,0 +1,38 @@
+@startuml
+interface Lock{
+    void lock();
+    void lockInterruptibly() throws InterruptedException;
+    boolean tryLock();
+    boolean tryLock(long time, TimeUnit unit) throws InterruptedException;
+    void unlock();
+    Condition newCondition();
+}
+
+class ReentrantLook{
+
+}
+
+abstract class AbstractQueuedSynchronizer{
+    public final void acquire(int arg);
+    public final void acquireInterruptibly(int arg);
+}
+abstract class Sync{
+    abstract void lock();
+    final boolean nonfairTryAcquire(int acquires);
+    protected final boolean tryRelease(int releases)
+}
+class FairSync {
+    protected final boolean tryAcquire(int acquires)
+}
+class NonfairSync {
+    protected final boolean tryAcquire(int acquires)
+}
+
+Lock <|.. ReentrantLook
+
+AbstractQueuedSynchronizer <|-- Sync
+Sync <|-- FairSync
+Sync <|-- NonfairSync
+
+ReentrantLook -> Sync
+@enduml
