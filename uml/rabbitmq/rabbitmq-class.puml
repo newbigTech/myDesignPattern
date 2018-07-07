@@ -1,0 +1,95 @@
+@startuml
+
+class ChannelFactory{
+    private String address;
+    private String userName;
+    private String password;
+    private String virtualHost;
+    private int cacheSize
+}
+class QueueDeclare{
+    private ChannelFactory channelFactory;
+    private String name;
+    private String deadLetterRoutingKey;
+    private String deadLetterExchange;
+    private boolean durable = true;
+    private String env;
+}
+class ExchangeDeclare{
+    private ChannelFactory channelFactory;
+    private String name;
+    private String type;
+    private String env;
+    private List<QueueBind> queueBinds;
+}
+
+class QueueBind{
+    private String queue;
+    private String routingKey;
+}
+class HandlerService{
+    private String queue;
+    private String routingKey;
+}
+
+interface MessageConverter {
+
+    byte[] convertToMessage(Object t);
+
+    Object convertToObject(byte[] messages);
+
+}
+
+class FastJsonMessageConverter {
+}
+class SimpleMessageConverter{
+}
+class StandardJsonMessageConverter{
+}
+
+interface RemoveMessageStore {
+
+    void storeRemovedMessage(String key,String message);
+
+    List<String> getRemoveMessage(String key);
+
+    void remove(String key,List<String> messages);
+
+    void remove(String key,String message);
+}
+
+class MemoryRemoveMessageStore{
+
+}
+
+class JDBCMessageStoreAndRetriever{
+
+}
+
+class RabbitTemplate {
+    private ChannelFactory channelFactory;
+    private HandlerService handlerService;
+    private MessageConverter messageConverter;
+    private MessageStoreAndRetriever messageStoreAndRetriever;
+    private boolean needCompensation;
+    private String appName;
+    private String zkConnect;
+    private RemoveMessageStore removeMessageStore;
+    private boolean stillRetry = false;
+
+
+}
+
+QueueDeclare -> ChannelFactory
+ExchangeDeclare -> ChannelFactory
+
+ExchangeDeclare -- QueueBind:1..n
+
+MessageConverter <|.. FastJsonMessageConverter
+MessageConverter <|.. SimpleMessageConverter
+MessageConverter <|.. StandardJsonMessageConverter
+
+JdbcTemplate <|-- JDBCMessageStoreAndRetriever
+
+RabbitTemplate -> ChannelFactory
+@enduml
