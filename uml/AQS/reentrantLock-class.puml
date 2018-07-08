@@ -34,5 +34,5 @@ AbstractQueuedSynchronizer <|-- Sync
 Sync <|-- FairSync
 Sync <|-- NonfairSync
 
-ReentrantLook -> Sync
+ReentrantLook *-> Sync
 @enduml
