@@ -1,0 +1,69 @@
+@startuml
+interface Lock{
+    void lock();
+    void lockInterruptibly() throws InterruptedException;
+    boolean tryLock();
+    boolean tryLock(long time, TimeUnit unit) throws InterruptedException;
+    void unlock();
+    Condition newCondition();
+}
+
+interface ReadWriteLock {
+    Lock readLock();
+    Lock writeLock();
+}
+
+class ReentrantReadWriteLock{
+
+}
+
+abstract class AbstractQueuedSynchronizer{
+    public final void acquire(int arg);
+    public final void acquireInterruptibly(int arg);
+}
+class Sync{
+        private transient ThreadLocalHoldCounter readHolds;
+        private transient HoldCounter cachedHoldCounter;
+        private transient Thread firstReader = null;
+        private transient int firstReaderHoldCount;
+        protected final boolean tryRelease(int releases);
+        protected final boolean tryAcquire(int acquires);
+        protected final boolean tryReleaseShared(int unused);
+        protected final int tryAcquireShared(int unused);
+}
+class FairSync {
+    final boolean writerShouldBlock();
+    final boolean readerShouldBlock();
+}
+
+class NonfairSync {
+    final boolean writerShouldBlock();
+    final boolean readerShouldBlock();
+}
+
+class ReadLock {
+
+}
+class WriteLock {
+
+}
+ReadWriteLock <|.. ReentrantReadWriteLock
+Lock <|.. ReadLock
+Lock <|.. WriteLock
+
+AbstractQueuedSynchronizer <|-- Sync
+Sync <|-- FairSync
+Sync <|-- NonfairSync
+ReadLock --> Sync
+WriteLock --> Sync
+ReentrantReadWriteLock *-> Sync
+
+
+legend center
+    1.对于同一线程，可以先获取写锁，再获取读锁
+    2.对于同一线程，不能先获取读锁，再获取写锁
+    3.对于不同线程，不能同时获取读锁和写锁，不能同时获取写锁和写锁，可以同时获取读锁
+    4.AQS中state属性的高16位保存读锁的个数，低16位保存写锁重入的次数
+
+end legend
+@enduml
