@@ -3,7 +3,7 @@ class Thread{
     ThreadLocal.ThreadLocalMap threadLocals;
 }
 class ThreadLocal{
-
+    protected T initialValue();
 }
 class ThreadLocalMap{
 
