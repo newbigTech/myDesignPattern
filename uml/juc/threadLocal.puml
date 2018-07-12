@@ -1,0 +1,26 @@
+@startuml
+class Thread{
+    ThreadLocal.ThreadLocalMap threadLocals;
+}
+class ThreadLocal{
+
+}
+class ThreadLocalMap{
+
+}
+class WeakReference<ThreadLocal> {
+
+}
+class Entry{
+    Object value;
+    Entry(ThreadLocal k, Object v);
+}
+
+WeakReference <|-- Entry
+
+ThreadLocalMap *-> Entry
+ThreadLocalMap --> ThreadLocal
+Thread *-> ThreadLocalMap
+ThreadLocal -> Thread
+
+@enduml
