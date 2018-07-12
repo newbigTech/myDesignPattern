@@ -23,7 +23,7 @@ class CachedData {
             // Recheck state because another thread might have acquired
             //   write lock and changed state before we did.
             if (!cacheValid) {
-                data = null;
+                data = loadDataFromDB();
                 cacheValid = true;
             }
             // Downgrade by acquiring read lock before releasing write lock
@@ -34,6 +34,10 @@ class CachedData {
 
         use(data);
         rwl.readLock().unlock();    //释放读锁
+    }
+
+    private Object loadDataFromDB() {
+        return null;
     }
 
     private void use(Object data) {
