@@ -24,7 +24,10 @@ end
 deactivate WMS
 
 WMS -> WMS:更新FactoryDelivery状态为已发货或待清关，\n回写FactoryDelivery相关信息:收获方、收货地点、CusPoNo等
-
+note right
+海外销售为清关，
+海外备货、国内销售&备货为已发货
+end note
 alt 工厂发货单为<font color=red>销售</font>类型
    WMS -> WMS:生成入库单PutawayHeader、入库单明细PutawayLine、PutawayImei
    WMS -> ERP:记录ERP
@@ -38,8 +41,15 @@ alt 工厂发货单为<font color=red>销售</font>类型
         deactivate WMS
    end
 end
-==海外工厂发货单==
-somebody -> WMS:填写清关信息，操作清关
+==海外<font color=red>销售</font>类型工厂发货单==
+somebody -> WMS:填写清关时间，操作清关
+WMS -> WMS:插入SalesOrderImei表
+activate WMS
+WMS -> WMS:更新ImeiCenter的此批记录state= 3已出库
+WMS -> ERP:抛erp(<font color=red>未更新库存</font>)
+WMS -> OPSS:通知出库
+WMS -> WMS:更新FactoryDelivery的state状态清关为已发货
+deactivate somebody
 
 legend center
 1.销售类型的工厂发货单来源Opss，在wms中salsOrder表B2B类型的记录关联
