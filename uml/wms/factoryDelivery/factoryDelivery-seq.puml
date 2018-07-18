@@ -2,6 +2,8 @@
 
 title 接口：/factoryDelivery/crawlFactoryDeliveryImeiFromOppo
 
+actor 关务 as somebody
+
 WMS -> OPPO:根据DeliveryRequestNo交货申请编号
 activate WMS
 OPPO -> WMS:返回该交货申请编号的所有sku明细信息
@@ -26,15 +28,18 @@ WMS -> WMS:更新FactoryDelivery状态为已发货或待清关，\n回写Factory
 alt 工厂发货单为<font color=red>销售</font>类型
    WMS -> WMS:生成入库单PutawayHeader、入库单明细PutawayLine、PutawayImei
    WMS -> ERP:记录ERP
-   alt 海外类型的工厂发货单(B2B订单)
+   alt 国内的工厂发货单(B2B订单)
         WMS -> WMS:插入SalesOrderImei表
         activate WMS
         WMS -> WMS:更新SalesOrder为已出库、未签收
         WMS -> WMS:更新ImeiCenter的此批记录state= 3已出库
+        WMS -> ERP:抛erp(<font color=red>未更新库存</font>)
+        WMS -> OPSS:通知出库
         deactivate WMS
    end
 end
-
+==海外工厂发货单==
+somebody -> WMS:填写清关信息，操作清关
 
 legend center
 1.销售类型的工厂发货单来源Opss，在wms中salsOrder表B2B类型的记录关联
