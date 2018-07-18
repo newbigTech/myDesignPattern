@@ -1,0 +1,51 @@
+@startuml
+
+class FactoryDelivery {
+    institution_code
+    delivery_request_no 交货申请编号
+    po_no
+    request_type 交货类型[1:备货,2:销售]
+    receive_party  收货方
+    receive_location    收货地点
+    cus_po_no 客户采购单号
+    vendor_code
+    vendor_name
+    state [1:新建,2:待发货,3:已发货,-1:已取消,4:待清关]
+    delivery_no 交货编号
+    delivery_time
+}
+
+class FactoryDeliverySku {
+    institution_code
+    delivery_request_no 交货申请编号
+    material_code 物料编号
+    sku
+    qty 数量
+    box_qty 箱数
+    actual_qty 实际发货数量
+}
+
+class FactoryDeliveryImei{
+    institution_code
+    delivery_request_no
+    sku
+    imei_code
+    imei2
+    box_code 箱号
+    kb_no 卡板号
+    meid
+    sn
+}
+
+class ReceiptHeader{
+
+}
+
+class ReceiptLine {
+
+}
+
+FactoryDelivery .. FactoryDeliverySku:1*n
+FactoryDelivery .. FactoryDeliveryImei:1*n
+
+@enduml
