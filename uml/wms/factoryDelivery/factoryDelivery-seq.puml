@@ -1,6 +1,6 @@
 @startuml
 
-title 接口：/factoryDelivery/crawlFactoryDeliveryImeiFromOppo
+title 相关接口：/factoryDelivery/crawlFactoryDeliveryImeiFromOppo                            \n/factoryDelivery/passCustomsForOverseaFactoryDelivery
 
 actor 关务 as somebody
 
