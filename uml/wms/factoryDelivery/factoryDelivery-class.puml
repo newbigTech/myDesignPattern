@@ -37,13 +37,13 @@ class FactoryDeliveryImei{
     sn
 }
 
-class ReceiptHeader{
-
-}
-
-class ReceiptLine {
-
-}
+'class ReceiptHeader{
+'
+'}
+'
+'class ReceiptLine {
+'
+'}
 
 FactoryDelivery .. FactoryDeliverySku:1*n
 FactoryDelivery .. FactoryDeliveryImei:1*n
