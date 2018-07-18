@@ -1,0 +1,29 @@
+@startuml
+title 备货类型工厂发货单创建流程
+actor 备货人员 as operator
+operator-> wms:新建收货通知单
+activate wms
+wms-> wms:查询PO明细
+operator -> wms:选择PO
+operator -> wms:选择目标仓库点击保存
+wms -> wms:生成状态为新建的收货通知单ReceiptHeader
+deactivate wms
+
+
+operator->wms:添加sku明细
+activate wms
+wms->wms:生成收货通知单明细ReceiptLine
+deactivate wms
+
+
+operator->wms:提交收货通知单
+activate wms
+wms-> wms :生成入库单PutawayHeader记录
+wms-> wms :根据收货通知单明细构造入库单PutawayLine明细并保存
+wms-> wms :更新收货通知单ReceiptHeader状态为待收货
+wms-> wms :根据收货通知单及其明细构造并保存工厂发货单\nFactoryDelivery、FactoryDeliverySku记录
+deactivate wms
+
+
+
+@enduml
