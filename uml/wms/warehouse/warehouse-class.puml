@@ -1,0 +1,11 @@
+@startuml
+
+class Warehouse {
+warehouse_code
+warehouse_code_erp
+warehouse_code_third 第三方仓库编码
+third_warehouse_type 第三方仓储类型
+state '状态  0=不启用  1=启用'
+}
+
+@enduml

@@ -1,0 +1,34 @@
+@startuml
+participant Schedule
+title 备货流程-工厂收货流程
+participant OPPO工厂 as oppo
+participant 第三方仓库 as warehouse
+
+oppo->warehouse:发货
+warehouse->warehouse:收货
+
+warehouse->wms:调用wms接口
+activate warehouse
+wms->wms:构建并插入putawayImei明细表
+wms->wms:生成imeiCenter记录
+wms->wms:生成入库批次putawayBatchHeader记录
+wms->wms:生成入库批次明细putawayBatchLine记录
+wms->wms:根据参数更新收货单ReceiptHeader状态为已收货或部分收货
+wms->wms:根据参数更新入库单PutawayHeader状态为已入库或部分入库
+wms->wms:根据PO单明细收货数量
+alt 全部入库
+    wms->wms:关闭PO单
+end
+deactivate warehouse
+
+====
+
+Schedule ->> wms:扫描putawayBatchHeader记录
+note right
+待完全收货，才被扫描，为了抛erp和库存操作完整性
+end note
+activate Schedule
+wms->Inv:操作库存
+wms->ERP:抛ERP
+deactivate Schedule
+@enduml
