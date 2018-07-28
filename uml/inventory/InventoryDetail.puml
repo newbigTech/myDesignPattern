@@ -47,4 +47,8 @@ class invInventoryMapDetail{
     --area_type_name--,
 }
 
+note bottom of invInventoryMapDetail
+库区和逻辑库存类型映射详情表
+end note
+
 @enduml
