@@ -1,0 +1,50 @@
+@startuml
+class WarehouseAreaInventoryDetail {
+    institutionCode,
+    skuCode,
+    warehouseCode,
+    <font color=red>warehouseType</font>,
+    <font color=red>warehouseThirdType<font color=red>,
+    areaCode,
+    <font color=red>areaTypeCode 库区类型,
+    virtual 虚拟:0 非虚拟:1,
+    totalQuantity,
+    realQuantity,
+    holdingQuantity,
+    occupiedQuantity,
+    realOccupiedQuantity,
+    combinedKey <font color=red>库区编码_skuCode<font color=red>
+}
+
+class InvSkuLogisticInventoryDetail {
+    institutionCode,
+    logisticInventoryCode <font color=red>逻辑库存编码 01-b2c 02-b2b 03-售后 04-buffer 05-活动 06-微信小程序b2c</font>,
+    logisticInventoryTypeCode <font color=red>逻辑库存类型编码 01-B2C 02-B2B</font>,
+    skuCode,
+    virtual 是否虚拟,
+    warehouseCode 仓库编码,
+    warehouseType <font color=red>仓库类型</font>,
+    warehouseThirdType <font color=red>第三方仓库类型</font>,
+    warehouseAreaCode  库区编码,
+    warehouseAreaTypeCode <font color=red>库存类型</font>,
+    totalQuantity 总库存
+    realQuantity  实存
+    holdingQuantity
+    occupiedQuantity
+    realOccupiedQuantity
+    combinedKey <font color=red>'库区编码_skuCode_逻辑库存编码'</font>
+}
+
+
+class invInventoryMapDetail{
+    areaCode,
+    areaName,
+    logistic_inventory_code,
+    logistic_inventory_name,
+    logistic_inventory_type_code,
+    logistic_inventory_type_name,
+    --areaTypeCode--,
+    --area_type_name--,
+}
+
+@enduml
