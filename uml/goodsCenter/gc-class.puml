@@ -1,0 +1,15 @@
+@startuml
+
+abstract class AbstractRemoteCache {
+private JedisTemplate writeJedisTemplate;
+private JedisTemplate readJedisTemplate;
+
+public void removeCache(final String prefix, final Collection<String> suffixs)
+public <Value> void putCache(final ArrayListMultimap<String, Value> multimapValues, final String prefix)
+protected <Value> ArrayListMultimap<String, Value> getMultimapCache(String prefix, Collection<String> suffixs, Class<Value> clazz)
+public <Value extends BaseDomainObject> void putCache(final Collection<Value> values, final String prefix)
+public <Value extends BaseDomainObject> List<Value> getCache(String prefix, Collection<String> suffixs, Class<Value> clazz)
+}
+'class
+
+@enduml
