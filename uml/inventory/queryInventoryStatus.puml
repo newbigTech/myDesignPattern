@@ -22,16 +22,15 @@ note right
 这三个均在动态配置中
 end note
 
-:1.查询logisticInventoryBusinessType对应的逻辑库存类型
-2.查询该逻辑库存类型支持的所有的库区;
+:1.查询logisticInventoryBusinessType对应的逻辑库存编码
+2.查询该逻辑库存编码支持的所有的库区;
 note right
-从inv_logistic_inventory查询对应的逻辑库存类型
+从inv_logistic_inventory查询对应的逻辑库存编码
 从inv_inventory_map_detail查询所有的库区
 end note
 
 if (国家为海外) then (yes)
-    :查询inv_warehouse_region筛选该国家支持的库区,
-    并设置优先级;
+    :查询inv_warehouse_region筛选该国家支持的库区;
     note right
     如果是海外根据countryCode
     筛选覆盖的库区
@@ -40,6 +39,9 @@ endif
 
 :如果是海外B2C业务优先从inv_sku_logistic_inventory_country
 获取逻辑库存编码;
+note right
+根据skuCode和CountryCode
+end note
 
 if(是否为抢购SKU) then(yes)
     :从抢购分片redis中查询数量;
