@@ -1,7 +1,7 @@
 @startuml
 'Store -> inventory:查询库存状态(countryCode,skuList,logisticInventoryBusinessType)
 'inventory -> inventory:查询inv_logistic_inventory,校验是否支持此logisticInventoryBusinessType
-title 流程图-查询库存状态
+title 流程图-查询库存状态SalesInventoryQueryService.queryInventoryStatus
 start
 :官网发起请求;
 note right
