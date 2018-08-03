@@ -43,6 +43,8 @@ note right
 根据skuCode和CountryCode
 end note
 
+:根据以上信息组装CombinedKey;
+
 if(是否为抢购SKU) then(yes)
     :从抢购分片redis中查询数量;
     note left
