@@ -35,8 +35,7 @@ class InvSkuLogisticInventoryDetail {
     combinedKey <font color=red>'库区编码_skuCode_逻辑库存编码'</font>
 }
 
-
-class invInventoryMapDetail{
+class invInventoryMapDetail库区和逻辑库存类型映射详情表{
     areaCode,
     areaName,
     logistic_inventory_code,
@@ -47,8 +46,15 @@ class invInventoryMapDetail{
     --area_type_name--,
 }
 
-note bottom of invInventoryMapDetail
-库区和逻辑库存类型映射详情表
-end note
+class invShippingTime配送时效{
+    warehouse_code
+    shipping_id
+    address_id
+    address_name_path
+    address_id_path
+    shipping_time
+    PRIMARY KEY (warehouse_code, shipping_id, address_id)
+}
+
 
 @enduml

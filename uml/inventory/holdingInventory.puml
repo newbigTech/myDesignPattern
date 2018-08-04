@@ -1,0 +1,25 @@
+@startuml
+title 流程图-预扣库存
+start
+:官网发起请求;
+note right
+参数：业务类型、主业务单号、CountryCode、
+          skuCode/数量列表
+end note
+if (是否抢购sku) then (yes)
+    :执行redis的opStack命令;
+    note right
+    如果是海外根据countryCode
+    筛选覆盖的库区
+    end note
+else (no)
+    :将需要更新的逻辑库存PO&物理库存PO
+    按照combinedKey排序;
+    note right
+    防止发生死锁
+    end note
+    :批量插入物理流水&逻辑流水;
+    :批量更新物理库存&逻辑库存;
+endif
+end
+@enduml
