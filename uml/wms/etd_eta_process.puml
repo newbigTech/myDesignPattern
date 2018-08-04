@@ -4,12 +4,16 @@ title 流程图-ETD/ETA核心计算逻辑
 start
 :获取仓库信息;
 #HotPink:if (预售) then (yes)
-    :处理时效=24h
-    基准时间=preSellBatchETA-1d;
+    :基准时间=preSellBatchETA-1d
+    处理时效=24h;
+    note right
+    处理时效应为0，基准时间为preSellBatchETA
+    为了后面跳过节假日、周末，仓库满载日方便
+    基准时间-24h,处理时效+24，正好抵消
+    end note
 else (no)
-    :处理时效=仓库配置时效
-    基准时间=当前时间;
-
+    :基准时间=当前时间
+    处理时效=仓库处理时效;
 endif
 #HotPink:if(是否为Priority优先配送) then(no)
     :处理时效=处理时效+1;
@@ -27,4 +31,10 @@ endif
 endwhile
 :返回基准时间偏移后的时间既为ETD;
 end
+
+legend center
+计算的核心逻辑为从哪天开始算起，即基准时间
+在仓库的流转时间时长，即仓库的处理时效
+ETD=基准时间+仓库处理时效(跳过周末&节假日&仓库满载日期)
+end legend
 @enduml

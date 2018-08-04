@@ -48,13 +48,81 @@ class invInventoryMapDetail库区和逻辑库存类型映射详情表{
 
 class invShippingTime配送时效{
     warehouse_code
-    shipping_id
+    <font color=red>shipping_id</font>
     address_id
     address_name_path
     address_id_path
     shipping_time
     PRIMARY KEY (warehouse_code, shipping_id, address_id)
 }
+
+class invWarehouseRegion仓库覆盖范围{
+    country_code
+    country_name
+    state_or_province_code
+    state_or_province_name
+    city_code
+    city_name
+    warehouse_code
+    warehouse_name
+    region_code
+}
+
+class invPresellBatch{
+    combined_key
+    business_no
+    batch_quantity 批次到货数量
+    presell_quantity 预售数量
+    warehouse_entry_quantity 已入库量
+    wait_entry_quantity 待入库量
+    sku_code
+    eta 批次到货时间
+    outbound_time 工厂发货时间
+    warehouse_code
+    warehouse_area_code
+    status 状态（0=初始  1=已生效）
+}
+
+class inv_presell_batch_detail{
+    batch_id 批次号 父id???
+    combined_key
+    presell_quantity  预售数量
+    warehouse_entry_quantity 已入库量
+    wait_entry_quantity  待入库量
+    sku_code
+    eta  批次到货时间
+    warehouse_code
+    warehouse_area_code
+    logistic_inventory_code
+    batch_business_no
+}
+
+class invShippingMethod物流配送方式 {
+    shipping_company_code
+    shipping_company_name
+    shipping_method
+    <font color=red>shipping_method_code</font>
+    status
+    shipping_type <font color=red>1：standard 2：priority</font>
+    max_weight
+    min_weight
+}
+
+class invWarehouse {
+    warehouse_code
+    warehouse_name
+    warehouse_code_erp 是否有用到？？？
+    warehouse_code_third 第三方编码
+    warehouse_type 1:自建仓 2:外包仓 3:网点仓 4:门店仓 5 外销逆向仓
+    third_type 第三方仓储类型[0:YJ,1:SF,2:KJ,5:TTL,7:BD,8:DEL]
+    warehouse_status 1：启用 0：未启用
+    departure 出库时效
+    holiday_group 节日组
+    timezone 时区
+    daily_processing_packages 每日最大订单处理量
+    virtual_flag 1:实体仓库,2:虚拟仓库
+}
+
 
 
 @enduml
