@@ -1,0 +1,24 @@
+@startuml
+
+class TreeMap
+abstract class AbstractMap
+interface NavigableMap
+interface Cloneable
+interface SortedMap
+interface Map<K,V>{
+int size()
+boolean containsKey(Object key)
+boolean containsValue(Object value)
+boolean isEmpty()
+V remove(Object key)
+void clear()
+}
+
+
+AbstractMap <|-- TreeMap
+NavigableMap <|.. TreeMap
+SortedMap <|-- NavigableMap
+Map <|-- SortedMap
+Cloneable <|.. TreeMap
+
+@enduml
