@@ -4,7 +4,7 @@ start
 :官网发起请求;
 note right
 参数：业务类型、主业务单号、CountryCode、
-skuCode/数量列表、逻辑库存业务类型、SKU库区编码
+skuCode/数量列表、逻辑库存业务类型、库区编码
 end note
 if (是否抢购sku) then (yes)
     :执行redis的opStack命令;
