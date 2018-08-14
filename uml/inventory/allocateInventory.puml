@@ -1,0 +1,46 @@
+@startuml
+title 流程图-分配库存SalesInventoryQueryService.allocate2CInventoryNew
+start
+:官网发起请求;
+note right
+(参数为：xxx);
+end note
+
+:根据请求参数获取逻辑库存类型编码logisticInventoryTypeCode;
+note right
+根据skuCode、countryCode、逻辑库存业务类型
+先试图命中inv_sku_logistic_inventory_country，
+如果失败，再命中inv_logistic_inventory
+end note
+
+:根据logisticInventoryTypeCode查询所有的warehouseArea;
+note right
+根据logisticInventoryTypeCode查询inv_inventory_map_rule得到salesType
+根据salesType过滤系统中warehouseArea
+end note
+
+:根据地址过滤得到覆盖的仓库库区;
+note right
+根据国家、省、市以及库区所属的仓库编码查询wareHouseRegion
+end note
+
+:根据goodsGroupCode,仓库编码,国家、省、市
+得到所有的物流配送方式invShippingMethod;
+note right
+从inv_warehouse_goods_shipping_method查询
+end note
+
+:根据上面查询到的所有shippingMethodCode
+以及地址国家、省、市、区、街道查询物流配送配送区域;
+note right
+查询inv_shipping_region
+end note
+
+:根据所有shippingMethodCode,仓库编码
+以及地址国家、省、市、区、街道查询物流配送配送时效;
+note right
+查询inv_shipping_time
+end note
+
+end
+@enduml
