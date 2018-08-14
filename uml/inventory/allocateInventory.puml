@@ -11,6 +11,8 @@ note right
 根据skuCode、countryCode、逻辑库存业务类型
 先试图命中inv_sku_logistic_inventory_country，
 如果失败，再命中inv_logistic_inventory
+注：<font color=red>可以跨logisticInventoryCode，但是不能跨logisticInventoryTypeCode
+<font color=red>因为同一订单中，可能不同sku使用不同的逻辑库存，有的是b2c,有的是邀请码buffer</font>
 end note
 
 :根据logisticInventoryTypeCode查询所有的warehouseArea;

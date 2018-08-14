@@ -46,6 +46,14 @@ class invInventoryMapDetail库区和逻辑库存类型映射详情表{
     --area_type_name--,
 }
 
+class invInventoryMapRule逻辑库存与库区映射规则 {
+logistic_inventory_type_code,
+logistic_inventory_type_name,
+area_type_code,
+area_type_name,
+<font color=red>sales_type</font>
+}
+
 class invShippingTime配送时效{
     warehouse_code
     <font color=red>shipping_id</font>
