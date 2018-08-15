@@ -28,8 +28,11 @@ public class MultiMapTest {
         Multimap<String, String> multimap = ArrayListMultimap.create();
 
         multimap.put("asdf","qwer");
+        multimap.put("asdf","qwer");
         multimap.put("asdf","ouus");
         multimap.put("asdf","fegag");
+        multimap.put("zcvb","fdfgjr");
+        multimap.put("zcvb","fdfgjr");
         multimap.put("zcvb","fdfgjr");
         System.out.println(JSONUtils.toJsonStr(multimap));
         Map<String, Collection<String>> map = multimap.asMap();

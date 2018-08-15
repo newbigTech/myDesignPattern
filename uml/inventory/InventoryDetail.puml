@@ -35,6 +35,16 @@ class InvSkuLogisticInventoryDetail {
     combinedKey <font color=red>'库区编码_skuCode_逻辑库存编码'</font>
 }
 
+class invLogisticInventory{
+    logistic_inventory_code
+    logistic_inventory_name
+    logistic_inventory_type_code
+    logistic_inventory_type_name
+    business_type
+    sales_type
+    status
+}
+
 class invInventoryMapDetail库区和逻辑库存类型映射详情表{
     areaCode,
     areaName,
@@ -47,11 +57,11 @@ class invInventoryMapDetail库区和逻辑库存类型映射详情表{
 }
 
 class invInventoryMapRule逻辑库存与库区映射规则 {
-logistic_inventory_type_code,
-logistic_inventory_type_name,
-area_type_code,
-area_type_name,
-<font color=red>sales_type</font>
+    logistic_inventory_type_code,
+    logistic_inventory_type_name,
+    area_type_code,
+    area_type_name,
+    <font color=red>sales_type</font>
 }
 
 class invShippingTime配送时效{
@@ -131,6 +141,44 @@ class invWarehouse {
     virtual_flag 1:实体仓库,2:虚拟仓库
 }
 
+class invWarehouseGoodsShippingMethod {
+    warehouse_name
+    warehouse_code
+    shipping_method
+    shipping_method_code
+    shipping_type '服务类型；1-standard 2-express'
+    <font color=red>shipping_goods_type</font>
+    priority 越小优先级越高
+    has_tracking
+    country_code
+    country_name
+    state_or_province_code
+    state_or_province_name
+    city_code
+    city_name
+    shipping_company_code
+    shipping_company_name
+}
 
+class invShippingRegion{
+shipping_method
+shipping_method_code
+country_code
+state_or_province_code
+city_code
+street_code
+area_code
+}
+
+class invShippingFee{
+    shipping_type,
+    weight_max,
+    weight_min,
+    post_fee,
+    --freeFee--,
+    goods_group,
+    country_code,
+    currency,
+}
 
 @enduml

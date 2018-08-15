@@ -23,7 +23,7 @@ end note
 
 :根据地址过滤得到覆盖的仓库库区;
 note right
-根据国家、省、市以及库区所属的仓库编码查询wareHouseRegion
+根据国家、省、市以及库区所属的仓库编码查询warehouseRegion
 end note
 
 :根据goodsGroupCode,仓库编码,国家、省、市
@@ -43,6 +43,9 @@ end note
 note right
 查询inv_shipping_time
 end note
+
+:根据上面的ShippingRegion过滤不被覆盖的物流渠道;
+:根据上面的ShippingTime关联物流配送时效;
 
 end
 @enduml
