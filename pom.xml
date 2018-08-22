@@ -45,6 +45,7 @@
         <velocity.view.version>1.4</velocity.view.version>
         <commons.collections4.version>4.0</commons.collections4.version>
         <muses.version>1.0.6</muses.version>
+        <elastic.job.version>2.1.1</elastic.job.version>
     </properties>
 
     <repositories>
@@ -402,6 +403,16 @@
                 <artifactId>javax.servlet-api</artifactId>
                 <version>${servlet.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.dangdang</groupId>
+                <artifactId>elastic-job-lite-core</artifactId>
+                <version>${elastic.job.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.dangdang</groupId>
+                <artifactId>elastic-job-lite-spring</artifactId>
+                <version>${elastic.job.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -450,6 +461,20 @@
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
             <version>${fastjson.version}</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>com.dangdang</groupId>
+            <artifactId>elastic-job-lite-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.dangdang</groupId>
+            <artifactId>elastic-job-lite-spring</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.dubbo</groupId>
+            <artifactId>dubbo</artifactId>
         </dependency>
     </dependencies>
 
