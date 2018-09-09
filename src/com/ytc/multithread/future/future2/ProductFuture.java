@@ -13,13 +13,13 @@ package com.ytc.multithread.future.future2;
  * @Description
  * @date 2018 09-09 13:30.
  */
-public class ProductFuture<MyProduct> {
+public class ProductFuture<T> {
 
-    private MyProduct product;
+    private T t;
 
     private boolean ready = false;
 
-    public synchronized MyProduct get() {
+    public synchronized T get() {
         while(!ready) {
             try {
                 System.out.println("产品没准备好，future被阻塞");
@@ -29,11 +29,11 @@ public class ProductFuture<MyProduct> {
                 e.printStackTrace();
             }
         }
-        return product;
+        return t;
     }
 
-    public synchronized void setProduct(MyProduct product) {
-        this.product = product;
+    public synchronized void setProduct(T t) {
+        this.t = t;
         ready = true;
         notifyAll();
     }

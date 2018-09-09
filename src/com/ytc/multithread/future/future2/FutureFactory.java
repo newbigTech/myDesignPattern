@@ -5,8 +5,6 @@
  *****************************************************************************/
 package com.ytc.multithread.future.future2;
 
-import com.ytc.dp.simpleFactory.AProduct;
-import com.ytc.dp.simpleFactory.Product;
 
 /**
  * @author yutianci
@@ -16,12 +14,12 @@ import com.ytc.dp.simpleFactory.Product;
  * @Description
  * @date 2018 09-09 13:29.
  */
-public class FutureFactory<T> {
+public class FutureFactory {
 
     public static ProductFuture createProduct(final String name) {
 
         //ProductFuture作为订单
-        final ProductFuture future = new ProductFuture<>();
+        final ProductFuture<MyProduct> future = new ProductFuture<>();
         new Thread(new Runnable() {
             @Override
             public void run() {
