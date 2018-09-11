@@ -14,7 +14,10 @@ end note
 deactivate AbstractClusterInvoker
 AbstractClusterInvoker -> FailoverClusterInvoker:doInvoke(Invocation invocation, List<Invoker<T>> invokers, LoadBalance loadbalance)
 FailoverClusterInvoker -> loadBalance:根据负载均衡策略选出\n需要执行的invoker
-
+note right
+默认使用随机负载均衡
+当节点数为2时蜕变为轮询策略
+end note
 FailoverClusterInvoker -> AbstractInvoker:invoker.invoke(invocation)
 note left
 经过一系列Filter、Listener
