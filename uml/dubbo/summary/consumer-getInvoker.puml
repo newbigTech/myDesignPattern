@@ -1,0 +1,28 @@
+@startuml
+participant Client
+participant ReferenceConfig
+participant RegistryProtocol
+participant RegistryDirectory
+participant ZookeeperRegistry
+
+Client -> ReferenceConfig:getObject()
+activate Client
+ReferenceConfig -> RegistryProtocol:1.refer(Class<T> type, URL url)
+activate ReferenceConfig
+RegistryProtocol -> ZookeeperRegistry:1.1register(URL url),注册临时节点
+RegistryProtocol -> RegistryDirectory:1.2注册持久化节点,并监听事件
+activate RegistryProtocol
+RegistryDirectory -> ZookeeperRegistry:注册持久化节点,并监听子节点变更
+ZookeeperRegistry -> RegistryDirectory:回调notify(List<URL> urls),并更新Provider的Invoker到本地JVM缓存
+note right
+此回调目的在于，获取Provider注册到zk上的服务,
+封装成Invoker,并保存到RegistryDirectory
+end note
+deactivate RegistryProtocol
+RegistryProtocol -> Cluster:1.3cluster.join(directory),将集群Invokers伪装成一个FailoverClusterInvoker
+Cluster -> RegistryProtocol:返回FailoverClusterInvoker
+RegistryProtocol -> ReferenceConfig:返回FailoverClusterInvoker
+deactivate ReferenceConfig
+ReferenceConfig -> JavassistProxyFactory:2.getProxy(Invoker<T> invoker, Class<?>[] interfaces)
+deactivate Client
+@enduml
