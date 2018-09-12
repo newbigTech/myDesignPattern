@@ -1,0 +1,7 @@
+@startuml
+actor user
+usecase UC1 as "You can use"
+
+
+
+@enduml
