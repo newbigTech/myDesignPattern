@@ -1,0 +1,23 @@
+@startuml
+
+interface LocalCacheLoader {
+    public void reload();
+}
+
+
+interface LocalCache<K, V> {
+    public V get(K key);
+    public void put(K key, V value);
+    public void refresh(Map<K, V> cache);
+}
+
+class DefaultLocalCache<K, V>  implements LocalCache {
+    private LocalCacheLoader cacheLoader;
+    private Map<K, V> cache = Maps.newHashMap();
+    private Boolean initialized = Boolean.FALSE;
+    public DefaultLocalCache(LocalCacheLoader cacheLoader);
+    public V get(K key);
+    public void put(K key, V value);
+    public void refresh(Map<K, V> cache);
+}
+@enduml
