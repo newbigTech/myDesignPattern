@@ -45,4 +45,10 @@ CurMaxCode写入zk不成功，
 end note
 deactivate AppProcessCodeZkCreator
 
+
+legend center
+1.不同机房通过机房标识区分
+2.相同机房通过zk维护进程标识
+3.不同机房使用不同的zk集群
+end legend
 @enduml
