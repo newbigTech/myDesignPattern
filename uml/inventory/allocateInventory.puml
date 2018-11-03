@@ -6,6 +6,10 @@ note right
 (参数为：xxx);
 end note
 
+:根据sku列表查询商品中心得到sku属性;
+
+:根据sku属性和数量计算包裹重量和体积;
+
 :根据请求参数获取逻辑库存类型编码logisticInventoryTypeCode;
 note right
 根据skuCode、countryCode、逻辑库存业务类型
@@ -15,25 +19,26 @@ note right
 <font color=red>因为同一订单中，可能不同sku使用不同的逻辑库存，有的是b2c,有的是邀请码buffer</font>
 end note
 
-:根据logisticInventoryTypeCode查询所有的warehouseArea;
+:根据logisticInventoryTypeCode获取salesType查询所有的warehouseArea;
 note right
 根据logisticInventoryTypeCode查询inv_inventory_map_rule得到salesType
 根据salesType过滤系统中warehouseArea
 end note
 
-:根据地址过滤得到覆盖的仓库库区;
+:根据地址信息(countryCode、StateOrProvinceCode、cityCode)过滤得到覆盖的仓库库区;
 note right
 根据国家、省、市以及库区所属的仓库编码查询warehouseRegion
 end note
 
-:根据goodsGroupCode,仓库编码,国家、省、市
-得到所有的物流配送方式invShippingMethod;
+:根据仓库编码,<font color=red>goodsGroupCode</font>,国家、省、市
+得到所有的物流配送方式invShippingMethod,
+并根据物流派送渠道过滤不符合地址要求的;
 note right
 从inv_warehouse_goods_shipping_method查询
 end note
 
 :根据上面查询到的所有shippingMethodCode
-以及地址国家、省、市、区、街道查询物流配送配送区域;
+以及地址国家、省、市、区、街道过滤不被覆盖的物流渠道;
 note right
 查询inv_shipping_region
 end note
@@ -44,8 +49,37 @@ note right
 查询inv_shipping_time
 end note
 
-:根据上面的ShippingRegion过滤不被覆盖的物流渠道;
+:过滤停用的物流配送方式;
+note right
+查询inv_shipping_method
+end note
+
 :根据上面的ShippingTime关联物流配送时效;
+
+:根据分配规则中包含的仓库信息,过滤掉根据地址信息得到仓库信息
+得到更精确的仓库信息;
+:根据库区、sku、逻辑库存编码查库存;
+note right
+inv_sku_logistic_inventory_detail或者redis分片缓存
+end note
+:根据查库存返回的信息过滤掉库存不足的仓库;
+
+:过滤超重的物流配送方式;
+note right
+查询inv_shipping_method
+end note
+
+:计算运费;
+note right
+查询inv_shipping_fee
+end note
+
+:计算etd&eta;
+
+:组装以上信息返回;
+note right
+etd/eta & warehouseGoodsShippingMethod
+end note
 
 end
 @enduml
