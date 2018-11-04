@@ -1,0 +1,19 @@
+@startuml
+
+class ComputerBox
+
+interface Comand
+
+class OpenComand
+
+interface MainBoard
+
+class GajiMainBoard
+
+Comand <|.. OpenComand
+MainBoard <|.. GajiMainBoard
+
+ComputerBox o-> Comand
+OpenComand x-> MainBoard
+
+@enduml
