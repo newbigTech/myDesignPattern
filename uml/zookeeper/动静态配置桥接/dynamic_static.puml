@@ -1,0 +1,50 @@
+@startuml
+
+class FixedShardedIntelliJedisDynamicPool
+
+class DynamicPoolConfigListener {
+    GenericObjectPoolConfig poolConfig
+    String hostsDynamicConfigKey;
+    String maxTotalDynamicConfigKey;
+    String maxWaitDynamicConfigKey;
+    List<T> poolInfos;
+    List<T> staticPoolInfos;
+    DynamicPool<T> dynamicPool;
+}
+
+class StaticDynamicConfigListenerBridge {
+    String configKey;
+    String staticConifgValue;
+    String currentConifgValue;
+}
+
+interface StaticDynamicConfigListener {
+    void valueChanged(String key, String value);
+}
+
+interface ApplicationContextAware
+
+interface DynamicConfigListener {
+    void handleDelete(String key);
+    void handleChange(String key, String value);
+}
+
+interface DynamicConfigKeyListener {
+    String[] getKeys()
+}
+
+StaticDynamicConfigListener <|.. DynamicPoolConfigListener
+
+ApplicationContextAware <|.. DynamicPoolConfigListener
+
+FixedShardedIntelliJedisDynamicPool x-> DynamicPoolConfigListener
+
+DynamicConfigListener <|-- DynamicConfigKeyListener
+
+DynamicConfigKeyListener <|.. StaticDynamicConfigListenerBridge
+
+DynamicPoolConfigListener o-> StaticDynamicConfigListenerBridge
+
+StaticDynamicConfigListenerBridge x-> StaticDynamicConfigListener
+
+@enduml

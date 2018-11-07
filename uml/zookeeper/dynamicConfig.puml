@@ -1,0 +1,18 @@
+@startuml
+
+interface BeanFactoryPostProcessor
+interface SmartLifecycle
+interface BeanFactoryAware
+interface Ordered
+
+
+class DynamicConfigHandler {
+public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory)
+}
+
+BeanFactoryPostProcessor <|.. DynamicConfigHandler
+SmartLifecycle <|.. DynamicConfigHandler
+BeanFactoryAware <|.. DynamicConfigHandler
+Ordered <|.. DynamicConfigHandler
+
+@enduml
