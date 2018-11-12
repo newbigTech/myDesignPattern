@@ -17,10 +17,11 @@ public class Client {
 
     public static void main(String[] args) {
         System.out.println("主线程先搞点事情。。。");
-        ProductFuture future = FutureFactory.createProduct("hahah");
+        MyFuture<MyProduct> future = FutureFactory.createProduct("hahah");
         System.out.println("使用futureFactory异步生产产品。。。");
-        Object o = future.get();
-        System.out.println(o);
+//        TimeUnit.SECONDS.sleep(7);
+        MyProduct myProduct = future.get();
+        System.out.println(myProduct);
         System.out.println("主线程搞完事情啦。。。");
     }
 }

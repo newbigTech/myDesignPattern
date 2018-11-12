@@ -13,7 +13,7 @@ package com.ytc.multithread.future.future2;
  * @Description
  * @date 2018 09-09 13:30.
  */
-public class ProductFuture<T> {
+public class MyFuture<T> {
 
     private T t;
 

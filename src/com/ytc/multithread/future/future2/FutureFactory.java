@@ -16,10 +16,10 @@ package com.ytc.multithread.future.future2;
  */
 public class FutureFactory {
 
-    public static ProductFuture createProduct(final String name) {
+    public static MyFuture<MyProduct> createProduct(final String name) {
 
         //ProductFuture作为订单
-        final ProductFuture<MyProduct> future = new ProductFuture<>();
+        final MyFuture<MyProduct> future = new MyFuture<>();
         new Thread(new Runnable() {
             @Override
             public void run() {
